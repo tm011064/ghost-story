@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="Checkpoint" color="#a0a0a4">
+  <property name="Is Level Start" type="bool" default="false"/>
+  <property name="Prefab" type="string" default="Checkpoint"/>
+ </objecttype>
+ <objecttype name="Barrel Met" color="#a0a0a4">
+  <property name="Prefab" type="string" default="Barrel Met Spawn Location"/>
+ </objecttype>
+ <objecttype name="Room" color="#a0a0a4">
+  <property name="Extension Bottom" type="int" default="14"/>
+  <property name="Extension Left" type="int" default="14"/>
+  <property name="Extension Right" type="int" default="14"/>
+  <property name="Extension Top" type="int" default="14"/>
+  <property name="Open Bottom" type="bool" default="false"/>
+  <property name="Open Left" type="bool" default="false"/>
+  <property name="Open Right" type="bool" default="false"/>
+  <property name="Open Top" type="bool" default="false"/>
+  <property name="Prefab" type="string" default="Full Screen Scroller With Box Trigger"/>
+ </objecttype>
+ <objecttype name="Camera Trigger" color="#ff0000">
+  <property name="Enter On Ladder" type="bool" default="false"/>
+  <property name="Triggers Room Transition" type="bool"/>
+ </objecttype>
+ <objecttype name="Camera Bounds" color="#cccccc"/>
+</objecttypes>
