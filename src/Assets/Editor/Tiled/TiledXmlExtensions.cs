@@ -185,8 +185,8 @@ namespace Assets.Editor.Tiled
       return map
         .Layers
         .Where(c => c.Properties != null && c.Properties.Property.Any(
-          p => string.Compare(p.Name.Trim(), propertyName, true) == 0
-            && string.Compare(p.Value.Trim(), propertyValue, true) == 0));
+          p => string.Equals(p.Name.Trim(), propertyName, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(p.Value.Trim(), propertyValue, StringComparison.OrdinalIgnoreCase)));
     }
 
     public static IEnumerable<Layer> ForEachLayerWithPropertyName(this Map map, string propertyName)
@@ -195,7 +195,7 @@ namespace Assets.Editor.Tiled
         .Layers
         .Where(c => c.Properties != null
           && c.Properties.Property.Any(
-            p => string.Compare(p.Name.Trim(), propertyName, true) == 0));
+            p => string.Equals(p.Name.Trim(), propertyName, StringComparison.OrdinalIgnoreCase)));
     }
 
     public static bool TryGetProperty(this Layer layer, string propertyName, out int value)
@@ -219,7 +219,7 @@ namespace Assets.Editor.Tiled
       var property = layer
         .Properties
         .Property
-        .FirstOrDefault(p => string.Compare(p.Name, propertyName) == 0);
+        .FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
 
       if (property != null)
       {

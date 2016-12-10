@@ -85,7 +85,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 112
+  orthographic size: 128
   m_Depth: -2
   m_CullingMask:
     serializedVersion: 2
@@ -179,9 +179,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CameraOffset: {x: 0, y: 0, z: 10}
   UseFixedUpdate: 0
-  TargetScreenSize: {x: 256, y: 224}
+  TargetScreenSize: {x: 384, y: 256}
   UseFixedAspectRatio: 1
-  FixedAspectRatio: {x: 256, y: 224}
+  FixedAspectRatio: {x: 384, y: 256}
   Target: {fileID: 0}
   Transform: {fileID: 0}
 --- !u!124 &12498726

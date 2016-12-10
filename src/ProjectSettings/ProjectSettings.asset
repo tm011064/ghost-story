@@ -362,6 +362,7 @@ PlayerSettings:
     1: DEBUG
     2: DEBUG
     7: DEBUG
+    13: DEBUG
   metroPackageName: SideScroller
   metroPackageVersion: 
   metroCertificatePath: 

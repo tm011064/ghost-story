@@ -13,7 +13,7 @@ public class PlayerStateUpdateController
     _playerController = playerController;
     _playerStateControllers = playerStateControllers;
   }
-  
+
   public void UpdatePlayerState(XYAxisState axisState)
   {
     var playerStateUpdateResult = PlayerStateUpdateResult.Max(
@@ -81,15 +81,9 @@ public class PlayerStateUpdateController
       return;
     }
 
-    if (animationClipInfo.LinkedShortNameHashes != null)
+    if (animationClipInfo.LinkedShortNameHashes.Contains(animatorStateInfo.shortNameHash))
     {
-      foreach (var hash in animationClipInfo.LinkedShortNameHashes)
-      {
-        if (animatorStateInfo.shortNameHash == hash)
-        {
-          return;
-        }
-      }
+      return;
     }
 
     _playerController.Animator.Play(animationClipInfo.ShortNameHash);

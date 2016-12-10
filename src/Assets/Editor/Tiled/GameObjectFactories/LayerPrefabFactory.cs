@@ -38,7 +38,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
       var prefabName = layer.Properties
         .Property
-        .First(p => string.Compare(p.Name.Trim(), "Prefab", true) == 0)
+        .First(p => string.Equals(p.Name.Trim(), "Prefab", StringComparison.OrdinalIgnoreCase))
         .Value
         .Trim()
         .ToLower();
