@@ -24,7 +24,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       Map = map;
     }
 
-    public abstract IEnumerable<GameObject> Create();
+    public abstract IEnumerable<GameObject> Create(Property[] propertyFilters);
 
     protected MatrixVertices CreateMatrixVertices(Layer layer)
     {
@@ -90,7 +90,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     }
 
     protected GameObject CreateInstantiableObject<TInstantiationArguments>(
-      GameObject asset, 
+      GameObject asset,
       string prefabName,
       TInstantiationArguments arguments)
       where TInstantiationArguments : InstantiationArguments

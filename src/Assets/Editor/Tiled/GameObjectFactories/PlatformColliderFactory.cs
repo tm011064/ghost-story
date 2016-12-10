@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
@@ -13,10 +14,14 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
     }
 
-    public override IEnumerable<GameObject> Create()
+    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
     {
+      var filters = propertyFilters
+        .Concat(new Property[] { new Property { Name = "Collider", Value = "platform" } })
+        .ToArray();
+
       return Map
-        .ForEachLayerWithProperty("Collider", "platform")
+        .ForEachLayerWithProperties(filters)
         .Get<GameObject>(CreateColliders);
     }
 

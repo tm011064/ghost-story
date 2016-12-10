@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
 using Assets.Editor.Tiled.GameObjectFactories;
 using UnityEditor;
 using UnityEngine;
@@ -11,68 +10,58 @@ namespace Assets.Editor.Tiled
 {
   public class TiledProjectImporter
   {
-    private AbstractGameObjectFactory[] _gameObjectFactories;
+    private readonly Map _map;
 
-    public static TiledProjectImporter CreateFromFile(string mapFilePath, string objectTypesFilePath = null)
-    {
-      var mapSerializer = new XmlSerializer(typeof(Map));
+    private readonly Objecttypes _objecttypes;
 
-      Map map;
+    private readonly Dictionary<string, Objecttype> _objecttypesByName;
 
-      Objecttypes objecttypes = new Objecttypes { Objecttype = new List<Objecttype>() };
-
-      using (var reader = new StreamReader(mapFilePath))
-      {
-        map = (Map)mapSerializer.Deserialize(reader);
-      }
-
-      if (!string.IsNullOrEmpty(objectTypesFilePath))
-      {
-        var objecttypesSerializer = new XmlSerializer(typeof(Objecttypes));
-
-        using (var reader = new StreamReader(objectTypesFilePath))
-        {
-          objecttypes = (Objecttypes)objecttypesSerializer.Deserialize(reader);
-        }
-      }
-
-      return new TiledProjectImporter(map, objecttypes);
-    }
+    private readonly Dictionary<string, string> _prefabLookup;
 
     public TiledProjectImporter(Map map, Objecttypes objecttypes)
     {
-      var objecttypesByName = objecttypes
+      _map = map;
+
+      _objecttypesByName = objecttypes
         .Objecttype
         .ToDictionary(ot => ot.Name, ot => ot, StringComparer.InvariantCultureIgnoreCase);
 
-      var prefabLookup = AssetDatabase
+      _prefabLookup = AssetDatabase
         .GetAllAssetPaths()
         .Where(path => path.EndsWith(".prefab"))
         .ToDictionary(p => GetPrefabName(p), p => p, StringComparer.InvariantCultureIgnoreCase);
-
-      _gameObjectFactories = new AbstractGameObjectFactory[]
-      {
-        new PlatformColliderFactory(map, prefabLookup, objecttypesByName),
-        new OneWayPlatformColliderFactory(map, prefabLookup, objecttypesByName),
-        new DeathHazardFactory(map, prefabLookup, objecttypesByName),
-        new LayerPrefabFactory(map, prefabLookup, objecttypesByName),
-        new TiledObjectPrefabFactory(map, prefabLookup, objecttypesByName),
-        new CameraModifierFactory(map, prefabLookup, objecttypesByName)
-      };
     }
 
-    public void Import(GameObject parent = null)
+    public void Import(
+      GameObject parent = null,
+      AbstractGameObjectFactory[] gameObjectFactories = null,
+      Property[] propertyFilters = null)
     {
+      if (gameObjectFactories == null)
+      {
+        gameObjectFactories = CreateDefaultGameObjectFactories().ToArray();
+      }
+
       var tiledObjectsGameObject = new GameObject("Tiled Objects");
       tiledObjectsGameObject.transform.position = Vector3.zero;
 
       tiledObjectsGameObject.AttachChildren(
-        _gameObjectFactories.SelectMany(f => f.Create()));
+        gameObjectFactories.SelectMany(f => f.Create(propertyFilters ?? new Property[0])));
 
       if (parent != null)
       {
         tiledObjectsGameObject.transform.parent = parent.transform;
       }
+    }
+
+    private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories()
+    {
+      yield return new PlatformColliderFactory(_map, _prefabLookup, _objecttypesByName);
+      yield return new OneWayPlatformColliderFactory(_map, _prefabLookup, _objecttypesByName);
+      yield return new DeathHazardFactory(_map, _prefabLookup, _objecttypesByName);
+      yield return new LayerPrefabFactory(_map, _prefabLookup, _objecttypesByName);
+      yield return new TiledObjectPrefabFactory(_map, _prefabLookup, _objecttypesByName);
+      yield return new CameraModifierFactory(_map, _prefabLookup, _objecttypesByName);
     }
 
     private string GetPrefabName(string assetPath)

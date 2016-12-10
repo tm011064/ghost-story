@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +8,10 @@ public class GameManager : MonoBehaviour
 {
   public static GameManager Instance = null;
 
+  [HideInInspector]
   public PlayerController Player;
+
+  public PlayableCharacter[] PlayableCharacters;
 
   [HideInInspector]
   public GameSettings GameSettings;
@@ -19,6 +23,9 @@ public class GameManager : MonoBehaviour
   public Easing Easing;
 
   private Checkpoint[] _orderedSceneCheckpoints;
+
+  private readonly Dictionary<string, PlayerController> _playerControllersByName
+    = new Dictionary<string, PlayerController>(StringComparer.OrdinalIgnoreCase);
 
   private int _currentCheckpointIndex = 0;
 
@@ -78,7 +85,7 @@ public class GameManager : MonoBehaviour
     ObjectPoolingManager.Instance.DeactivateAll();
 
     ResetCameraPosition(cameraPosition);
-    
+
     foreach (ISceneResetable sceneResetable in FindComponents<ISceneResetable>())
     {
       sceneResetable.OnSceneReset();
@@ -117,18 +124,33 @@ public class GameManager : MonoBehaviour
 
     ResetPooledObjects();
 
-    var playerController = Instantiate(
-      GameManager.Instance.Player,
-      checkpoint.transform.position,
-      Quaternion.identity) as PlayerController;
-
-    playerController.SpawnLocation = checkpoint.transform.position;
-
-    Player = playerController;
+    ActivatePlayer(
+      PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
+      checkpoint.transform.position);
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
 #endif
+  }
+
+  public void ActivatePlayer(string name, Vector3? position = null)
+  {
+    PlayerController playerController;
+
+    if (!_playerControllersByName.TryGetValue(name, out playerController))
+    {
+      var prefab = PlayableCharacters.Single(
+        p => string.Equals(p.PlayerController.name, name, StringComparison.OrdinalIgnoreCase));
+
+      playerController = Instantiate(
+        prefab.PlayerController,
+        position ?? Vector3.zero,
+        Quaternion.identity) as PlayerController;
+
+      _playerControllersByName[name] = playerController;
+    }
+
+    Player = playerController;
   }
 
   private IEnumerable<T> FindComponents<T>()
@@ -208,9 +230,20 @@ public class GameManager : MonoBehaviour
       Destroy(gameObject);
     }
 
+    if (PlayableCharacters == null || !PlayableCharacters.Any())
+    {
+      throw new InvalidOperationException("GameManager must have at least one playable character defined");
+    }
+
+    if (!PlayableCharacters.Any(p => p.IsDefault)
+      || PlayableCharacters.Count(p => p.IsDefault) > 1)
+    {
+      throw new InvalidOperationException("GameManager must have exactly one default playable character defined");
+    }
+
     InputStateManager = new InputStateManager();
 
-    InputStateManager.InitializeButtons("Jump", "Dash", "Fall", "Attack");
+    InputStateManager.InitializeButtons("Jump", "Dash", "Fall", "Attack", "Switch"); // TODO (Roman): move this somewhere else
     InputStateManager.InitializeAxes("Horizontal", "Vertical");
 
     Easing = new Easing();

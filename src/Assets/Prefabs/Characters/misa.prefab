@@ -83,12 +83,12 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012664598406}
-  - 114: {fileID: 114000013577865462}
+  - 114: {fileID: 114000010952797648}
   - 114: {fileID: 114000012203644590}
   - 50: {fileID: 50000014072373306}
   - 114: {fileID: 114000013497037138}
   m_Layer: 8
-  m_Name: misa
+  m_Name: Misa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,6 +225,83 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114000010952797648
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252c4da529a509e47bc7622213598c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterPhysicsManager: {fileID: 0}
+  WallJumpSettings:
+    EnableWallJumps: 0
+    WallJumpEnabledTime: 0.5
+    WallVelocityDownThreshold: -200
+    WallJumpPushOffAxisOverrideTime: 0.2
+    WallStickGravity: -100
+    WallJumpWallEvaluationDuration: 0.1
+    MaxWallDownwardSpeed: -1000
+    MinDistanceFromFloor: 128
+  JumpSettings:
+    Gravity: -900
+    StandJumpHeight: 90
+    WalkJumpHeight: 90
+    WalkJumpHeightSpeedTrigger: 9999
+    RunJumpHeight: 9999
+    RunJumpHeightSpeedTrigger: 9999
+    InAirDamping: 8
+    AllowJumpAfterGroundLostThreashold: 0.1
+    MaxDownwardSpeed: -400
+    EnableBackflipOnDirectionChange: 1
+    BackflipOnDirectionChangeSpeed: 200
+    MaxHorizontalSpeed: 110
+  RunSettings:
+    WalkSpeed: 120
+    EnableRunning: 0
+    RunSpeed: 900
+    AccelerationGroundDamping: 8
+    DecelerationGroundDamping: 96
+  ClimbSettings:
+    EnableLadderClimbing: 0
+    ClimbUpVelocity: 100
+    ClimbDownVelocity: 100
+    MinFallDuration: 0.5
+  SlideSettings:
+    EnableSliding: 0
+    Duration: 1
+    Distance: 200
+    InputButtonsPressed:
+    - Down
+    InputButtonDown: Jump
+  CrouchSettings:
+    EnableCrouching: 0
+  PlayerHealthSettings:
+    HealthUnits: 20
+    DeathAnimationPrefab: {fileID: 0}
+    DeathAnimationPrefabOffset: {x: 0, y: 0}
+  DamageSettings:
+    SpriteBlinkInterval: 0.1
+    KnockbackDuration: 0.8
+    KnockbackDistance: 8
+    InvincibleDurationAfterKnockback: 2
+  InputSettings:
+    AxisSensitivityThreshold: 0.2
+  BoxColliderOffsetWallAttached: {x: 0, y: 0}
+  BoxColliderSizeWallAttached: {x: 0, y: 0}
+  AdjustedGravity: 0
+  Animator: {fileID: 0}
+  Sprite: {fileID: 0}
+  SpriteRenderer: {fileID: 0}
+  EnvironmentBoxCollider: {fileID: 0}
+  EnemyBoxCollider: {fileID: 0}
+  SpawnLocation: {x: 0, y: 0, z: 0}
+  CurrentPlatform: {fileID: 0}
+  PlayerState: 0
+  StandIdleEnvironmentBoxColliderSize: {x: 0, y: 0}
 --- !u!114 &114000012203644590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -291,83 +368,6 @@ MonoBehaviour:
   WalkingJumpHeightWidth: 332
   PlayerDimensions: {x: 86, y: 86}
   SafeAreaBounds: {x: 1920, y: 1080}
---- !u!114 &114000013577865462
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012640441032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ae30c20452fd0040a6e7fad419061c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterPhysicsManager: {fileID: 0}
-  WallJumpSettings:
-    EnableWallJumps: 0
-    WallJumpEnabledTime: 0.5
-    WallVelocityDownThreshold: -200
-    WallJumpPushOffAxisOverrideTime: 0.2
-    WallStickGravity: -100
-    WallJumpWallEvaluationDuration: 0.1
-    MaxWallDownwardSpeed: -1000
-    MinDistanceFromFloor: 128
-  JumpSettings:
-    Gravity: -900
-    StandJumpHeight: 90
-    WalkJumpHeight: 90
-    WalkJumpHeightSpeedTrigger: 9999
-    RunJumpHeight: 9999
-    RunJumpHeightSpeedTrigger: 9999
-    InAirDamping: 8
-    AllowJumpAfterGroundLostThreashold: 0.1
-    MaxDownwardSpeed: -400
-    EnableBackflipOnDirectionChange: 1
-    BackflipOnDirectionChangeSpeed: 200
-    MaxHorizontalSpeed: 110
-  RunSettings:
-    WalkSpeed: 120
-    EnableRunning: 0
-    RunSpeed: 9999
-    AccelerationGroundDamping: 8
-    DecelerationGroundDamping: 96
-  ClimbSettings:
-    EnableLadderClimbing: 0
-    ClimbUpVelocity: 100
-    ClimbDownVelocity: 100
-    MinFallDuration: 0.5
-  SlideSettings:
-    EnableSliding: 0
-    Duration: 1
-    Distance: 200
-    InputButtonsPressed:
-    - Down
-    InputButtonDown: Jump
-  CrouchSettings:
-    EnableCrouching: 0
-  PlayerHealthSettings:
-    HealthUnits: 20
-    DeathAnimationPrefab: {fileID: 0}
-    DeathAnimationPrefabOffset: {x: 0, y: 0}
-  DamageSettings:
-    SpriteBlinkInterval: 0.1
-    KnockbackDuration: 0.8
-    KnockbackDistance: 8
-    InvincibleDurationAfterKnockback: 2
-  InputSettings:
-    AxisSensitivityThreshold: 0.2
-  BoxColliderOffsetWallAttached: {x: 0, y: 0}
-  BoxColliderSizeWallAttached: {x: 0, y: 0}
-  AdjustedGravity: 0
-  Animator: {fileID: 0}
-  Sprite: {fileID: 0}
-  SpriteRenderer: {fileID: 0}
-  EnvironmentBoxCollider: {fileID: 0}
-  EnemyBoxCollider: {fileID: 0}
-  SpawnLocation: {x: 0, y: 0, z: 0}
-  CurrentPlatform: {fileID: 0}
-  PlayerState: 0
-  StandIdleEnvironmentBoxColliderSize: {x: 0, y: 0}
 --- !u!212 &212000013109681084
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -15,14 +15,15 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
     }
 
-    public override IEnumerable<GameObject> Create()
+    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
     {
       var parentObject = new GameObject("Auto created Tiled layer objects");
 
       parentObject.transform.position = Vector3.zero;
 
       var createdGameObjects = Map
-        .ForEachLayerWithPropertyName("Prefab")
+        .ForEachLayerWithProperties(propertyFilters)
+        .Where(layer => layer.HasProperty("Prefab"))
         .Get<IEnumerable<GameObject>>(CreatePrefabsFromLayer)
         .SelectMany(l => l);
 

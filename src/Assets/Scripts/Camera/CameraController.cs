@@ -22,6 +22,8 @@ public class CameraController : MonoBehaviour
 
   private readonly CameraMovementSettingsManager _cameraMovementSettingsManager = new CameraMovementSettingsManager();
 
+  private GameManager _gameManager;
+
   private CharacterPhysicsManager _characterPhysicsManager;
 
   private float _horizontalSmoothDampVelocity;
@@ -29,8 +31,6 @@ public class CameraController : MonoBehaviour
   private float _verticalSmoothDampVelocity;
 
   private UpdateTimer _zoomTimer;
-
-  private PlayerController _playerController;
 
   private CameraTrolley[] _cameraTrolleys;
 
@@ -165,10 +165,10 @@ public class CameraController : MonoBehaviour
 
     Transform = gameObject.transform;
 
-    _playerController = GameManager.Instance.Player;
+    _gameManager = GameManager.Instance;
 
     // we set the target of the camera to our player through code
-    Target = _playerController.transform;
+    Target = _gameManager.Player.transform;
 
     _lastTargetPosition = Target.transform.position;
 
@@ -340,13 +340,13 @@ public class CameraController : MonoBehaviour
                   || Target.position.y <= _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary)
                 &&
                 (
-                  Target.position.y > Transform.position.y + CameraOffset.y + _playerController.JumpSettings.RunJumpHeight // (the character has exceeded the jump height which means he has been artifically catapulted upwards)
+                  Target.position.y > Transform.position.y + CameraOffset.y + _gameManager.Player.JumpSettings.RunJumpHeight // (the character has exceeded the jump height which means he has been artifically catapulted upwards)
                   && _characterPhysicsManager.Velocity.y > 0f // AND we go up  
                 )
              )
         )
       {
-        updateParameters.YPos = Target.position.y - _playerController.JumpSettings.RunJumpHeight;
+        updateParameters.YPos = Target.position.y - _gameManager.Player.JumpSettings.RunJumpHeight;
 
         _isAboveJumpHeightLocked = true; // make sure for second if condition
       }

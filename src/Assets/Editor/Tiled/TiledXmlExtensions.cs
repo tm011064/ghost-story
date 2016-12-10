@@ -61,6 +61,15 @@ namespace Assets.Editor.Tiled
       return properties;
     }
 
+    public static IEnumerable<Objectgroup> ForEachObjectGroupWithProperties(
+      this Map map,
+      Property[] properties)
+    {
+      return map
+        .Objectgroup
+        .Where(og => properties.All(property => og.HasProperty(property.Name, property.Value)));
+    }
+
     public static IEnumerable<Objectgroup> ForEachObjectGroupWithProperty(
       this Map map,
       string propertyName,
@@ -69,6 +78,19 @@ namespace Assets.Editor.Tiled
       return map
         .Objectgroup
         .Where(og => og.HasProperty(propertyName, propertyValue));
+    }
+
+    public static IEnumerable<Object> ForEachObjectWithProperty(
+      this Map map,
+      Property[] propertyFilters,
+      string propertyName,
+      Dictionary<string, Objecttype> objecttypesByName)
+    {
+      return map
+        .ForEachObjectGroupWithProperties(propertyFilters)
+        .SelectMany(og => og
+          .Object
+          .Where(o => o.HasProperty(propertyName, objecttypesByName)));
     }
 
     public static IEnumerable<Object> ForEachObjectWithProperty(
@@ -180,22 +202,42 @@ namespace Assets.Editor.Tiled
       return !obj.Gid.HasValue;
     }
 
+    public static IEnumerable<Layer> ForEachLayerWithProperties(
+      this Map map,
+      Property[] properties)
+    {
+      return map
+        .Layers
+        .Where(
+          layer => layer.Properties != null
+          && properties.All(property => layer.Properties.Property.Any(
+            p => string.Equals(p.Name.Trim(), property.Name, StringComparison.OrdinalIgnoreCase)
+              && string.Equals(p.Value.Trim(), property.Value, StringComparison.OrdinalIgnoreCase))));
+    }
+
     public static IEnumerable<Layer> ForEachLayerWithProperty(this Map map, string propertyName, string propertyValue)
     {
       return map
         .Layers
-        .Where(c => c.Properties != null && c.Properties.Property.Any(
-          p => string.Equals(p.Name.Trim(), propertyName, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(p.Value.Trim(), propertyValue, StringComparison.OrdinalIgnoreCase)));
+        .Where(
+          layer => layer.Properties != null
+          && layer.Properties.Property.Any(
+            p => string.Equals(p.Name.Trim(), propertyName, StringComparison.OrdinalIgnoreCase)
+              && string.Equals(p.Value.Trim(), propertyValue, StringComparison.OrdinalIgnoreCase)));
     }
 
     public static IEnumerable<Layer> ForEachLayerWithPropertyName(this Map map, string propertyName)
     {
       return map
         .Layers
-        .Where(c => c.Properties != null
-          && c.Properties.Property.Any(
-            p => string.Equals(p.Name.Trim(), propertyName, StringComparison.OrdinalIgnoreCase)));
+        .Where(layer => layer.HasProperty(propertyName));
+    }
+
+    public static bool HasProperty(this Layer layer, string propertyName)
+    {
+      return layer.Properties != null
+        && layer.Properties.Property.Any(
+          p => string.Equals(p.Name.Trim(), propertyName, StringComparison.OrdinalIgnoreCase));
     }
 
     public static bool TryGetProperty(this Layer layer, string propertyName, out int value)

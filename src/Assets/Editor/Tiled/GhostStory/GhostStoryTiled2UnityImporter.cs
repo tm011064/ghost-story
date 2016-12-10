@@ -34,6 +34,7 @@ namespace Assets.Editor.Tiled
         AttachCustomObjects(prefab);
       }
 
+      // TODO (Roman): loop over layers and determine whether the layer is real or alternate, then assign tag maybe?
       LinkCheckpointsToRooms(prefab);
     }
 
@@ -90,9 +91,11 @@ namespace Assets.Editor.Tiled
 
       Debug.Log("Importing file '" + tmxFile + "'");
 
-      var importer = TiledProjectImporter.CreateFromFile(
+      var importer = TiledProjectImporterFactory.CreateFromFile(
         tmxFile,
         objectTypesPath);
+
+      // TODO (Roman): get all alternate, real and global objects and assign to dedicated game object
 
       importer.Import(prefab);
     }

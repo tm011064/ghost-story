@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
 {
@@ -13,13 +14,12 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
     }
 
-    public override IEnumerable<GameObject> Create()
+    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
     {
       var prefabsParent = new GameObject("Auto created Tiled prefabs");
       prefabsParent.transform.position = Vector3.zero;
 
-      var prefabGameObjects = Map
-        .ForEachObjectWithProperty("Prefab", ObjecttypesByName)
+      var prefabGameObjects = GetObjects(propertyFilters)
         .Get<GameObject>(CreatePrefabFromGameObject);
 
       foreach (var gameObject in prefabGameObjects)
@@ -28,6 +28,13 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       }
 
       yield return prefabsParent;
+    }
+
+    private IEnumerable<Object> GetObjects(Property[] propertyFilters)
+    {
+      return propertyFilters.Any()
+        ? Map.ForEachObjectWithProperty(propertyFilters, "Prefab", ObjecttypesByName)
+        : Map.ForEachObjectWithProperty("Prefab", ObjecttypesByName);
     }
 
     private GameObject CreatePrefabFromGameObject(Object obj)

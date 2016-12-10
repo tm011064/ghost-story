@@ -258,7 +258,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 1000013642570662, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+    - target: {fileID: 0}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -266,7 +266,7 @@ Prefab:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1000013642570662, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+    - target: {fileID: 0}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
