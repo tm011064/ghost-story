@@ -270,6 +270,22 @@ Prefab:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1000011047799546, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_TagString
+      value: RealWorld
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013474371630, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_TagString
+      value: RealWorld
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011877818482, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_TagString
+      value: AlternateWorld
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012588790390, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_TagString
+      value: AlternateWorld
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
   m_IsPrefabParent: 0

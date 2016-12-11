@@ -87,6 +87,7 @@ GameObject:
   - 114: {fileID: 114000012203644590}
   - 50: {fileID: 50000014072373306}
   - 114: {fileID: 114000013497037138}
+  - 114: {fileID: 114000014100412196}
   m_Layer: 8
   m_Name: Misa
   m_TagString: Untagged
@@ -368,6 +369,18 @@ MonoBehaviour:
   WalkingJumpHeightWidth: 332
   PlayerDimensions: {x: 86, y: 86}
   SafeAreaBounds: {x: 1920, y: 1080}
+--- !u!114 &114000014100412196
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 937c1616b0c3ae845a770a7efd13b2a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelOneMaxDuration: 1
 --- !u!212 &212000013109681084
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -2,18 +2,27 @@
 
 public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
 {
-  public FreezeRealWorldPlayerControlHandler(PlayerController playerController)
+  private readonly XYAxisState _frozenAxisState;
+
+  public FreezeRealWorldPlayerControlHandler(PlayerController playerController, float duration)
     : base(
       playerController,
-      3, // TODO (Roman): get this from a config value
+      duration,
       Animator.StringToHash("Freeze"))
   {
+    _frozenAxisState = base.GetAxisState();
+  }
+
+  protected override XYAxisState GetAxisState()
+  {
+    return _frozenAxisState;
   }
 
   public override void Dispose()
   {
-    GameManager.Player.GetComponentInChildren<SpriteRenderer>().enabled = false; // TODO (Roman): refactor this
-    GameManager.Player.enabled = false;
+    ((GhostStoryGameManager)GameManager.Instance).SwitchToRealWorld();
+
+    GameManager.Player.DisableAndHide();
 
     GameManager.ActivatePlayer(PlayableCharacterNames.Misa.ToString());
 

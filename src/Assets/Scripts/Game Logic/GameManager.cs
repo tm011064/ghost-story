@@ -249,6 +249,12 @@ public class GameManager : MonoBehaviour
     Easing = new Easing();
 
     DontDestroyOnLoad(gameObject);
+
+    OnAwake();
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   void Update()

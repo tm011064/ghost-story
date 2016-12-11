@@ -97,9 +97,15 @@ public partial class PlayerController : BaseCharacterController
 
     _reusableWallJumpEvaluationControlHandler = new WallJumpEvaluationControlHandler(this);
 
-    PushControlHandler(CreateDefaultPlayerControlHandler());
-
     AdjustedGravity = JumpSettings.Gravity;
+
+    OnAwake();
+
+    PushControlHandler(CreateDefaultPlayerControlHandler());
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   private void InitializeWeapons()

@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433718}
-  - 114: {fileID: 11421160}
+  - 114: {fileID: 114000012318356666}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -29,40 +29,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11421160
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 168078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 913f3d65f751af747b5074268dd57734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Player: {fileID: 114000010952797648, guid: 1058e9988b4583745befb236cd9b265f, type: 2}
-  PlayableCharacters:
-  - PlayerController: {fileID: 114000010952797648, guid: 1058e9988b4583745befb236cd9b265f,
-      type: 2}
-    IsDefault: 1
-  - PlayerController: {fileID: 114000013577865462, guid: 97e2d8c3119525c46a46745d05b4b36f,
-      type: 2}
-    IsDefault: 0
-  GameSettings:
-    PlayerMetricSettings:
-      JumpReleaseUpVelocityMultiplier: 0.5
-    LogSettings:
-      LogFile: Log\DefaultLog.txt
-      TotalArchivedFilesToKeep: 3
-      EchoToConsole: 1
-      AddTimeStamp: 1
-      BreakOnError: 1
-      BreakOnAssert: 1
-      EnabledTraceTags: []
-      EnableAllTraceTags: 0
-      AddTraceTagToMessage: 1
-    ObjectPoolSettings:
-      TotalEnemyDeathAnimations: 12
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -74,3 +40,37 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 168078}
   m_IsPrefabParent: 1
+--- !u!114 &114000012318356666
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 168078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a68fa7034e85845968d934c7916573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 0}
+  PlayableCharacters:
+  - PlayerController: {fileID: 114000010952797648, guid: 1058e9988b4583745befb236cd9b265f,
+      type: 2}
+    IsDefault: 1
+  - PlayerController: {fileID: 114000013577865462, guid: 97e2d8c3119525c46a46745d05b4b36f,
+      type: 2}
+    IsDefault: 0
+  GameSettings:
+    PlayerMetricSettings:
+      JumpReleaseUpVelocityMultiplier: 0.5
+    LogSettings:
+      LogFile: Log/DefaultLog.txt
+      TotalArchivedFilesToKeep: 3
+      EchoToConsole: 1
+      AddTimeStamp: 1
+      BreakOnError: 1
+      BreakOnAssert: 1
+      EnabledTraceTags: []
+      EnableAllTraceTags: 0
+      AddTraceTagToMessage: 1
+    ObjectPoolSettings:
+      TotalEnemyDeathAnimations: 12

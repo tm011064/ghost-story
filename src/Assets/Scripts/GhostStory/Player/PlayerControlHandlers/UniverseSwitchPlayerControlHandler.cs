@@ -1,10 +1,14 @@
-﻿using UnityEngine;
-
+﻿
 public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
 {
-  public UniverseSwitchPlayerControlHandler(PlayerController playerController)
+  private readonly WorldSwitchSettings _worldSwitchSettings;
+
+  public UniverseSwitchPlayerControlHandler(
+    PlayerController playerController,
+    WorldSwitchSettings worldSwitchSettings)
     : base(playerController)
   {
+    _worldSwitchSettings = worldSwitchSettings;
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
@@ -13,14 +17,18 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
     {
       var position = GameManager.Player.transform.position;
 
-      GameManager.Player.PushControlHandler(new FreezeRealWorldPlayerControlHandler(GameManager.Player));
+      GameManager.Player.PushControlHandler(
+        new FreezeRealWorldPlayerControlHandler(
+          GameManager.Player,
+          _worldSwitchSettings.LevelOneMaxDuration));
 
       GameManager.ActivatePlayer(PlayableCharacterNames.Kino.ToString(), position);
 
-      GameManager.Player.GetComponentInChildren<SpriteRenderer>().enabled = true; // TODO (Roman): refactor this
-      GameManager.Player.enabled = true;
+      GameManager.Player.EnableAndShow();
       GameManager.Player.SpawnLocation = position;
       GameManager.Player.Respawn();
+
+      ((GhostStoryGameManager)GameManager.Instance).SwitchToAlternateWorld();
     }
 
     return base.DoUpdate();

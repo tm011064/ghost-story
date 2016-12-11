@@ -4,11 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Death
-  - Checkpoint 1
-  - Checkpoint 2
-  - Checkpoint 3
-  - JumpArenaCheckpoint
+  - RealWorld
+  - AlternateWorld
   layers:
   - Default
   - TransparentFX

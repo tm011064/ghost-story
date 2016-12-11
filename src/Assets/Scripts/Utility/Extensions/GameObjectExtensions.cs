@@ -27,4 +27,18 @@ public static class GameObjectExtensions
       self.AttachChild(child);
     }
   }
+
+  public static void DisableAndHide(this GameObject self)
+  {
+    Debug.Log("Enabling " + self.name);
+    self.GetComponentInChildren<Renderer>().enabled = false;
+    self.SetActive(false);
+  }
+
+  public static void EnableAndShow(this GameObject self)
+  {
+    Debug.Log("Disabling " + self.name);
+    self.SetActive(true);
+    self.GetComponentInChildren<Renderer>().enabled = true;
+  }
 }
