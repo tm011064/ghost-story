@@ -10,30 +10,28 @@ namespace Assets.Editor.Tiled
 {
   public class TiledProjectImporter
   {
-    private readonly Map _map;
+    public readonly Map Map;
 
-    private readonly Objecttypes _objecttypes;
+    public readonly Dictionary<string, Objecttype> ObjecttypesByName;
 
-    private readonly Dictionary<string, Objecttype> _objecttypesByName;
-
-    private readonly Dictionary<string, string> _prefabLookup;
+    public readonly Dictionary<string, string> PrefabLookup;
 
     public TiledProjectImporter(Map map, Objecttypes objecttypes)
     {
-      _map = map;
+      Map = map;
 
-      _objecttypesByName = objecttypes
+      ObjecttypesByName = objecttypes
         .Objecttype
         .ToDictionary(ot => ot.Name, ot => ot, StringComparer.InvariantCultureIgnoreCase);
 
-      _prefabLookup = AssetDatabase
+      PrefabLookup = AssetDatabase
         .GetAllAssetPaths()
         .Where(path => path.EndsWith(".prefab"))
         .ToDictionary(p => GetPrefabName(p), p => p, StringComparer.InvariantCultureIgnoreCase);
     }
 
     public void Import(
-      GameObject parent = null,
+      GameObject parent,
       AbstractGameObjectFactory[] gameObjectFactories = null,
       Property[] propertyFilters = null)
     {
@@ -48,20 +46,32 @@ namespace Assets.Editor.Tiled
       tiledObjectsGameObject.AttachChildren(
         gameObjectFactories.SelectMany(f => f.Create(propertyFilters ?? new Property[0])));
 
-      if (parent != null)
+      AssignTags(parent);
+
+      tiledObjectsGameObject.transform.parent = parent.transform;
+    }
+
+    private void AssignTags(GameObject prefab)
+    {
+      foreach (var layer in Map.ForEachLayerWithPropertyName("Tag"))
       {
-        tiledObjectsGameObject.transform.parent = parent.transform;
+        var tag = layer.GetProperty("Tag");
+        var transform = prefab.transform.FindChild(layer.Name);
+
+        transform.tag = tag;
+
+        Debug.Log("Tile2Unity Import: Assigned tag '" + tag + "' to game object " + transform);
       }
     }
 
     private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories()
     {
-      yield return new PlatformColliderFactory(_map, _prefabLookup, _objecttypesByName);
-      yield return new OneWayPlatformColliderFactory(_map, _prefabLookup, _objecttypesByName);
-      yield return new DeathHazardFactory(_map, _prefabLookup, _objecttypesByName);
-      yield return new LayerPrefabFactory(_map, _prefabLookup, _objecttypesByName);
-      yield return new TiledObjectPrefabFactory(_map, _prefabLookup, _objecttypesByName);
-      yield return new CameraModifierFactory(_map, _prefabLookup, _objecttypesByName);
+      yield return new PlatformColliderFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new OneWayPlatformColliderFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new DeathHazardFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new LayerPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new TiledObjectPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new CameraModifierFactory(Map, PrefabLookup, ObjecttypesByName);
     }
 
     private string GetPrefabName(string assetPath)

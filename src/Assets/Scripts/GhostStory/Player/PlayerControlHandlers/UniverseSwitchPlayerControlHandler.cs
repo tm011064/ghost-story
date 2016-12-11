@@ -9,6 +9,7 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
     : base(playerController)
   {
     _worldSwitchSettings = worldSwitchSettings;
+    GhostStoryGameContext.Instance.SwitchToRealWorld();
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
@@ -28,7 +29,7 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
       GameManager.Player.SpawnLocation = position;
       GameManager.Player.Respawn();
 
-      ((GhostStoryGameManager)GameManager.Instance).SwitchToAlternateWorld();
+      GhostStoryGameContext.Instance.SwitchToAlternateWorld();
     }
 
     return base.DoUpdate();

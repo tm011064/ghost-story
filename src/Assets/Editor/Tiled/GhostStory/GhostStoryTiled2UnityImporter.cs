@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Editor.Tiled.GameObjectFactories;
 using Tiled2Unity;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -34,7 +35,6 @@ namespace Assets.Editor.Tiled
         AttachCustomObjects(prefab);
       }
 
-      // TODO (Roman): loop over layers and determine whether the layer is real or alternate, then assign tag maybe?
       LinkCheckpointsToRooms(prefab);
     }
 
@@ -95,9 +95,28 @@ namespace Assets.Editor.Tiled
         tmxFile,
         objectTypesPath);
 
-      // TODO (Roman): get all alternate, real and global objects and assign to dedicated game object
-
-      importer.Import(prefab);
+      importer.Import(
+        prefab,
+        new AbstractGameObjectFactory[]
+        {
+          new PlatformColliderFactory(
+            importer.Map, 
+            importer.PrefabLookup, 
+            importer.ObjecttypesByName, 
+            "RealWorldPlatforms", 
+            "Platforms"),
+          new PlatformColliderFactory(
+            importer.Map, 
+            importer.PrefabLookup, 
+            importer.ObjecttypesByName,
+            "AlternateWorldPlatforms",
+            "AlternatePlatforms"),
+          new OneWayPlatformColliderFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new DeathHazardFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new LayerPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new TiledObjectPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new CameraModifierFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+        });
     }
 
     private void Destroy(GameObject prefab, params string[] names)

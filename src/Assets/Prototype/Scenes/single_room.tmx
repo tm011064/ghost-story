@@ -16,7 +16,7 @@
  </tileset>
  <layer name="Real_Background" width="24" height="16">
   <properties>
-   <property name="Universe" value="Real"/>
+   <property name="Tag" value="RealWorld"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -39,8 +39,8 @@
  </layer>
  <layer name="Real_Platforms" width="24" height="16">
   <properties>
-   <property name="Collider" value="Platform"/>
-   <property name="Universe" value="Real"/>
+   <property name="Collider" value="RealWorldPlatforms"/>
+   <property name="Tag" value="RealWorld"/>
   </properties>
   <data encoding="csv">
 137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,137,
@@ -63,7 +63,7 @@
  </layer>
  <layer name="Alternate_Background" width="24" height="16">
   <properties>
-   <property name="Universe" value="Alternate"/>
+   <property name="Tag" value="AlternateWorld"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -86,8 +86,8 @@
  </layer>
  <layer name="Alternate_Platforms" width="24" height="16">
   <properties>
-   <property name="Collider" value="Platform"/>
-   <property name="Universe" value="Alternate"/>
+   <property name="Collider" value="AlternateWorldPlatforms"/>
+   <property name="Tag" value="AlternateWorld"/>
   </properties>
   <data encoding="csv">
 133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,

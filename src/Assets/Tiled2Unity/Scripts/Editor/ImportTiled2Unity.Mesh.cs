@@ -212,6 +212,8 @@ namespace Tiled2Unity
 
     private void AssignTagTo(GameObject gameObject, XElement xml)
     {
+      Debug.Log("Getting tag for " + gameObject.name + ", xml: " + xml.Value);
+
       string tag = ImportUtils.GetAttributeAsString(xml, "tag", "");
       if (String.IsNullOrEmpty(tag))
         return;

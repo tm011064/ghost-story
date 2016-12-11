@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 10/12/2016 22:24:04-->
+<!--Last exported: 11/12/2016 17:05:01-->
 <Tiled2Unity version="1.0.7.7">
   <AssignMaterial mesh="mesh_0001" material="blocks_64x32_dark" />
   <AssignMaterial mesh="mesh_0002" material="blocks_16x16" />
@@ -11,21 +11,21 @@
   <Prefab name="single_room" orientation="Orthogonal" staggerAxis="Y" staggerIndex="Odd" hexSideLength="0" numLayers="4" numTilesWide="24" numTilesHigh="16" tileWidth="16" tileHeight="16" exportScale="1" mapWidthInPixels="384" mapHeightInPixels="256">
     <GameObject name="Real_Background" x="0" y="0" z="0">
       <GameObject name="blocks_64x32_dark" copy="mesh_0001" sortingLayerName="" sortingOrder="0" opacity="1" />
-      <Property name="Universe" value="Real" />
+      <Property name="Tag" value="RealWorld" />
     </GameObject>
     <GameObject name="Real_Platforms" x="0" y="0" z="0">
       <GameObject name="blocks_16x16" copy="mesh_0002" sortingLayerName="" sortingOrder="1" opacity="1" />
-      <Property name="Collider" value="Platform" />
-      <Property name="Universe" value="Real" />
+      <Property name="Collider" value="RealWorldPlatforms" />
+      <Property name="Tag" value="RealWorld" />
     </GameObject>
     <GameObject name="Alternate_Background" x="0" y="0" z="0">
       <GameObject name="blocks_64x32_dark" copy="mesh_0003" sortingLayerName="" sortingOrder="2" opacity="1" />
-      <Property name="Universe" value="Alternate" />
+      <Property name="Tag" value="AlternateWorld" />
     </GameObject>
     <GameObject name="Alternate_Platforms" x="0" y="0" z="0">
       <GameObject name="blocks_16x16" copy="mesh_0004" sortingLayerName="" sortingOrder="3" opacity="1" />
-      <Property name="Collider" value="Platform" />
-      <Property name="Universe" value="Alternate" />
+      <Property name="Collider" value="AlternateWorldPlatforms" />
+      <Property name="Tag" value="AlternateWorld" />
     </GameObject>
     <GameObject name="Checkpoints" x="0" y="0" z="0">
       <GameObject name="TileObject" x="48" y="-208" rotation="0" layer="Checkpoint" scaleX="1" scaleY="1">

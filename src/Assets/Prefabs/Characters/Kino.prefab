@@ -238,7 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlatformMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 1048576
   OneWayPlatformMask:
     serializedVersion: 2
     m_Bits: 512

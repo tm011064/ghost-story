@@ -6,18 +6,26 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 {
   public class PlatformColliderFactory : AbstractGameObjectFactory
   {
+    private readonly string _colliderName;
+
+    private readonly string _layerMaskName;
+
     public PlatformColliderFactory(
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
+      Dictionary<string, Objecttype> objecttypesByName,
+      string colliderName = "platform",
+      string layerMaskName = "Platforms")
       : base(map, prefabLookup, objecttypesByName)
     {
+      _colliderName = colliderName;
+      _layerMaskName = layerMaskName;
     }
 
     public override IEnumerable<GameObject> Create(Property[] propertyFilters)
     {
       var filters = propertyFilters
-        .Concat(new Property[] { new Property { Name = "Collider", Value = "platform" } })
+        .Concat(new Property[] { new Property { Name = "Collider", Value = _colliderName } })
         .ToArray();
 
       return Map
@@ -39,7 +47,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         var obj = new GameObject("Collider");
 
         obj.transform.position = Vector3.zero;
-        obj.layer = LayerMask.NameToLayer("Platforms");
+        obj.layer = LayerMask.NameToLayer(_layerMaskName);
 
         AddEdgeColliders(obj, points);
 

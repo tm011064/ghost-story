@@ -274,6 +274,15 @@ namespace Assets.Editor.Tiled
       return false;
     }
 
+    public static string GetProperty(this Layer layer, string propertyName)
+    {
+      return layer
+        .Properties
+        .Property
+        .First(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+        .Value;
+    }
+
     public static void Execute(this IEnumerable<Layer> layers, Action<Layer> action)
     {
       foreach (var layer in layers)

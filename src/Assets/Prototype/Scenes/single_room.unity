@@ -176,7 +176,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!1001 &1084691455
 Prefab:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 440896, guid: 9906e1dd519a54140b221ea7bd753884, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9906e1dd519a54140b221ea7bd753884, type: 2}
@@ -285,6 +285,18 @@ Prefab:
     - target: {fileID: 1000012588790390, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
       propertyPath: m_TagString
       value: AlternateWorld
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012576984262, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011929127290, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011389328708, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 872c60c2fa271a540a1c55c769ff0b1d, type: 2}
