@@ -21,7 +21,7 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
       GameManager.Player.PushControlHandler(
         new FreezeRealWorldPlayerControlHandler(
           GameManager.Player,
-          _worldSwitchSettings.LevelOneMaxDuration));
+          _worldSwitchSettings));
 
       GameManager.ActivatePlayer(PlayableCharacterNames.Kino.ToString(), position);
 

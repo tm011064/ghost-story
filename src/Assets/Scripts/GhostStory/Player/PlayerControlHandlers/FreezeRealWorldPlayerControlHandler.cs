@@ -4,13 +4,18 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
 {
   private readonly XYAxisState _frozenAxisState;
 
-  public FreezeRealWorldPlayerControlHandler(PlayerController playerController, float duration)
+  private readonly WorldSwitchSettings _worldSwitchSettings;
+
+  public FreezeRealWorldPlayerControlHandler(
+    PlayerController playerController,
+    WorldSwitchSettings worldSwitchSettings)
     : base(
       playerController,
-      duration,
+      worldSwitchSettings.Duration,
       Animator.StringToHash("Freeze"))
   {
     _frozenAxisState = base.GetAxisState();
+    _worldSwitchSettings = worldSwitchSettings;
   }
 
   protected override XYAxisState GetAxisState()
@@ -27,5 +32,10 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
     GameManager.ActivatePlayer(PlayableCharacterNames.Misa.ToString());
 
     base.Dispose();
+  }
+
+  protected override ControlHandlerAfterUpdateStatus DoUpdate()
+  {
+    return base.DoUpdate();
   }
 }

@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
   private readonly FPSRenderer _fpsRenderer = new FPSRenderer();
 #endif
 
+  public PlayerController GetPlayerByName(string name)
+  {
+    return _playerControllersByName[name];
+  }
+
   public void SpawnPlayerAtNextCheckpoint(bool doCycle)
   {
     if (_currentCheckpointIndex >= _orderedSceneCheckpoints.Length - 1)

@@ -40,6 +40,11 @@ namespace Assets.Editor.Tiled
     {
       var properties = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
+      if (string.IsNullOrEmpty(obj.Type))
+      {
+        throw new NotSupportedException("Object " + obj.Name + " has not type");
+      }
+
       Objecttype objecttype;
 
       if (objecttypesByName.TryGetValue(obj.Type, out objecttype))

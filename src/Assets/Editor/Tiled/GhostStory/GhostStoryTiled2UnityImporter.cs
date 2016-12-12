@@ -18,6 +18,7 @@ namespace Assets.Editor.Tiled
 
     public void CustomizePrefab(GameObject prefab)
     {
+      //Customize(prefab);
       CustomizeSafe(prefab);
     }
 

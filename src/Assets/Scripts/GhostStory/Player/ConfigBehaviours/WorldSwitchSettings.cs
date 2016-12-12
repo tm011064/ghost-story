@@ -2,5 +2,5 @@
 
 public class WorldSwitchSettings : MonoBehaviour
 {
-  public float LevelOneMaxDuration = 10f;
+  public float Duration = 10f;
 }
