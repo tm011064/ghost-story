@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
@@ -26,6 +26,8 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
 
   public VerticalCameraFollowMode VerticalCameraFollowMode;
 
+  public FullScreenScrollerTransitionMode FullScreenScrollerTransitionMode = FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal;
+
   private GameObject _parent;
 
   private CameraController _cameraController;
@@ -44,9 +46,9 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
 
     OnSceneReset();
 
-    var enterTrigger = GetComponentInChildren<ITriggerEnterExit>();
+    var enterTriggers = GetComponentsInChildren<ITriggerEnterExit>();
 
-    if (enterTrigger != null)
+    foreach (var enterTrigger in enterTriggers)
     {
       enterTrigger.Entered += (_, e) => OnEnter(e.SourceCollider);
       enterTrigger.Exited += (_, e) => _cameraController.OnCameraModifierExit(_cameraMovementSettings);
@@ -88,22 +90,28 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
     // the scroll transform action.
     var targetPosition = _cameraController.CalculateTargetPosition();
 
-    PushControlHandlers(targetPosition);
-
-    var scrollTransformationAction = new TranslateTransformAction(
+    var scrollTranslationInfo = ScrollTranslationInfoFactory.Create(
+      _cameraController.Transform.position,
       targetPosition,
-      FullScreenScrollSettings.TransitionTime,
-      EasingType.Linear,
-      GameManager.Instance.Easing);
+      FullScreenScrollerTransitionMode,
+      FullScreenScrollSettings.TransitionTime);
 
-    _cameraController.EnqueueScrollAction(scrollTransformationAction);
+    PushControlHandlers(targetPosition, scrollTranslationInfo);
+
+    foreach (var translateTransformActions in scrollTranslationInfo.TranslateTransformActions)
+    {
+      _cameraController.EnqueueScrollAction(translateTransformActions);
+    }
   }
 
-  private void PushControlHandlers(Vector3 targetPosition)
+  private void PushControlHandlers(Vector3 targetPosition, ScrollTranslationInfo scrollTranslationInfo)
   {
-    Vector3? playerTranslationVector = GetPlayerTranslationVector(targetPosition);
+    Vector3? playerTranslationVector = GetPlayerTranslationVector(targetPosition, scrollTranslationInfo);
 
-    var freezeControlHandlers = new Queue<FreezePlayerControlHandler>(GetScrollControlHandlers(playerTranslationVector));
+    var freezeControlHandlers = new Queue<FreezePlayerControlHandler>(
+      GetScrollControlHandlers(
+        playerTranslationVector,
+        scrollTranslationInfo.PlayerMovementDelayDuration));
 
     GameManager.Instance.Player.ExchangeActiveControlHandler(
       freezeControlHandlers.Dequeue());
@@ -115,36 +123,64 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
     }
   }
 
-  private Vector3? GetPlayerTranslationVector(Vector3 targetPosition)
+  private Vector3? GetPlayerTranslationVector(Vector3 targetPosition, ScrollTranslationInfo scrollTranslationInfo)
   {
     if (FullScreenScrollSettings.PlayerTranslationDistance == 0f)
     {
       return null;
     }
 
-    var currentCameraPosition = _cameraController.gameObject.transform.position;
-
-    var directionVector = targetPosition - currentCameraPosition;
+    var directionVector = GetDirectionVector(
+      _cameraController.Transform.position,
+      targetPosition,
+      scrollTranslationInfo);
 
     return directionVector.normalized * FullScreenScrollSettings.PlayerTranslationDistance;
   }
 
-  private IEnumerable<FreezePlayerControlHandler> GetScrollControlHandlers(Vector3? playerTranslationVector)
+  private Vector3 GetDirectionVector(
+    Vector3 currentCameraPosition,
+    Vector3 targetPosition,
+    ScrollTranslationInfo scrollTranslationInfo)
+  {
+    switch (scrollTranslationInfo.PlayerMovementAxis)
+    {
+      case AxisType.Horizontal:
+        return new Vector3(targetPosition.x - currentCameraPosition.x, 0f);
+
+      case AxisType.Vertical:
+        return new Vector3(0f, targetPosition.y - currentCameraPosition.y);
+    }
+
+    throw new NotImplementedException();
+  }
+
+  private IEnumerable<FreezePlayerControlHandler> GetScrollControlHandlers(
+    Vector3? playerTranslationVector,
+    float delayDuration)
   {
     if (FullScreenScrollSettings.EndScrollFreezeTime > 0f)
     {
       yield return new FreezePlayerControlHandler(
-          GameManager.Instance.Player,
-          FullScreenScrollSettings.EndScrollFreezeTime,
-          _animationShortNameHash);
+        GameManager.Instance.Player,
+        FullScreenScrollSettings.EndScrollFreezeTime,
+        _animationShortNameHash);
     }
 
     yield return new FreezePlayerControlHandler(
+      GameManager.Instance.Player,
+      FullScreenScrollSettings.TransitionTime,
+      _animationShortNameHash,
+      playerTranslationVector,
+      FullScreenScrollSettings.PlayerTranslationEasingType);
+
+    if (delayDuration > 0f)
+    {
+      yield return new FreezePlayerControlHandler(
         GameManager.Instance.Player,
-        FullScreenScrollSettings.TransitionTime,
-        _animationShortNameHash,
-        playerTranslationVector,
-        FullScreenScrollSettings.PlayerTranslationEasingType);
+        delayDuration,
+        _animationShortNameHash);
+    }
   }
 
   private void OnEnter(Collider2D collider)

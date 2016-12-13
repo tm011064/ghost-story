@@ -248,7 +248,7 @@ MonoBehaviour:
     MaxWallDownwardSpeed: -1000
     MinDistanceFromFloor: 128
   JumpSettings:
-    Gravity: -900
+    Gravity: -800
     StandJumpHeight: 90
     WalkJumpHeight: 90
     WalkJumpHeightSpeedTrigger: 9999
@@ -259,7 +259,7 @@ MonoBehaviour:
     MaxDownwardSpeed: -400
     EnableBackflipOnDirectionChange: 1
     BackflipOnDirectionChangeSpeed: 200
-    MaxHorizontalSpeed: 110
+    MaxHorizontalSpeed: 9999
   RunSettings:
     WalkSpeed: 120
     EnableRunning: 0
@@ -381,9 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Duration: 10
-  MaxDistance: 180
-  DistanceStartFadeThreshold: 0.4
-  FadeEasingType: 16
 --- !u!212 &212000013109681084
 SpriteRenderer:
   m_ObjectHideFlags: 1

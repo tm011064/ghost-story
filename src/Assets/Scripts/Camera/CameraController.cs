@@ -304,9 +304,7 @@ public class CameraController : MonoBehaviour
 
     if (_activeTranslateTransformAction.ActionStatus == TranslateTransformActionStatus.Completed)
     {
-      _activeTranslateTransformAction = _scrollActions.Any()
-        ? _scrollActions.Dequeue()
-        : null;
+      _activeTranslateTransformAction = null;
     }
 
     return true;

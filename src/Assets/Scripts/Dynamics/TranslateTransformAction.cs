@@ -48,6 +48,8 @@ public class TranslateTransformAction
     _duration = duration;
   }
 
+  public float Duration { get { return _duration; } }
+
   public void Start(Vector3 startPosition)
   {
     ActionStatus = TranslateTransformActionStatus.Started;

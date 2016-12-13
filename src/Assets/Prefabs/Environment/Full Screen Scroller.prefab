@@ -54,12 +54,10 @@ MonoBehaviour:
   FullScreenScrollSettings:
     TransitionTime: 0.9
     CameraScrollEasingType: 15
-    PlayerTranslationDistance: 32
+    PlayerTranslationDistance: 48
     PlayerTranslationEasingType: 0
     StartScrollFreezeTime: 0.3
     EndScrollFreezeTime: 0.4
-  EnableDefaultVerticalLockPosition: 1
-  DefaultVerticalLockPosition: 120
   RelativePositioningParentObject: {fileID: 0}
   Offset: {x: 0, y: 0}
   Size: {x: 0, y: 0}
