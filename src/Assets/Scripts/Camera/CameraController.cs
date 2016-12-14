@@ -49,6 +49,14 @@ public class CameraController : MonoBehaviour
     _scrollActions.Enqueue(scrollAction);
   }
 
+  public void EnqueueScrollActions(IEnumerable<TranslateTransformAction> scrollActions)
+  {
+    foreach (var scrollAction in scrollActions)
+    {
+      _scrollActions.Enqueue(scrollAction);
+    }
+  }
+
   /// <summary>
   /// This method takes the requested target position and moves the camera to the according coordinates based
   /// on the current camera move settings.
@@ -302,7 +310,7 @@ public class CameraController : MonoBehaviour
 
     transform.position = _activeTranslateTransformAction.GetPosition();
 
-    if (_activeTranslateTransformAction.ActionStatus == TranslateTransformActionStatus.Completed)
+    if (_activeTranslateTransformAction.IsCompleted())
     {
       _activeTranslateTransformAction = null;
     }

@@ -89,98 +89,31 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
     // the order here is important. First we want to set the camera movement settings, then we can create
     // the scroll transform action.
     var targetPosition = _cameraController.CalculateTargetPosition();
+    var player = GameManager.Instance.Player;
 
-    var scrollTranslationInfo = ScrollTranslationInfoFactory.Create(
-      _cameraController.Transform.position,
-      targetPosition,
-      FullScreenScrollerTransitionMode,
-      FullScreenScrollSettings.TransitionTime);
+    var contexts = PlayerTranslationActionContextFactory.Create(
+        _cameraController.Transform.position,
+        targetPosition,
+        FullScreenScrollerTransitionMode,
+        _animationShortNameHash,
+        FullScreenScrollSettings).ToArray();
 
-    PushControlHandlers(targetPosition, scrollTranslationInfo);
+    _cameraController.EnqueueScrollActions(
+      contexts.Select(c => c.TranslateTransformAction));
 
-    foreach (var translateTransformActions in scrollTranslationInfo.TranslateTransformActions)
-    {
-      _cameraController.EnqueueScrollAction(translateTransformActions);
-    }
-  }
+    var playerControlHandlersStack = new Stack<PlayerControlHandler>(
+      contexts.Select(c => c.PlayerControlHandler));
 
-  private void PushControlHandlers(Vector3 targetPosition, ScrollTranslationInfo scrollTranslationInfo)
-  {
-    Vector3? playerTranslationVector = GetPlayerTranslationVector(targetPosition, scrollTranslationInfo);
-
-    var freezeControlHandlers = new Queue<FreezePlayerControlHandler>(
-      GetScrollControlHandlers(
-        playerTranslationVector,
-        scrollTranslationInfo.PlayerMovementDelayDuration));
-
-    GameManager.Instance.Player.ExchangeActiveControlHandler(
-      freezeControlHandlers.Dequeue());
-
-    while (freezeControlHandlers.Any())
-    {
-      GameManager.Instance.Player.PushControlHandler(
-        freezeControlHandlers.Dequeue());
-    }
-  }
-
-  private Vector3? GetPlayerTranslationVector(Vector3 targetPosition, ScrollTranslationInfo scrollTranslationInfo)
-  {
-    if (FullScreenScrollSettings.PlayerTranslationDistance == 0f)
-    {
-      return null;
-    }
-
-    var directionVector = GetDirectionVector(
-      _cameraController.Transform.position,
-      targetPosition,
-      scrollTranslationInfo);
-
-    return directionVector.normalized * FullScreenScrollSettings.PlayerTranslationDistance;
-  }
-
-  private Vector3 GetDirectionVector(
-    Vector3 currentCameraPosition,
-    Vector3 targetPosition,
-    ScrollTranslationInfo scrollTranslationInfo)
-  {
-    switch (scrollTranslationInfo.PlayerMovementAxis)
-    {
-      case AxisType.Horizontal:
-        return new Vector3(targetPosition.x - currentCameraPosition.x, 0f);
-
-      case AxisType.Vertical:
-        return new Vector3(0f, targetPosition.y - currentCameraPosition.y);
-    }
-
-    throw new NotImplementedException();
-  }
-
-  private IEnumerable<FreezePlayerControlHandler> GetScrollControlHandlers(
-    Vector3? playerTranslationVector,
-    float delayDuration)
-  {
     if (FullScreenScrollSettings.EndScrollFreezeTime > 0f)
     {
-      yield return new FreezePlayerControlHandler(
-        GameManager.Instance.Player,
+      playerControlHandlersStack.Push(new FreezePlayerControlHandler(
+        player,
         FullScreenScrollSettings.EndScrollFreezeTime,
-        _animationShortNameHash);
+        _animationShortNameHash));
     }
 
-    yield return new FreezePlayerControlHandler(
-      GameManager.Instance.Player,
-      FullScreenScrollSettings.TransitionTime,
-      _animationShortNameHash,
-      playerTranslationVector,
-      FullScreenScrollSettings.PlayerTranslationEasingType);
-
-    if (delayDuration > 0f)
-    {
-      yield return new FreezePlayerControlHandler(
-        GameManager.Instance.Player,
-        delayDuration,
-        _animationShortNameHash);
-    }
+    player.ExchangeActiveControlHandler(playerControlHandlersStack.Pop());
+    player.PushControlHandlers(playerControlHandlersStack.ToArray());
   }
 
   private void OnEnter(Collider2D collider)
