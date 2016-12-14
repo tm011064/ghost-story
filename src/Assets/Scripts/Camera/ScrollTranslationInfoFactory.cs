@@ -33,7 +33,7 @@ public static class ScrollTranslationInfoFactory
       return CreateDirectTransition(currentPosition, targetPosition, duration);
     }
 
-    var verticalLocation = new Vector3(currentPosition.x, targetPosition.y);
+    var verticalLocation = new Vector3(currentPosition.x, targetPosition.y, targetPosition.z);
 
     var distanceFromCurrentToVerticalLocation = Vector3.Distance(currentPosition, verticalLocation);
     var distanceFromVerticalToTargetLocation = Vector3.Distance(verticalLocation, targetPosition);
