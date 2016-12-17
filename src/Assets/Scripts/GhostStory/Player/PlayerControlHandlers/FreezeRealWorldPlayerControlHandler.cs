@@ -36,6 +36,17 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
+    if (GameManager.InputStateManager.IsButtonDown("Switch")
+      && GhostStoryGameContext.Instance.IsAlternateWorldActivated())
+    {
+      var player = GameManager.GetPlayerByName(PlayableCharacterNames.Misa.ToString());
+      player.transform.position = GameManager.Player.transform.position;
+
+      GameManager.InputStateManager.SetButtonHandled("Switch");
+
+      return ControlHandlerAfterUpdateStatus.CanBeDisposed;
+    }
+
     return base.DoUpdate();
   }
 }

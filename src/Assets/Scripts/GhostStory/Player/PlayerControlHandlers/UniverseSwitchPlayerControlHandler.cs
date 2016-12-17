@@ -14,7 +14,10 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
-    if (GameManager.InputStateManager.IsButtonDown("Switch"))
+    if (GameManager.InputStateManager.IsButtonDown("Switch")
+      && !GameManager.InputStateManager.IsButtonHandled("Switch")
+      && GhostStoryGameContext.Instance.IsRealWorldActivated()
+      && GameManager.Player.IsGrounded())
     {
       var position = GameManager.Player.transform.position;
 

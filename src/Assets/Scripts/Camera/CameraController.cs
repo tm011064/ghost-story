@@ -43,12 +43,7 @@ public class CameraController : MonoBehaviour
   private readonly Queue<TranslateTransformAction> _scrollActions = new Queue<TranslateTransformAction>(16);
 
   private TranslateTransformAction _activeTranslateTransformAction;
-
-  public void EnqueueScrollAction(TranslateTransformAction scrollAction)
-  {
-    _scrollActions.Enqueue(scrollAction);
-  }
-
+  
   public void EnqueueScrollActions(IEnumerable<TranslateTransformAction> scrollActions)
   {
     foreach (var scrollAction in scrollActions)

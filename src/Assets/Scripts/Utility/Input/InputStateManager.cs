@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InputStateManager
@@ -25,6 +26,16 @@ public class InputStateManager
 
       throw;
     }
+  }
+
+  public void SetButtonHandled(string buttonName)
+  {
+    _buttonStates[buttonName].IsHandled = true;
+  }
+
+  public bool IsButtonHandled(string buttonName)
+  {
+    return _buttonStates[buttonName].IsHandled;
   }
 
   public bool IsButtonDown(string buttonName)
@@ -116,17 +127,15 @@ public class InputStateManager
 
   public void InitializeButtons(params string[] buttonNames)
   {
-    for (var i = 0; i < buttonNames.Length; i++)
-    {
-      _buttonStates[buttonNames[i]] = new ButtonsState(buttonNames[i]);
-    }
+    _buttonStates = buttonNames.ToDictionary(
+      name => name,
+      name => new ButtonsState(name));
   }
 
   public void InitializeAxes(params string[] axisNames)
   {
-    for (var i = 0; i < axisNames.Length; i++)
-    {
-      _axisStates[axisNames[i]] = new AxisState(axisNames[i]);
-    }
+    _axisStates = axisNames.ToDictionary(
+      name => name,
+      name => new AxisState(name));
   }
 }

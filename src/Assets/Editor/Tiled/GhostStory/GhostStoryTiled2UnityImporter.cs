@@ -18,24 +18,12 @@ namespace Assets.Editor.Tiled
 
     public void CustomizePrefab(GameObject prefab)
     {
-      //Customize(prefab);
       CustomizeSafe(prefab);
     }
 
     private void Customize(GameObject prefab)
     {
-      Destroy(
-        prefab,
-        "Rooms",
-        "Enemies",
-        "Checkpoints",
-        "Camera Modifier");
-
-      if (prefab != null)
-      {
-        AttachCustomObjects(prefab);
-      }
-
+      AttachCustomObjects(prefab);
       LinkCheckpointsToRooms(prefab);
     }
 
@@ -116,25 +104,20 @@ namespace Assets.Editor.Tiled
           new DeathHazardFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new LayerPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new TiledObjectPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new CameraModifierFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new CameraModifierFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)          
         });
-    }
-
-    private void Destroy(GameObject prefab, params string[] names)
-    {
-      foreach (var name in names)
-      {
-        var childTransform = prefab.transform.FindChild(name);
-
-        while (childTransform != null)
+      // TODO (Roman): set up levelsettings
+      importer.Import(
+        prefab,
+        new AbstractGameObjectFactory[]
         {
-          Debug.Log("Tile2Unity Import: Destroying game object " + name);
-
-          UnityEngine.Object.DestroyImmediate(childTransform.gameObject);
-
-          childTransform = prefab.transform.FindChild(name);
-        }
-      }
+          new CamerBoundsTransitionObjectFactory(
+              importer.Map,
+              importer.PrefabLookup,
+              importer.ObjecttypesByName,
+              "Green Door")
+        },
+        new Property[] { new Property { Name = "Tag", Value = "RealWorld" } });
     }
   }
 }

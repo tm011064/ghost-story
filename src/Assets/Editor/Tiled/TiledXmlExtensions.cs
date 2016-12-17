@@ -40,14 +40,10 @@ namespace Assets.Editor.Tiled
     {
       var properties = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
-      if (string.IsNullOrEmpty(obj.Type))
-      {
-        throw new NotSupportedException("Object " + obj.Name + " has not type");
-      }
-
       Objecttype objecttype;
 
-      if (objecttypesByName.TryGetValue(obj.Type, out objecttype))
+      if (!string.IsNullOrEmpty(obj.Type)
+        && objecttypesByName.TryGetValue(obj.Type, out objecttype))
       {
         foreach (var property in objecttype.Properties)
         {
@@ -73,6 +69,15 @@ namespace Assets.Editor.Tiled
       return map
         .Objectgroup
         .Where(og => properties.All(property => og.HasProperty(property.Name, property.Value)));
+    }
+
+    public static IEnumerable<Objectgroup> ForEachObjectGroupWithPropertyName(
+      this Map map,
+      string propertyName)
+    {
+      return map
+        .Objectgroup
+        .Where(og => og.HasProperty(propertyName));
     }
 
     public static IEnumerable<Objectgroup> ForEachObjectGroupWithProperty(
@@ -124,6 +129,13 @@ namespace Assets.Editor.Tiled
 
       return properties.TryGetValue(propertyName, out value)
         && string.Equals(propertyValue, value, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static bool HasProperty(this Objectgroup obj, string propertyName)
+    {
+      var properties = GetProperties(obj);
+
+      return properties.ContainsKey(propertyName);
     }
 
     public static bool HasProperty(this Objectgroup obj, string propertyName, string propertyValue)
@@ -279,13 +291,26 @@ namespace Assets.Editor.Tiled
       return false;
     }
 
-    public static string GetProperty(this Layer layer, string propertyName)
+    private static string GetPropertyValue(Properties properties, string propertyName)
     {
-      return layer
-        .Properties
+      return properties
         .Property
         .First(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase))
         .Value;
+    }
+
+    public static string GetPropertyValue(this Objectgroup objectgroup, string propertyName)
+    {
+      return GetPropertyValue(
+        objectgroup.Properties,
+        propertyName);
+    }
+
+    public static string GetPropertyValue(this Layer layer, string propertyName)
+    {
+      return GetPropertyValue(
+        layer.Properties,
+        propertyName);
     }
 
     public static void Execute(this IEnumerable<Layer> layers, Action<Layer> action)

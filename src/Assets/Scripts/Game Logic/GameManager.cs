@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
 
   private Checkpoint[] _orderedSceneCheckpoints;
 
+  private CameraController _cameraController;
+
   private readonly Dictionary<string, PlayerController> _playerControllersByName
     = new Dictionary<string, PlayerController>(StringComparer.OrdinalIgnoreCase);
 
@@ -103,9 +105,7 @@ public class GameManager : MonoBehaviour
 
   private void ResetCameraPosition(Vector3 position)
   {
-    var cameraController = Camera.main.GetComponent<CameraController>();
-
-    cameraController.MoveCameraToTargetPosition(position);
+    _cameraController.MoveCameraToTargetPosition(position);
   }
 
   public void LoadScene()
@@ -156,6 +156,7 @@ public class GameManager : MonoBehaviour
     }
 
     Player = playerController;
+    _cameraController.Target = Player.transform;
   }
 
   private IEnumerable<T> FindComponents<T>()
@@ -254,6 +255,8 @@ public class GameManager : MonoBehaviour
     Easing = new Easing();
 
     DontDestroyOnLoad(gameObject);
+
+    _cameraController = Camera.main.GetComponent<CameraController>();
 
     OnAwake();
   }

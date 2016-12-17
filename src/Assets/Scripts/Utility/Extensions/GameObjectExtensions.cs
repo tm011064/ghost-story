@@ -30,15 +30,24 @@ public static class GameObjectExtensions
 
   public static void DisableAndHide(this GameObject self)
   {
-    Debug.Log("Enabling " + self.name);
-    self.GetComponentInChildren<Renderer>().enabled = false;
-    self.SetActive(false);
+    Debug.Log("Disabling " + self.name);
+    SetActive(self, false);
   }
 
   public static void EnableAndShow(this GameObject self)
   {
-    Debug.Log("Disabling " + self.name);
-    self.SetActive(true);
-    self.GetComponentInChildren<Renderer>().enabled = true;
+    Debug.Log("Enabling " + self.name);
+    SetActive(self, true);
+  }
+
+  private static void SetActive(GameObject gameObject, bool isActive)
+  {
+    gameObject.SetActive(isActive);
+
+    var renderer = gameObject.GetComponentInChildren<Renderer>();
+    if (renderer != null)
+    {
+      renderer.enabled = isActive;
+    }
   }
 }

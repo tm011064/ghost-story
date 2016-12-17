@@ -8,12 +8,24 @@ public class GhostStoryGameContext
 
   private GameObject[] _alternateWorldGameObjects;
 
+  private bool _isRealWorld;
+
   public GhostStoryGameContext(
     GameObject[] realWorldGameObjects,
     GameObject[] alternateWorldGameObjects)
   {
     _realWorldGameObjects = realWorldGameObjects;
     _alternateWorldGameObjects = alternateWorldGameObjects;
+  }
+
+  public bool IsRealWorldActivated()
+  {
+    return _isRealWorld;
+  }
+
+  public bool IsAlternateWorldActivated()
+  {
+    return !_isRealWorld;
   }
 
   public void SwitchToRealWorld()
@@ -27,6 +39,8 @@ public class GhostStoryGameContext
     {
       gameObject.EnableAndShow();
     }
+
+    _isRealWorld = true;
   }
 
   public void SwitchToAlternateWorld()
@@ -40,5 +54,7 @@ public class GhostStoryGameContext
     {
       gameObject.EnableAndShow();
     }
+
+    _isRealWorld = false;
   }
 }

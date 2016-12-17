@@ -93,7 +93,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       GameObject asset,
       string prefabName,
       TInstantiationArguments arguments)
-      where TInstantiationArguments : InstantiationArguments
+      where TInstantiationArguments : AbstractInstantiationArguments
     {
       var gameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
 

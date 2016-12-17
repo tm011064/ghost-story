@@ -35,7 +35,7 @@ public partial class FullScreenScroller : IInstantiable<CameraModifierInstantiat
 
       var boxColliderTriggerEnterBehaviour = boxColliderGameObject.AddComponent<BoxColliderTriggerEnterBehaviour>();
 
-      if (args.Properties.GetBool("Enter On Ladder"))
+      if (args.Properties.GetBoolSafe("Enter On Ladder", false))
       {
         boxColliderTriggerEnterBehaviour.PlayerStatesNeededToEnter = new PlayerState[] { PlayerState.ClimbingLadder };
       }
@@ -47,7 +47,6 @@ public partial class FullScreenScroller : IInstantiable<CameraModifierInstantiat
     transform.position = bounds.center;
 
     Size = bounds.size;
-    VerticalCameraFollowMode = VerticalCameraFollowMode.FollowAlways;
   }
 
   public bool Contains(Vector2 point)

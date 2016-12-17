@@ -40,6 +40,8 @@ namespace Assets.Editor.Tiled
         gameObjectFactories = CreateDefaultGameObjectFactories().ToArray();
       }
 
+      ExecuteCommands(parent);
+
       var tiledObjectsGameObject = new GameObject("Tiled Objects");
       tiledObjectsGameObject.transform.position = Vector3.zero;
 
@@ -51,11 +53,65 @@ namespace Assets.Editor.Tiled
       tiledObjectsGameObject.transform.parent = parent.transform;
     }
 
+    private void ExecuteCommands(GameObject prefab)
+    {
+      var objectCommands = Map
+        .ForEachObjectGroupWithPropertyName("Commands")
+        .Select(og => new { Name = og.Name, Commands = GetCommands(og) });
+
+      var layerCommands = Map
+        .ForEachLayerWithPropertyName("Commands")
+        .Select(layer => new { Name = layer.Name, Commands = GetCommands(layer) });
+
+      foreach (var command in objectCommands.Concat(layerCommands))
+      {
+        ExecuteDestroyPrefabCommand(prefab, command.Name, command.Commands);
+      }
+    }
+
+    private void ExecuteDestroyPrefabCommand(GameObject prefab, string gameObjectName, IEnumerable<string> commands)
+    {
+      if (!commands.Any(c => string.Equals(c, "DestroyPrefab", StringComparison.OrdinalIgnoreCase)))
+      {
+        return;
+      }
+
+      Destroy(prefab, gameObjectName);
+    }
+
+    private void Destroy(GameObject prefab, string name)
+    {
+      var childTransform = prefab.transform.FindChild(name);
+
+      while (childTransform != null)
+      {
+        Debug.Log("Tile2Unity Import: Destroying game object " + name);
+
+        UnityEngine.Object.DestroyImmediate(childTransform.gameObject);
+
+        childTransform = prefab.transform.FindChild(name);
+      }
+    }
+
+    private IEnumerable<string> GetCommands(Objectgroup objectgroup)
+    {
+      return objectgroup.GetPropertyValue("Commands")
+        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => s.Trim());
+    }
+
+    private IEnumerable<string> GetCommands(Layer layer)
+    {
+      return layer.GetPropertyValue("Commands")
+        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => s.Trim());
+    }
+
     private void AssignTags(GameObject prefab)
     {
       foreach (var layer in Map.ForEachLayerWithPropertyName("Tag"))
       {
-        var tag = layer.GetProperty("Tag");
+        var tag = layer.GetPropertyValue("Tag");
         var transform = prefab.transform.FindChild(layer.Name);
 
         transform.tag = tag;
