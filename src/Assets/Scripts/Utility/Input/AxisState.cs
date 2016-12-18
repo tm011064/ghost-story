@@ -6,19 +6,9 @@ public class AxisState
 
   public float LastValue;
 
+  public bool IsHandled;
+
   private string _axisName;
-
-  public void Update()
-  {
-    LastValue = Value;
-
-    Value = Input.GetAxis(_axisName);
-  }
-
-  public AxisState Clone()
-  {
-    return (AxisState)MemberwiseClone();
-  }
 
   public AxisState(float value)
   {
@@ -28,5 +18,33 @@ public class AxisState
   public AxisState(string axisName)
   {
     _axisName = axisName;
+  }
+
+  public void Update()
+  {
+    IsHandled = false;
+
+    LastValue = Value;
+
+    Value = Input.GetAxis(_axisName);
+  }
+
+  public bool HasChangedDirection(InputSettings inputSettings)
+  {
+    return
+      (
+        Mathf.Abs(LastValue) < inputSettings.AxisSensitivityThreshold
+        && Mathf.Abs(Value) >= inputSettings.AxisSensitivityThreshold
+      )
+      ||
+      (
+        Mathf.Abs(LastValue) >= inputSettings.AxisSensitivityThreshold
+        && Mathf.Abs(Value) < inputSettings.AxisSensitivityThreshold
+      );
+  }
+
+  public AxisState Clone()
+  {
+    return (AxisState)MemberwiseClone();
   }
 }

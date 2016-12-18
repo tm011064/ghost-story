@@ -18,20 +18,14 @@ Material:
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: 4f0a16f7aa99e2d4bb7460d3e4bc5c9b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8e5fc671cf015b44c9e0a52dcf8d7a52, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - first:
         name: PixelSnap
       second: 1
-    - first:
-        name: _CutOff
-      second: 0.1
     m_Colors:
-    - first:
-        name: _AlphaColorKey
-      second: {r: 0, g: 0, b: 0, a: 0}
     - first:
         name: _Color
       second: {r: 1, g: 1, b: 1, a: 1}

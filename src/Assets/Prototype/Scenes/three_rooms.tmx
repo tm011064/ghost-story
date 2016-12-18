@@ -135,7 +135,7 @@
    <property name="Layer" value="House"/>
    <property name="Prefab" value="Elevator Shaft"/>
    <property name="TransitionsTo" value="HouseShafts"/>
-   <property name="Type" value="Transition"/>
+   <property name="Type" value="LayerTransition"/>
    <property name="Universe" value="RealWorld"/>
   </properties>
   <data encoding="csv">
@@ -260,7 +260,7 @@
    <property name="Layer" value="HouseShafts"/>
    <property name="Prefab" value="Elevator Shaft"/>
    <property name="TransitionsTo" value="House"/>
-   <property name="Type" value="Transition"/>
+   <property name="Type" value="LayerTransition"/>
    <property name="Universe" value="RealWorld"/>
   </properties>
   <data encoding="csv">

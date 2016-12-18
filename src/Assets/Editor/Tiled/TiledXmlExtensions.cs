@@ -25,7 +25,7 @@ namespace Assets.Editor.Tiled
     {
       return properties == null
         ? new Dictionary<string, string>()
-        : properties.Property.ToDictionary(p => p.Name, p => p.Value);
+        : properties.Property.ToDictionary(p => p.Name, p => p.Value, StringComparer.OrdinalIgnoreCase);
     }
 
     public static Dictionary<string, string> GetProperties(this Object obj, Dictionary<string, Objecttype> objecttypesByName)

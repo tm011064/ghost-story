@@ -109,7 +109,7 @@ namespace Assets.Editor.Tiled
       yield return new PlatformColliderFactory(Map, PrefabLookup, ObjecttypesByName);
       yield return new OneWayPlatformColliderFactory(Map, PrefabLookup, ObjecttypesByName);
       yield return new DeathHazardFactory(Map, PrefabLookup, ObjecttypesByName);
-      yield return new LayerPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new TiledLayerPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
       yield return new TiledObjectPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
       yield return new CameraModifierFactory(Map, PrefabLookup, ObjecttypesByName);
     }

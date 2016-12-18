@@ -63,7 +63,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
           new CameraTransitionInstantiationArguments
           {
             TransitionObjectBounds = transitionObjectBounds,
-            IntersectingCameraBounds = intersectingCameraBounds
+            IntersectingCameraBounds = intersectingCameraBounds,
+            PrefabsAssetPathsByShortName = PrefabLookup
           });
       }
     }

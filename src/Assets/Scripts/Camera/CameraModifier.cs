@@ -31,6 +31,7 @@ public partial class CameraModifier : MonoBehaviour
     var triggerEnterBehaviours = GetComponentsInChildren<ITriggerEnterExit>();
 
     _cameraController = Camera.main.GetComponent<CameraController>();
+    _cameraMovementSettings = CreateCameraMovementSettings();
 
     foreach (var triggerEnterBehaviour in triggerEnterBehaviours)
     {
@@ -41,8 +42,6 @@ public partial class CameraModifier : MonoBehaviour
 
   void Start()
   {
-    _cameraMovementSettings = CreateCameraMovementSettings();
-
     var playerPosition = GameManager.Instance.Player.transform.position;
 
     if (_cameraMovementSettings.Contains(playerPosition))

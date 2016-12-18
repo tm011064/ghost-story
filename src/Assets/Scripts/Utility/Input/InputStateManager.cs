@@ -48,10 +48,26 @@ public class InputStateManager
     return (_buttonStates[buttonName].ButtonPressState & ButtonPressState.IsPressed) != 0;
   }
 
+  public void SetVerticalAxisHandled()
+  {
+    _axisStates["Vertical"].IsHandled = true;
+  }
+
+  public bool IsVerticalAxisHandled()
+  {
+    return _axisStates["Vertical"].IsHandled;
+  }
+
+  public bool IsUpAxisButtonDown(InputSettings inputSettings)
+  {
+    return _axisStates["Vertical"].Value < inputSettings.AxisSensitivityThreshold 
+      && _axisStates["Vertical"].HasChangedDirection(inputSettings);
+  }
+
   /// <summary>
   /// You can pass in any button name as well as the following axis directions: Down, Up, Left, Right
   /// </summary>
-  public bool AreButtonsPressed(string[] buttonAndAxisNames, InputSettings inputSettings)
+  public bool AreButtonsPressed(InputSettings inputSettings, params string[] buttonAndAxisNames)
   {
     for (var i = 0; i < buttonAndAxisNames.Length; i++)
     {

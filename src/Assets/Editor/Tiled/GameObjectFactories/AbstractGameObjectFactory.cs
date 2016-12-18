@@ -11,7 +11,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     protected readonly Dictionary<string, Objecttype> ObjecttypesByName;
 
-    private readonly Dictionary<string, string> _prefabLookup = new Dictionary<string, string>();
+    protected readonly Dictionary<string, string> PrefabLookup = new Dictionary<string, string>();
 
     protected readonly TiledObjectLayerConfig[] ObjectLayerConfigs;
 
@@ -22,7 +22,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
     {
-      _prefabLookup = prefabLookup;
+      PrefabLookup = prefabLookup;
       ObjecttypesByName = objecttypesByName;
 
       Map = map;
@@ -105,7 +105,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
       string assetPath;
 
-      if (!_prefabLookup.TryGetValue(prefabName, out assetPath))
+      if (!PrefabLookup.TryGetValue(prefabName, out assetPath))
       {
         throw new MissingReferenceException("No prefab with name '" + prefabName + "' exists at this project");
       }
@@ -115,7 +115,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     protected GameObject CreateInstantiableObject<TInstantiationArguments>(
       GameObject asset,
-      string prefabName,
+      string gameObjectName,
       AbstractTiledLayerConfig layerConfig,
       TInstantiationArguments arguments)
       where TInstantiationArguments : AbstractInstantiationArguments
@@ -124,7 +124,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
       OnGameObjectCreated(layerConfig, gameObject);
 
-      gameObject.name = prefabName;
+      gameObject.name = gameObjectName;
 
       var instantiable = gameObject.GetComponentOrThrow<IInstantiable<TInstantiationArguments>>();
 

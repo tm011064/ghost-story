@@ -12,8 +12,6 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
     VerticalLockSettings = CreateVerticalLockSettings(arguments.Bounds, cameraController);
     HorizontalLockSettings = CreateHorizontalLockSettings(arguments.Bounds, cameraController);
 
-    VerticalCameraFollowMode = VerticalCameraFollowMode.FollowAlways;
-
     foreach (var args in arguments.BoundsPropertyInfos)
     {
       var boxColliderGameObject = new GameObject("Box Collider With Enter Trigger");
@@ -29,7 +27,7 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
 
       var boxColliderTriggerEnterBehaviour = boxColliderGameObject.AddComponent<BoxColliderTriggerEnterBehaviour>();
 
-      if (args.Properties.GetBool("Enter On Ladder"))
+      if (args.Properties.GetBoolSafe("Enter On Ladder", false))
       {
         boxColliderTriggerEnterBehaviour.PlayerStatesNeededToEnter = new PlayerState[] { PlayerState.ClimbingLadder };
       }
