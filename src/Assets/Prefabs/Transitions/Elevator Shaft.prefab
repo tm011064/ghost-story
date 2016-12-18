@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1000013673989646}
+  m_RootGameObject: {fileID: 1000013380084920}
   m_IsPrefabParent: 1
---- !u!1 &1000013673989646
+--- !u!1 &1000013380084920
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000012196070550}
-  - 114: {fileID: 114000011877054452}
+  - 4: {fileID: 4000013746679584}
+  - 114: {fileID: 114000012356708966}
   m_Layer: 0
-  m_Name: Green Door
+  m_Name: Elevator Shaft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000012196070550
+--- !u!4 &4000013746679584
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013673989646}
+  m_GameObject: {fileID: 1000013380084920}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,17 +40,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &114000011877054452
+--- !u!114 &114000012356708966
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013673989646}
+  m_GameObject: {fileID: 1000013380084920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7d5e5c00b7dcf041bbdedce74401a33, type: 3}
+  m_Script: {fileID: 11500000, guid: 08f9a8fa0b56aba48a2e19e937d2ed21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DoorKey: 0
-  Size: {x: 0, y: 0}
-  CameraModifierPadding: {x: 6, y: 6}

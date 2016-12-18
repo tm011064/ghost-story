@@ -21,19 +21,11 @@ namespace Assets.Editor.Tiled
       };
     }
 
-    public static Dictionary<string, string> GetProperties(this Objectgroup obj)
+    public static Dictionary<string, string> ToDictionary(this Properties properties)
     {
-      var properties = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-
-      if (obj.Properties != null)
-      {
-        foreach (var property in obj.Properties.Property)
-        {
-          properties[property.Name] = property.Value;
-        }
-      }
-
-      return properties;
+      return properties == null
+        ? new Dictionary<string, string>()
+        : properties.Property.ToDictionary(p => p.Name, p => p.Value);
     }
 
     public static Dictionary<string, string> GetProperties(this Object obj, Dictionary<string, Objecttype> objecttypesByName)
@@ -133,18 +125,14 @@ namespace Assets.Editor.Tiled
 
     public static bool HasProperty(this Objectgroup obj, string propertyName)
     {
-      var properties = GetProperties(obj);
-
-      return properties.ContainsKey(propertyName);
+      return obj.Properties.ToDictionary().ContainsKey(propertyName);
     }
 
     public static bool HasProperty(this Objectgroup obj, string propertyName, string propertyValue)
     {
-      var properties = GetProperties(obj);
-
       string value;
 
-      return properties.TryGetValue(propertyName, out value)
+      return obj.Properties.ToDictionary().TryGetValue(propertyName, out value)
         && string.Equals(propertyValue, value, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -248,6 +236,14 @@ namespace Assets.Editor.Tiled
       return map
         .Layers
         .Where(layer => layer.HasProperty(propertyName));
+    }
+
+    public static bool HasProperty(this Layer layer, string propertyName, string propertyValue)
+    {
+      string value;
+
+      return layer.Properties.ToDictionary().TryGetValue(propertyName, out value)
+        && string.Equals(propertyValue, value, StringComparison.OrdinalIgnoreCase);
     }
 
     public static bool HasProperty(this Layer layer, string propertyName)

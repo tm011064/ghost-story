@@ -6,38 +6,28 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 {
   public class PlatformColliderFactory : AbstractGameObjectFactory
   {
-    private readonly string _colliderName;
-
-    private readonly string _layerMaskName;
-
     public PlatformColliderFactory(
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName,
-      string colliderName = "platform",
-      string layerMaskName = "Platforms")
+      Dictionary<string, Objecttype> objecttypesByName)
       : base(map, prefabLookup, objecttypesByName)
     {
-      _colliderName = colliderName;
-      _layerMaskName = layerMaskName;
     }
 
-    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
+    public override IEnumerable<GameObject> Create()
     {
-      var filters = propertyFilters
-        .Concat(new Property[] { new Property { Name = "Collider", Value = _colliderName } })
-        .ToArray();
-
-      return Map
-        .ForEachLayerWithProperties(filters)
-        .Get<GameObject>(CreateColliders);
+      return TileLayerConfigs
+        .Where(c => c.Type == "Platform")
+        .Select(config => CreateColliders(config));
     }
 
-    private GameObject CreateColliders(Layer layer)
+    private GameObject CreateColliders(TiledTileLayerConfig layerConfig)
     {
-      var vertices = CreateMatrixVertices(layer);
+      var vertices = CreateMatrixVertices(layerConfig.TiledLayer);
 
-      var collidersGameObject = new GameObject("Platform Colliders");
+      var name = layerConfig.Universe + " " + layerConfig.Layer + " Platform Colliders";
+
+      var collidersGameObject = new GameObject(name);
       collidersGameObject.transform.position = Vector3.zero;
 
       var colliders = vertices.GetColliderEdges();
@@ -47,12 +37,14 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         var obj = new GameObject("Collider");
 
         obj.transform.position = Vector3.zero;
-        obj.layer = LayerMask.NameToLayer(_layerMaskName);
+        obj.layer = LayerMask.NameToLayer("Platforms");
 
         AddEdgeColliders(obj, points);
 
         obj.transform.parent = collidersGameObject.transform;
       }
+
+      OnGameObjectCreated(layerConfig, collidersGameObject);
 
       return collidersGameObject;
     }

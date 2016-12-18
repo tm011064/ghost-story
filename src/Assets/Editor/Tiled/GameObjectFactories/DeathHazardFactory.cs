@@ -14,26 +14,22 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
     }
 
-    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
+    public override IEnumerable<GameObject> Create()
     {
-      var filters = propertyFilters
-        .Concat(new Property[] { new Property { Name = "Collider", Value = "deathhazard" } })
-        .ToArray();
-
-      return Map
-        .ForEachLayerWithProperties(filters)
-        .Get<GameObject>(CreateColliders);
+      return TileLayerConfigs
+        .Where(config => config.Type == "DeathHazard")
+        .Select(config => CreateColliders(config));
     }
 
-    private GameObject CreateColliders(Layer layer)
+    private GameObject CreateColliders(TiledTileLayerConfig layerConfig)
     {
-      var vertices = CreateMatrixVertices(layer);
+      var vertices = CreateMatrixVertices(layerConfig.TiledLayer);
 
       var collidersGameObject = new GameObject("Death Hazard Colliders");
       collidersGameObject.transform.position = Vector3.zero;
 
       int padding;
-      layer.TryGetProperty("Collider Padding", out padding);
+      layerConfig.TiledLayer.TryGetProperty("Collider Padding", out padding);
 
       var colliders = vertices.GetColliderEdges(padding);
 
@@ -50,6 +46,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
         obj.transform.parent = collidersGameObject.transform;
       }
+
+      OnGameObjectCreated(layerConfig, collidersGameObject);
 
       return collidersGameObject;
     }

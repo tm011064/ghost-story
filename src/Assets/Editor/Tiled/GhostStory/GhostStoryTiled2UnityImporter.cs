@@ -7,7 +7,7 @@ using Tiled2Unity;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace Assets.Editor.Tiled
+namespace Assets.Editor.Tiled.GhostStory
 {
   [CustomTiledImporter]
   class GhostStoryTiled2UnityImporter : ICustomTiledImporter
@@ -88,36 +88,32 @@ namespace Assets.Editor.Tiled
         prefab,
         new AbstractGameObjectFactory[]
         {
-          new PlatformColliderFactory(
-            importer.Map, 
-            importer.PrefabLookup, 
-            importer.ObjecttypesByName, 
-            "RealWorldPlatforms", 
-            "Platforms"),
-          new PlatformColliderFactory(
-            importer.Map, 
-            importer.PrefabLookup, 
-            importer.ObjecttypesByName,
-            "AlternateWorldPlatforms",
-            "AlternatePlatforms"),
-          new OneWayPlatformColliderFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new DeathHazardFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new LayerPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new TiledObjectPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new CameraModifierFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)          
+          new GhostStoryPlatformColliderFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryCamerBoundsTransitionObjectFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryCameraModifierFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryTiledObjectPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)
         });
-      // TODO (Roman): set up levelsettings
-      importer.Import(
-        prefab,
-        new AbstractGameObjectFactory[]
+
+      AssignLevelObjectConfigs(prefab, importer.Map);
+    }
+
+    private void AssignLevelObjectConfigs(GameObject prefab, Map map)
+    {
+      var layerTypes = new string[] { "Background", "Platform", "OneWayPlatform", "Transition" };
+
+      foreach (var layer in map.Layers)
+      {
+        var type = layer.GetPropertyValue("Type");
+        if (layerTypes.Contains(type))
         {
-          new CamerBoundsTransitionObjectFactory(
-              importer.Map,
-              importer.PrefabLookup,
-              importer.ObjecttypesByName,
-              "Green Door")
-        },
-        new Property[] { new Property { Name = "Tag", Value = "RealWorld" } });
+          var layerConfig = TiledTileLayerConfigFactory.Create(layer);
+
+          var transform = prefab.transform.FindChild(layerConfig.TiledLayer.Name);
+
+          transform.gameObject.AddLevelConfigComponent(layerConfig);
+          transform.gameObject.layer = LayerMask.NameToLayer("Background");
+        }
+      }
     }
   }
 }

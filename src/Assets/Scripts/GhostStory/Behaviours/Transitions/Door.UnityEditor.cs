@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.GhostStory.Behaviours.Transitions
@@ -9,7 +11,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     {
       var center = arguments.TransitionObjectBounds.center;
 
-      foreach (var cameraBounds in arguments.IntersectingCameraBounds)
+      foreach (var intersectingCameraBounds in arguments.IntersectingCameraBounds)
       {
         var fullScreenScrollerGameObject = new GameObject("Full Screen Scroller");
 
@@ -17,21 +19,16 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         fullScreenScrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
         fullScreenScrollerGameObject.transform.parent = gameObject.transform;
 
-        if (!string.IsNullOrEmpty(arguments.Tag))
-        {
-          fullScreenScrollerGameObject.tag = arguments.Tag;
-        }
-
         fullScreenScrollerGameObject
           .AddComponent<FullScreenScroller>()
           .Instantiate(new CameraModifierInstantiationArguments
             {
-              Bounds = cameraBounds,
+              Bounds = intersectingCameraBounds,
               BoundsPropertyInfos = new CameraModifierInstantiationArguments.BoundsPropertyInfo[] 
                 {
                   new CameraModifierInstantiationArguments.BoundsPropertyInfo
                   {
-                    Bounds = GetCameraModifierBounds(arguments, cameraBounds)
+                    Bounds = GetCameraModifierBounds(arguments, intersectingCameraBounds)
                   }
                 }
             });
@@ -98,3 +95,5 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     }
   }
 }
+
+#endif

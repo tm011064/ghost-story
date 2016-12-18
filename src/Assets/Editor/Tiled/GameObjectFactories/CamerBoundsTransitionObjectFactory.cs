@@ -6,58 +6,49 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 {
   public class CamerBoundsTransitionObjectFactory : AbstractGameObjectFactory
   {
-    private readonly string _transitionObjectPrefabName;
-
     public CamerBoundsTransitionObjectFactory(
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName,
-      string transitionObjectPrefabName)
+      Dictionary<string, Objecttype> objecttypesByName)
       : base(map, prefabLookup, objecttypesByName)
     {
-      _transitionObjectPrefabName = transitionObjectPrefabName;
     }
 
-    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
+    public override IEnumerable<GameObject> Create()
     {
-      var cameraBounds = GetCameraBounds(propertyFilters).ToArray();
+      var cameraBoundsByLayerName = CreateCameraBoundsByLayerNameLookup();
 
-      var filters = propertyFilters
-        .Concat(new Property[] { new Property { Name = "TransitionObjectPrefab", Value = _transitionObjectPrefabName } })
-        .ToArray();
-
-      var tag = GetTag(propertyFilters);
-
-      return Map
-        .ForEachLayerWithProperties(filters)
-        .SelectMany(layer => CreateTransitionObjects(layer, tag, cameraBounds));
+      return TileLayerConfigs
+        .Where(og => og.Type == "Transition")
+        .SelectMany(layerConfig => CreateTransitionObjects(
+          layerConfig,
+          cameraBoundsByLayerName[layerConfig.Layer]));
     }
 
-    private string GetTag(Property[] propertyFilters)
+    private ILookup<string, Bounds> CreateCameraBoundsByLayerNameLookup()
     {
-      var tagProperty = propertyFilters.FirstOrDefault(p => p.Name == "Tag");
-      return tagProperty == null
-        ? null
-        : tagProperty.Value;
+      return ObjectLayerConfigs
+        .Where(config => config.Type == "CameraBounds")
+        .Select(config =>
+          new
+          {
+            Layer = config.Layer,
+            Bounds = config.TiledObjectgroup.Object.Select(o => o.GetBounds())
+          })
+        .SelectMany(c => c.Bounds.Select(b => new { Layer = c.Layer, Bounds = b }))
+        .ToLookup(c => c.Layer, c => c.Bounds);
     }
 
-    private IEnumerable<Bounds> GetCameraBounds(Property[] propertyFilters)
+    private IEnumerable<GameObject> CreateTransitionObjects(
+      TiledTileLayerConfig layerConfig,
+      IEnumerable<Bounds> cameraBounds)
     {
-      var cameraBoundsFilter = propertyFilters
-        .Concat(new Property[] { new Property { Name = "Type", Value = "CameraBounds" } })
-        .ToArray();
-
-      return Map
-        .ForEachObjectGroupWithProperties(cameraBoundsFilter)
-        .SelectMany(og => og.Object.Select(o => o.GetBounds()));
-    }
-
-    private IEnumerable<GameObject> CreateTransitionObjects(Layer layer, string tag, IEnumerable<Bounds> cameraBounds)
-    {
-      var vertices = CreateMatrixVertices(layer);
+      var vertices = CreateMatrixVertices(layerConfig.TiledLayer);
       var transitionObjectBoundaries = vertices.GetRectangleBounds();
 
-      var asset = LoadPrefabAsset(_transitionObjectPrefabName);
+      var prefabName = layerConfig.TiledLayer.GetPropertyValue("Prefab");
+
+      var asset = LoadPrefabAsset(prefabName);
 
       foreach (var transitionObjectBounds in transitionObjectBoundaries)
       {
@@ -67,12 +58,12 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
         yield return CreateInstantiableObject(
           asset,
-          _transitionObjectPrefabName,
+          prefabName,
+          layerConfig,
           new CameraTransitionInstantiationArguments
           {
             TransitionObjectBounds = transitionObjectBounds,
-            IntersectingCameraBounds = intersectingCameraBounds,
-            Tag = tag
+            IntersectingCameraBounds = intersectingCameraBounds
           });
       }
     }

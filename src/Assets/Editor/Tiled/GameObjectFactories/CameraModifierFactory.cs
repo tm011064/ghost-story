@@ -14,22 +14,17 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
     }
 
-    public override IEnumerable<GameObject> Create(Property[] propertyFilters)
+    public override IEnumerable<GameObject> Create()
     {
-      var filters = propertyFilters
-        .Concat(new Property[] { new Property { Name = "Collider", Value = "cameramodifier" } })
-        .ToArray();
-
-      return Map
-        .ForEachObjectGroupWithProperties(filters)
-        .Get<IEnumerable<GameObject>>(CreateCameraModifers)
-        .SelectMany(l => l);
+      return ObjectLayerConfigs
+        .Where(config => config.Type == "CameraModifier")
+        .SelectMany(config => CreateCameraModifers(config));
     }
 
-    private IEnumerable<GameObject> CreateCameraModifers(Objectgroup objectgroup)
+    private IEnumerable<GameObject> CreateCameraModifers(TiledObjectLayerConfig layerConfig)
     {
-      var bounds = objectgroup.GetTypeOrThrow("Camera Bounds");
-      var triggers = objectgroup.GetTypesOrThrow("Camera Trigger");
+      var bounds = layerConfig.TiledObjectgroup.GetTypeOrThrow("Camera Bounds");
+      var triggers = layerConfig.TiledObjectgroup.GetTypesOrThrow("Camera Trigger");
 
       var fullScreenScrollers = triggers.Where(o => o.HasProperty(
         "Triggers Room Transition",
@@ -41,7 +36,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         yield return CreateCameraModifier(
           fullScreenScrollers,
           bounds,
-          "Full Screen Scroller");
+          "Full Screen Scroller",
+          layerConfig);
       }
 
       var cameraModifiers = triggers.Except(fullScreenScrollers).ToArray();
@@ -51,14 +47,16 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         yield return CreateCameraModifier(
             cameraModifiers,
             bounds,
-            "Camera Modifier");
+            "Camera Modifier",
+            layerConfig);
       }
     }
 
     private GameObject CreateCameraModifier(
       Object[] triggers,
       Object boundsObject,
-      string prefabName)
+      string prefabName,
+      AbstractTiledLayerConfig layerConfig)
     {
       var boundsPropertyInfos = triggers
         .Where(t => t.PolyLine == null)
@@ -74,6 +72,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       return CreateInstantiableObject(
        asset,
        prefabName,
+       layerConfig,
        new CameraModifierInstantiationArguments
        {
          BoundsPropertyInfos = boundsPropertyInfos,

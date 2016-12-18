@@ -5,6 +5,4 @@ public class CameraTransitionInstantiationArguments : AbstractInstantiationArgum
   public Bounds TransitionObjectBounds;
 
   public Bounds[] IntersectingCameraBounds;
-
-  public string Tag;
 }

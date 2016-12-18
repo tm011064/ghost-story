@@ -32,8 +32,7 @@ namespace Assets.Editor.Tiled
 
     public void Import(
       GameObject parent,
-      AbstractGameObjectFactory[] gameObjectFactories = null,
-      Property[] propertyFilters = null)
+      AbstractGameObjectFactory[] gameObjectFactories = null)
     {
       if (gameObjectFactories == null)
       {
@@ -46,9 +45,7 @@ namespace Assets.Editor.Tiled
       tiledObjectsGameObject.transform.position = Vector3.zero;
 
       tiledObjectsGameObject.AttachChildren(
-        gameObjectFactories.SelectMany(f => f.Create(propertyFilters ?? new Property[0])));
-
-      AssignTags(parent);
+        gameObjectFactories.SelectMany(f => f.Create()));
 
       tiledObjectsGameObject.transform.parent = parent.transform;
     }
@@ -105,19 +102,6 @@ namespace Assets.Editor.Tiled
       return layer.GetPropertyValue("Commands")
         .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
         .Select(s => s.Trim());
-    }
-
-    private void AssignTags(GameObject prefab)
-    {
-      foreach (var layer in Map.ForEachLayerWithPropertyName("Tag"))
-      {
-        var tag = layer.GetPropertyValue("Tag");
-        var transform = prefab.transform.FindChild(layer.Name);
-
-        transform.tag = tag;
-
-        Debug.Log("Tile2Unity Import: Assigned tag '" + tag + "' to game object " + transform);
-      }
     }
 
     private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories()
