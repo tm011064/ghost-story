@@ -8,35 +8,39 @@ public class ButtonsState
 
   private float _pressStarted;
 
+  public bool IsHandled;
+
   public void Update()
   {
-    ButtonPressState state = ButtonPressState.Idle;
+    IsHandled = false;
+
+    var pressState = ButtonPressState.Idle;
 
     if (Input.GetButton(_buttonName))
     {
-      state |= ButtonPressState.IsPressed;
+      pressState |= ButtonPressState.IsPressed;
     }
 
-    if (((state & ButtonPressState.IsPressed) != 0)               // IF   currently pressed
-      && ((ButtonPressState & ButtonPressState.IsPressed) == 0))  // AND  previously not pressed
+    if (((pressState & ButtonPressState.IsPressed) != 0)
+      && ((ButtonPressState & ButtonPressState.IsPressed) == 0))
     {
       _pressStarted = Time.time;
 
-      state |= ButtonPressState.IsDown;
+      pressState |= ButtonPressState.IsDown;
     }
 
-    if (((state & ButtonPressState.IsPressed) == 0)               // IF   currently not pressed
-      && ((ButtonPressState & ButtonPressState.IsPressed) != 0))  // AND  previously pressed
+    if (((pressState & ButtonPressState.IsPressed) == 0)
+      && ((ButtonPressState & ButtonPressState.IsPressed) != 0))
     {
-      state |= ButtonPressState.IsUp;
+      pressState |= ButtonPressState.IsUp;
     }
 
-    if ((state & (ButtonPressState.IsUp | ButtonPressState.IsDown | ButtonPressState.IsPressed)) != 0)
+    if ((pressState & (ButtonPressState.IsUp | ButtonPressState.IsDown | ButtonPressState.IsPressed)) != 0)
     {
-      state &= ~ButtonPressState.Idle;
+      pressState &= ~ButtonPressState.Idle;
     }
 
-    ButtonPressState = state;
+    ButtonPressState = pressState;
   }
 
   public float GetPressedTime()

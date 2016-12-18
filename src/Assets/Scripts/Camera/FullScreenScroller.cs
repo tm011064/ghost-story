@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
@@ -26,6 +26,8 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
 
   public VerticalCameraFollowMode VerticalCameraFollowMode;
 
+  public FullScreenScrollerTransitionMode FullScreenScrollerTransitionMode = FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal;
+
   private GameObject _parent;
 
   private CameraController _cameraController;
@@ -44,9 +46,9 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
 
     OnSceneReset();
 
-    var enterTrigger = GetComponentInChildren<ITriggerEnterExit>();
+    var enterTriggers = GetComponentsInChildren<ITriggerEnterExit>();
 
-    if (enterTrigger != null)
+    foreach (var enterTrigger in enterTriggers)
     {
       enterTrigger.Entered += (_, e) => OnEnter(e.SourceCollider);
       enterTrigger.Exited += (_, e) => _cameraController.OnCameraModifierExit(_cameraMovementSettings);
@@ -87,64 +89,31 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
     // the order here is important. First we want to set the camera movement settings, then we can create
     // the scroll transform action.
     var targetPosition = _cameraController.CalculateTargetPosition();
+    var player = GameManager.Instance.Player;
 
-    PushControlHandlers(targetPosition);
+    var contexts = PlayerTranslationActionContextFactory.Create(
+        _cameraController.Transform.position,
+        targetPosition,
+        FullScreenScrollerTransitionMode,
+        _animationShortNameHash,
+        FullScreenScrollSettings).ToArray();
 
-    var scrollTransformationAction = new TranslateTransformAction(
-      targetPosition,
-      FullScreenScrollSettings.TransitionTime,
-      EasingType.Linear,
-      GameManager.Instance.Easing);
+    _cameraController.EnqueueScrollActions(
+      contexts.Select(c => c.TranslateTransformAction));
 
-    _cameraController.EnqueueScrollAction(scrollTransformationAction);
-  }
+    var playerControlHandlersStack = new Stack<PlayerControlHandler>(
+      contexts.Select(c => c.PlayerControlHandler));
 
-  private void PushControlHandlers(Vector3 targetPosition)
-  {
-    Vector3? playerTranslationVector = GetPlayerTranslationVector(targetPosition);
-
-    var freezeControlHandlers = new Queue<FreezePlayerControlHandler>(GetScrollControlHandlers(playerTranslationVector));
-
-    GameManager.Instance.Player.ExchangeActiveControlHandler(
-      freezeControlHandlers.Dequeue());
-
-    while (freezeControlHandlers.Any())
-    {
-      GameManager.Instance.Player.PushControlHandler(
-        freezeControlHandlers.Dequeue());
-    }
-  }
-
-  private Vector3? GetPlayerTranslationVector(Vector3 targetPosition)
-  {
-    if (FullScreenScrollSettings.PlayerTranslationDistance == 0f)
-    {
-      return null;
-    }
-
-    var currentCameraPosition = _cameraController.gameObject.transform.position;
-
-    var directionVector = targetPosition - currentCameraPosition;
-
-    return directionVector.normalized * FullScreenScrollSettings.PlayerTranslationDistance;
-  }
-
-  private IEnumerable<FreezePlayerControlHandler> GetScrollControlHandlers(Vector3? playerTranslationVector)
-  {
     if (FullScreenScrollSettings.EndScrollFreezeTime > 0f)
     {
-      yield return new FreezePlayerControlHandler(
-          GameManager.Instance.Player,
-          FullScreenScrollSettings.EndScrollFreezeTime,
-          _animationShortNameHash);
+      playerControlHandlersStack.Push(new FreezePlayerControlHandler(
+        player,
+        FullScreenScrollSettings.EndScrollFreezeTime,
+        _animationShortNameHash));
     }
 
-    yield return new FreezePlayerControlHandler(
-        GameManager.Instance.Player,
-        FullScreenScrollSettings.TransitionTime,
-        _animationShortNameHash,
-        playerTranslationVector,
-        FullScreenScrollSettings.PlayerTranslationEasingType);
+    player.ExchangeActiveControlHandler(playerControlHandlersStack.Pop());
+    player.PushControlHandlers(playerControlHandlersStack.ToArray());
   }
 
   private void OnEnter(Collider2D collider)

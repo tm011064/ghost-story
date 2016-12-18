@@ -59,7 +59,7 @@ public class PlayerControlHandler : BaseControlHandler
     _playerUpdateController.UpdatePlayerState(axisState);
   }
 
-  protected XYAxisState GetAxisState()
+  protected virtual XYAxisState GetAxisState()
   {
     XYAxisState axisState;
 

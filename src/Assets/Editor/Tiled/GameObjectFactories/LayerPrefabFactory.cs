@@ -21,10 +21,9 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
       parentObject.transform.position = Vector3.zero;
 
-      var createdGameObjects = Map
-        .ForEachLayerWithPropertyName("Prefab")
-        .Get<IEnumerable<GameObject>>(CreatePrefabsFromLayer)
-        .SelectMany(l => l);
+      var createdGameObjects = TileLayerConfigs
+        .Where(config => config.TiledLayer.HasProperty("Prefab"))
+        .SelectMany(config => CreatePrefabsFromLayer(config));
 
       foreach (var gameObject in createdGameObjects)
       {
@@ -34,28 +33,29 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       yield return parentObject;
     }
 
-    private IEnumerable<GameObject> CreatePrefabsFromLayer(Layer layer)
+    private IEnumerable<GameObject> CreatePrefabsFromLayer(TiledTileLayerConfig layerConfig)
     {
-      var prefabName = layer.Properties
+      var prefabName = layerConfig.TiledLayer.Properties
         .Property
-        .First(p => string.Compare(p.Name.Trim(), "Prefab", true) == 0)
+        .First(p => string.Equals(p.Name.Trim(), "Prefab", StringComparison.OrdinalIgnoreCase))
         .Value
         .Trim()
         .ToLower();
 
       var asset = LoadPrefabAsset(prefabName);
 
-      var matrixVertices = CreateMatrixVertices(layer);
+      var matrixVertices = CreateMatrixVertices(layerConfig.TiledLayer);
 
       foreach (var bounds in matrixVertices.GetRectangleBounds())
       {
         yield return CreateInstantiableObject(
           asset,
           prefabName,
+          layerConfig,
           new InstantiationArguments
           {
             Bounds = bounds,
-            Properties = layer
+            Properties = layerConfig.TiledLayer
               .Properties
               .Property
               .ToDictionary(p => p.Name, p => p.Value, StringComparer.InvariantCultureIgnoreCase)

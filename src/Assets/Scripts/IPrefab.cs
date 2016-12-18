@@ -1,5 +1,5 @@
 ﻿public interface IInstantiable<TInstantiationArgument>
-  where TInstantiationArgument : InstantiationArguments
+  where TInstantiationArgument : AbstractInstantiationArguments
 {
 #if UNITY_EDITOR
   void Instantiate(TInstantiationArgument arguments);

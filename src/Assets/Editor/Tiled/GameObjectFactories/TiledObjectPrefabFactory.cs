@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
@@ -15,14 +16,15 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     public override IEnumerable<GameObject> Create()
     {
-      var prefabsParent = new GameObject("Auto created Tiled prefabs");
+      var prefabsParent = new GameObject("Prefab Group");
+
       prefabsParent.transform.position = Vector3.zero;
 
-      var prefabGameObjects = Map
-        .ForEachObjectWithProperty("Prefab", ObjecttypesByName)
-        .Get<GameObject>(CreatePrefabFromGameObject);
+      var createdGameObjects = ObjectLayerConfigs
+        .Where(config => config.Type == "PrefabGroup")
+        .SelectMany(config => CreatePrefabFromGameObject(config));
 
-      foreach (var gameObject in prefabGameObjects)
+      foreach (var gameObject in createdGameObjects)
       {
         gameObject.transform.parent = prefabsParent.transform;
       }
@@ -30,24 +32,28 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       yield return prefabsParent;
     }
 
-    private GameObject CreatePrefabFromGameObject(Object obj)
+    private IEnumerable<GameObject> CreatePrefabFromGameObject(TiledObjectLayerConfig layerConfig)
     {
-      var properties = obj.GetProperties(ObjecttypesByName);
+      foreach (var obj in layerConfig.TiledObjectgroup.Object)
+      {
+        var properties = obj.GetProperties(ObjecttypesByName);
 
-      var prefabName = properties["prefab"];
+        var prefabName = properties["Prefab"];
 
-      var asset = LoadPrefabAsset(prefabName);
+        var asset = LoadPrefabAsset(prefabName);
 
-      return CreateInstantiableObject(
-       asset,
-       prefabName,
-       new InstantiationArguments
-       {
-         Bounds = obj.GetBounds(),
-         Properties = properties,
-         IsFlippedHorizontally = obj.Gid >= 2000000000,
-         IsFlippedVertically = (obj.Gid >= 1000000000 && obj.Gid < 2000000000) || obj.Gid >= 3000000000
-       });
+        yield return CreateInstantiableObject(
+         asset,
+         prefabName,
+         layerConfig,
+         new InstantiationArguments
+         {
+           Bounds = obj.GetBounds(),
+           Properties = properties,
+           IsFlippedHorizontally = obj.Gid >= 2000000000,
+           IsFlippedVertically = (obj.Gid >= 1000000000 && obj.Gid < 2000000000) || obj.Gid >= 3000000000
+         });
+      }
     }
   }
 }

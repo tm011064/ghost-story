@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
     {
       ShortNameHash = animationHash,
       Weight = animationWeight,
-      LinkedShortNameHashes = linkedShortNameHashes,
+      LinkedShortNameHashes = new HashSet<int>(linkedShortNameHashes ?? new int[0]),
       Speed = animationSpeed
     };
 

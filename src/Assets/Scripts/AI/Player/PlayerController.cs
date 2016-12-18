@@ -13,7 +13,7 @@ public partial class PlayerController : BaseCharacterController
 
   public RunSettings RunSettings = new RunSettings();
 
-  public ClimbSettings ClimbSettings = new ClimbSettings();
+  public ClimbSettings ClimbSettings = new ClimbSettings(); // TODO (Roman): make those behaviors that can be attached to the controller
 
   public SlideSettings SlideSettings = new SlideSettings();
 
@@ -97,9 +97,15 @@ public partial class PlayerController : BaseCharacterController
 
     _reusableWallJumpEvaluationControlHandler = new WallJumpEvaluationControlHandler(this);
 
-    PushControlHandler(new DefaultPlayerControlHandler(this));
-
     AdjustedGravity = JumpSettings.Gravity;
+
+    OnAwake();
+
+    PushControlHandler(CreateDefaultPlayerControlHandler());
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   private void InitializeWeapons()
@@ -303,7 +309,7 @@ public partial class PlayerController : BaseCharacterController
 
     CharacterPhysicsManager.Reset(SpawnLocation);
 
-    ResetControlHandlers(new DefaultPlayerControlHandler(this));
+    ResetControlHandlers(CreateDefaultPlayerControlHandler());
 
     _gameManager.RefreshScene(SpawnLocation);
 
@@ -318,5 +324,10 @@ public partial class PlayerController : BaseCharacterController
   public bool IsAttacking()
   {
     return WeaponControlHandlers.Any(wh => wh.IsAttacking());
+  }
+
+  protected virtual PlayerControlHandler CreateDefaultPlayerControlHandler()
+  {
+    return new DefaultPlayerControlHandler(this);
   }
 }

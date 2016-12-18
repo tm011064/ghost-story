@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
@@ -15,14 +16,14 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     public override IEnumerable<GameObject> Create()
     {
-      return Map
-        .ForEachLayerWithProperty("Collider", "onewayplatform")
-        .Get<GameObject>(CreateColliders);
+      return TileLayerConfigs
+        .Where(config => config.Type == "OneWayPlatform")
+        .Select(config => CreateColliders(config));
     }
 
-    private GameObject CreateColliders(Layer layer)
+    private GameObject CreateColliders(TiledTileLayerConfig layerConfig)
     {
-      var vertices = CreateMatrixVertices(layer);
+      var vertices = CreateMatrixVertices(layerConfig.TiledLayer);
 
       var collidersGameObject = new GameObject("One Way Platform Colliders");
       collidersGameObject.transform.position = Vector3.zero;
@@ -53,6 +54,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
         edgeColliderObject.transform.parent = collidersGameObject.transform;
       }
+
+      OnGameObjectCreated(layerConfig, collidersGameObject);
 
       return collidersGameObject;
     }

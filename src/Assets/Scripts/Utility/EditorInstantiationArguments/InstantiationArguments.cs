@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InstantiationArguments
+public class InstantiationArguments : AbstractInstantiationArguments
 {
   public Bounds Bounds;
 

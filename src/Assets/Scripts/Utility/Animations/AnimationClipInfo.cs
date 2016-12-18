@@ -1,8 +1,10 @@
-﻿public class AnimationClipInfo
+﻿using System.Collections.Generic;
+
+public class AnimationClipInfo
 {
   public int ShortNameHash;
 
-  public int[] LinkedShortNameHashes;
+  public HashSet<int> LinkedShortNameHashes;
 
   public int Weight;
 

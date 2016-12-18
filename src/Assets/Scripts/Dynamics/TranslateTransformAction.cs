@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TranslateTransformAction
 {
-  public TranslateTransformActionStatus ActionStatus = TranslateTransformActionStatus.Idle;
-
   private readonly Vector3 _targetPosition;
 
   private readonly Easing _easing;
@@ -12,7 +11,9 @@ public class TranslateTransformAction
 
   private readonly float _duration;
 
-  private float _startTime;
+  private float? _startTime;
+
+  private float? _endTime;
 
   private Vector3 _path;
 
@@ -48,11 +49,17 @@ public class TranslateTransformAction
     _duration = duration;
   }
 
+  public float Duration { get { return _duration; } }
+
+  public bool IsCompleted()
+  {
+    return _endTime.HasValue && Time.time >= _endTime.Value;
+  }
+
   public void Start(Vector3 startPosition)
   {
-    ActionStatus = TranslateTransformActionStatus.Started;
-
     _startTime = Time.time;
+    _endTime = _startTime + _duration;
 
     _startPosition = startPosition;
 
@@ -61,26 +68,19 @@ public class TranslateTransformAction
 
   public Vector3 GetPosition()
   {
-    if (ActionStatus == TranslateTransformActionStatus.Completed)
+    if (!_startTime.HasValue)
+    {
+      throw new InvalidOperationException("Action has not started yet");
+    }
+
+    if (Time.time >= _endTime.Value)
     {
       return _targetPosition;
     }
 
-    if (ActionStatus == TranslateTransformActionStatus.Idle)
-    {
-      return _startPosition;
-    }
-
-    float currentTime = Time.time - _startTime;
+    float currentTime = Time.time - _startTime.Value;
 
     var percentage = _easing.GetValue(_easingType, currentTime, _duration);
-
-    if (percentage >= 1f)
-    {
-      ActionStatus = TranslateTransformActionStatus.Completed;
-
-      return _targetPosition;
-    }
 
     var translationVector = _startPosition + (_path.normalized * (_path.magnitude * percentage));
 

@@ -13,6 +13,10 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     private readonly Dictionary<string, string> _prefabLookup = new Dictionary<string, string>();
 
+    protected readonly TiledObjectLayerConfig[] ObjectLayerConfigs;
+
+    protected readonly TiledTileLayerConfig[] TileLayerConfigs;
+
     protected AbstractGameObjectFactory(
       Map map,
       Dictionary<string, string> prefabLookup,
@@ -22,9 +26,29 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       ObjecttypesByName = objecttypesByName;
 
       Map = map;
+
+      TileLayerConfigs = map
+        .Layers
+        .Select(layer => TiledTileLayerConfigFactory.Create(layer))
+        .ToArray();
+
+      ObjectLayerConfigs = map
+        .Objectgroup
+        .Select(og => new TiledObjectLayerConfig
+        {
+          TiledObjectgroup = og,
+          Layer = og.GetPropertyValue("Layer"),
+          Type = og.GetPropertyValue("Type"),
+          Universe = og.GetPropertyValue("Universe")
+        })
+        .ToArray();
     }
 
     public abstract IEnumerable<GameObject> Create();
+
+    protected virtual void OnGameObjectCreated(AbstractTiledLayerConfig layerConfig, GameObject gameObject)
+    {
+    }
 
     protected MatrixVertices CreateMatrixVertices(Layer layer)
     {
@@ -90,12 +114,15 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     }
 
     protected GameObject CreateInstantiableObject<TInstantiationArguments>(
-      GameObject asset, 
+      GameObject asset,
       string prefabName,
+      AbstractTiledLayerConfig layerConfig,
       TInstantiationArguments arguments)
-      where TInstantiationArguments : InstantiationArguments
+      where TInstantiationArguments : AbstractInstantiationArguments
     {
       var gameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
+
+      OnGameObjectCreated(layerConfig, gameObject);
 
       gameObject.name = prefabName;
 
