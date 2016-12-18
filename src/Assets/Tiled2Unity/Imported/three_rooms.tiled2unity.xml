@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 18/12/2016 11:10:01-->
+<!--Last exported: 18/12/2016 17:23:56-->
 <Tiled2Unity version="1.0.7.7">
   <AssignMaterial mesh="mesh_0001" material="blocks_192x128" />
   <AssignMaterial mesh="mesh_0002" material="blocks_16x16" />
@@ -38,7 +38,7 @@
       <Property name="Layer" value="House" />
       <Property name="Prefab" value="Elevator Shaft" />
       <Property name="TransitionsTo" value="HouseShafts" />
-      <Property name="Type" value="Transition" />
+      <Property name="Type" value="LayerTransition" />
       <Property name="Universe" value="RealWorld" />
     </GameObject>
     <GameObject name="Real Elevator Background" x="0" y="0" z="0">
@@ -58,7 +58,7 @@
       <Property name="Layer" value="HouseShafts" />
       <Property name="Prefab" value="Elevator Shaft" />
       <Property name="TransitionsTo" value="House" />
-      <Property name="Type" value="Transition" />
+      <Property name="Type" value="LayerTransition" />
       <Property name="Universe" value="RealWorld" />
     </GameObject>
     <GameObject name="Alternate Background" x="0" y="0" z="0">

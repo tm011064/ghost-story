@@ -45,10 +45,10 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       if (cameraModifiers.Any())
       {
         yield return CreateCameraModifier(
-            cameraModifiers,
-            bounds,
-            "Camera Modifier",
-            layerConfig);
+          cameraModifiers,
+          bounds,
+          "Camera Modifier",
+          layerConfig);
       }
     }
 

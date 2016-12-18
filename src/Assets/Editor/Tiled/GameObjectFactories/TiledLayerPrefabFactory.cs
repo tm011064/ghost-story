@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
 {
-  public class LayerPrefabFactory : AbstractGameObjectFactory
+  public class TiledLayerPrefabFactory : AbstractGameObjectFactory
   {
-    public LayerPrefabFactory(
+    public TiledLayerPrefabFactory(
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
@@ -17,20 +17,20 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     public override IEnumerable<GameObject> Create()
     {
-      var parentObject = new GameObject("Auto created Tiled layer objects");
+      var prefabsParent = new GameObject("Prefab Group");
 
-      parentObject.transform.position = Vector3.zero;
+      prefabsParent.transform.position = Vector3.zero;
 
       var createdGameObjects = TileLayerConfigs
-        .Where(config => config.TiledLayer.HasProperty("Prefab"))
+        .Where(config => config.Type == "PrefabGroup")
         .SelectMany(config => CreatePrefabsFromLayer(config));
 
       foreach (var gameObject in createdGameObjects)
       {
-        gameObject.transform.parent = parentObject.transform;
+        gameObject.transform.parent = prefabsParent.transform;
       }
 
-      yield return parentObject;
+      yield return prefabsParent;
     }
 
     private IEnumerable<GameObject> CreatePrefabsFromLayer(TiledTileLayerConfig layerConfig)
@@ -57,8 +57,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
             Bounds = bounds,
             Properties = layerConfig.TiledLayer
               .Properties
-              .Property
-              .ToDictionary(p => p.Name, p => p.Value, StringComparer.InvariantCultureIgnoreCase)
+              .ToDictionary()
           });
       }
     }

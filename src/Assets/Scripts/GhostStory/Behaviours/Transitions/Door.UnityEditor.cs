@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts.GhostStory.Behaviours.Transitions
@@ -13,14 +14,15 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
       foreach (var intersectingCameraBounds in arguments.IntersectingCameraBounds)
       {
-        var fullScreenScrollerGameObject = new GameObject("Full Screen Scroller");
+        var assetPath = arguments.PrefabsAssetPathsByShortName["Full Screen Scroller"];
+        var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
+        var fullScreenScrollerGameObject = GameObject.Instantiate(asset, center, Quaternion.identity) as GameObject;
 
-        fullScreenScrollerGameObject.transform.position = center;
         fullScreenScrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
         fullScreenScrollerGameObject.transform.parent = gameObject.transform;
 
         fullScreenScrollerGameObject
-          .AddComponent<FullScreenScroller>()
+          .GetComponent<FullScreenScroller>()
           .Instantiate(new CameraModifierInstantiationArguments
             {
               Bounds = intersectingCameraBounds,

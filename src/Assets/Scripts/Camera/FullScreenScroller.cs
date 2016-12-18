@@ -46,8 +46,9 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
 
     OnSceneReset();
 
-    var enterTriggers = GetComponentsInChildren<ITriggerEnterExit>();
+    _cameraMovementSettings = CreateCameraMovementSettings();
 
+    var enterTriggers = GetComponentsInChildren<ITriggerEnterExit>();
     foreach (var enterTrigger in enterTriggers)
     {
       enterTrigger.Entered += (_, e) => OnEnter(e.SourceCollider);
@@ -55,8 +56,6 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
     }
 
     _checkpoint = GetComponentInChildren<Checkpoint>();
-
-    _cameraMovementSettings = CreateCameraMovementSettings();
   }
 
   public void OnSceneReset()

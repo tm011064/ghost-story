@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class CameraMovementSettingsManager
 {
@@ -24,19 +25,24 @@ public class CameraMovementSettingsManager
 
   public void AddSettings(CameraMovementSettings cameraMovementSettings)
   {
-    if (_cameraMovementSettings.LastOrDefault() == cameraMovementSettings)
+    if (cameraMovementSettings.Equals(ActiveSettings))
     {
       return;
     }
-
+    
     _cameraMovementSettings.Add(cameraMovementSettings);
 
     ChangeSettings(cameraMovementSettings);
   }
 
+  public void ClearSettings()
+  {
+    _cameraMovementSettings.Clear();
+  }
+
   public void RemoveSettings(CameraMovementSettings cameraMovementSettings)
   {
-    if (ActiveSettings != cameraMovementSettings)
+    if (!ActiveSettings.Equals(cameraMovementSettings))
     {
       _cameraMovementSettings.Clear();
       _cameraMovementSettings.Add(ActiveSettings);

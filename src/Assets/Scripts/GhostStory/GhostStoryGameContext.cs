@@ -74,6 +74,8 @@ public class GhostStoryGameContext
 
   public void SwitchLayer(LevelLayer layer)
   {
+    Camera.main.GetComponent<CameraController>().ClearCameraModifiers();
+
     DisableCurrentGameObjects();
 
     _activeUniverse = new LayerUniverseKey { Layer = layer, Universe = _activeUniverse.Universe };

@@ -54,7 +54,7 @@ MonoBehaviour:
   FullScreenScrollSettings:
     TransitionTime: 1.4
     CameraScrollEasingType: 15
-    PlayerTranslationDistance: 48
+    PlayerTranslationDistance: 32
     PlayerTranslationEasingType: 0
     StartScrollFreezeTime: 0.3
     EndScrollFreezeTime: 0.4
