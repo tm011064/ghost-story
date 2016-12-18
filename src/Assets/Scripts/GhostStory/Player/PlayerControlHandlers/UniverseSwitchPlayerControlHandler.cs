@@ -9,7 +9,6 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
     : base(playerController)
   {
     _worldSwitchSettings = worldSwitchSettings;
-    GhostStoryGameContext.Instance.SwitchToRealWorld();
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()

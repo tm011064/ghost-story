@@ -265,6 +265,15 @@ public class GameManager : MonoBehaviour
   {
   }
 
+  void Start()
+  {
+    OnStart();
+  }
+
+  protected virtual void OnStart()
+  {
+  }
+
   void Update()
   {
     InputStateManager.Update();

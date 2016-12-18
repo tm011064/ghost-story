@@ -4,8 +4,6 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
 {
   private readonly XYAxisState _frozenAxisState;
 
-  private readonly WorldSwitchSettings _worldSwitchSettings;
-
   public FreezeRealWorldPlayerControlHandler(
     PlayerController playerController,
     WorldSwitchSettings worldSwitchSettings)
@@ -15,7 +13,6 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
       Animator.StringToHash("Freeze"))
   {
     _frozenAxisState = base.GetAxisState();
-    _worldSwitchSettings = worldSwitchSettings;
   }
 
   protected override XYAxisState GetAxisState()

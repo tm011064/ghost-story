@@ -30,13 +30,11 @@ public static class GameObjectExtensions
 
   public static void DisableAndHide(this GameObject self)
   {
-    Debug.Log("Disabling " + self.name);
     SetActive(self, false);
   }
 
   public static void EnableAndShow(this GameObject self)
   {
-    Debug.Log("Enabling " + self.name);
     SetActive(self, true);
   }
 

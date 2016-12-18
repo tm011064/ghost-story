@@ -1,60 +1,83 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using Assets.Scripts.GhostStory;
+using UnityEngine;
 
 public class GhostStoryGameContext
 {
   public static GhostStoryGameContext Instance;
 
-  private GameObject[] _realWorldGameObjects;
+  private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
 
-  private GameObject[] _alternateWorldGameObjects;
-
-  private bool _isRealWorld;
+  private LayerUniverseKey _activeUniverse;
 
   public GhostStoryGameContext(
-    GameObject[] realWorldGameObjects,
-    GameObject[] alternateWorldGameObjects)
+    ILookup<LayerUniverseKey, GameObject> gameObjectsByLayerUniverseKey)
   {
-    _realWorldGameObjects = realWorldGameObjects;
-    _alternateWorldGameObjects = alternateWorldGameObjects;
+    _gameObjectsByLayerUniverseKey = gameObjectsByLayerUniverseKey;
+  }
+
+  public void DisableAndHideAllObjects()
+  {
+    foreach (var lookupGrouping in _gameObjectsByLayerUniverseKey)
+    {
+      foreach (var gameObject in lookupGrouping)
+      {
+        gameObject.DisableAndHide();
+      }
+    }
   }
 
   public bool IsRealWorldActivated()
   {
-    return _isRealWorld;
+    return _activeUniverse.Universe == Universe.RealWorld;
   }
 
   public bool IsAlternateWorldActivated()
   {
-    return !_isRealWorld;
+    return _activeUniverse.Universe == Universe.AlternateWorld;
+  }
+
+  private void DisableCurrentGameObjects()
+  {
+    foreach (var gameObject in _gameObjectsByLayerUniverseKey[_activeUniverse])
+    {
+      gameObject.DisableAndHide();
+    }
+  }
+
+  private void EnableCurrentGameObjects()
+  {
+    foreach (var gameObject in _gameObjectsByLayerUniverseKey[_activeUniverse])
+    {
+      gameObject.EnableAndShow();
+    }
+  }
+
+  private void SwitchUniverse(Universe universe)
+  {
+    DisableCurrentGameObjects();
+
+    _activeUniverse = new LayerUniverseKey { Layer = _activeUniverse.Layer, Universe = universe };
+
+    EnableCurrentGameObjects();
   }
 
   public void SwitchToRealWorld()
   {
-    foreach (var gameObject in _alternateWorldGameObjects)
-    {
-      gameObject.DisableAndHide();
-    }
-
-    foreach (var gameObject in _realWorldGameObjects)
-    {
-      gameObject.EnableAndShow();
-    }
-
-    _isRealWorld = true;
+    SwitchUniverse(Universe.RealWorld);
   }
 
   public void SwitchToAlternateWorld()
   {
-    foreach (var gameObject in _realWorldGameObjects)
-    {
-      gameObject.DisableAndHide();
-    }
+    SwitchUniverse(Universe.AlternateWorld);
+  }
 
-    foreach (var gameObject in _alternateWorldGameObjects)
-    {
-      gameObject.EnableAndShow();
-    }
+  public void SwitchLayer(LevelLayer layer)
+  {
+    DisableCurrentGameObjects();
 
-    _isRealWorld = false;
+    _activeUniverse = new LayerUniverseKey { Layer = layer, Universe = _activeUniverse.Universe };
+
+    EnableCurrentGameObjects();
   }
 }
