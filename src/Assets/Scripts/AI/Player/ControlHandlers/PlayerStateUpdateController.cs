@@ -20,7 +20,10 @@ public class PlayerStateUpdateController
         UpdatePlayerStateControllers(axisState),
         UpdateWeaponControllers(axisState));
 
-    AdjustSpriteScale(axisState);
+    if (playerStateUpdateResult.AllowHorizontalSpriteFlip)
+    {
+      AdjustSpriteScale(axisState);
+    }
 
     if (playerStateUpdateResult.AnimationClipInfo != null)
     {
@@ -30,9 +33,9 @@ public class PlayerStateUpdateController
 
   private PlayerStateUpdateResult UpdateWeaponControllers(XYAxisState axisState)
   {
-    foreach (var weaponControlHandler in _playerController.WeaponControlHandlers)
+    foreach (var weaponControlHandler in _playerController.Weapons)
     {
-      var playerStateUpdateResult = weaponControlHandler.Update(axisState);
+      var playerStateUpdateResult = weaponControlHandler.UpdateState(axisState);
 
       if (playerStateUpdateResult.IsHandled)
       {

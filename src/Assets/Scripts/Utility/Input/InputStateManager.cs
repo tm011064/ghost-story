@@ -60,8 +60,18 @@ public class InputStateManager
 
   public bool IsUpAxisButtonDown(InputSettings inputSettings)
   {
-    return _axisStates["Vertical"].Value < inputSettings.AxisSensitivityThreshold 
+    return _axisStates["Vertical"].Value < inputSettings.AxisSensitivityThreshold
       && _axisStates["Vertical"].HasChangedDirection(inputSettings);
+  }
+
+  public bool IsAxisUpPressed(InputSettings inputSettings)
+  {
+    return _axisStates["Vertical"].Value > inputSettings.AxisSensitivityThreshold;
+  }
+
+  public bool IsAxisDownPressed(InputSettings inputSettings)
+  {
+    return _axisStates["Vertical"].Value > inputSettings.AxisSensitivityThreshold;
   }
 
   /// <summary>

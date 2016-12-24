@@ -11,6 +11,8 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
 
   public AnimationClipInfo AnimationClipInfo;
 
+  public bool AllowHorizontalSpriteFlip;
+
   private PlayerStateUpdateResult()
   {
   }
@@ -19,7 +21,8 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
     int animationHash,
     int animationWeight = 0,
     float animationSpeed = 1f,
-    int[] linkedShortNameHashes = null)
+    int[] linkedShortNameHashes = null,
+    bool allowHorizontalSpriteFlip = true)
   {
     AnimationClipInfo = new AnimationClipInfo
     {
@@ -30,13 +33,15 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
     };
 
     IsHandled = true;
+    AllowHorizontalSpriteFlip = allowHorizontalSpriteFlip;
   }
 
   public static PlayerStateUpdateResult CreateHandled(
     string animationName,
     int animationWeight = 0,
     float animationSpeed = 1f,
-    string[] linkedAnimationNames = null)
+    string[] linkedAnimationNames = null,
+    bool allowHorizontalSpriteFlip = true)
   {
     return new PlayerStateUpdateResult(
       Animator.StringToHash(animationName),
@@ -44,16 +49,18 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
       animationSpeed,
       linkedAnimationNames == null
         ? null
-        : linkedAnimationNames.Select(name => Animator.StringToHash(name)).ToArray());
+        : linkedAnimationNames.Select(name => Animator.StringToHash(name)).ToArray(),
+      allowHorizontalSpriteFlip);
   }
 
   public static PlayerStateUpdateResult CreateHandled(
     int animationHash,
     int animationWeight = 0,
     float animationSpeed = 1f,
-    int[] linkedShortNameHashes = null)
+    int[] linkedShortNameHashes = null,
+    bool allowHorizontalSpriteFlip = true)
   {
-    return new PlayerStateUpdateResult(animationHash, animationWeight, animationSpeed, linkedShortNameHashes);
+    return new PlayerStateUpdateResult(animationHash, animationWeight, animationSpeed, linkedShortNameHashes, allowHorizontalSpriteFlip);
   }
 
   public static PlayerStateUpdateResult Max(

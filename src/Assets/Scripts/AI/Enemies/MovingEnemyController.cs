@@ -5,6 +5,12 @@ public class MovingEnemyController : BaseCharacterController, IPlayerCollidable,
   void Awake()
   {
     CharacterPhysicsManager = GetComponent<CharacterPhysicsManager>();
+
+    OnAwake();
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   public virtual void Reset()

@@ -6,6 +6,16 @@
 
   public float SensitivityThreshold;
 
+  public bool IsUp()
+  {
+    return YAxis > SensitivityThreshold;
+  }
+
+  public bool IsDown()
+  {
+    return YAxis < -SensitivityThreshold;
+  }
+
   /// <summary>
   /// If true, the horizontal axis press is not strong enough and must be ignored
   /// </summary>
