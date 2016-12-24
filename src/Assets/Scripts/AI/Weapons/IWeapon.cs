@@ -1,4 +1,8 @@
 ﻿public interface IWeapon
 {
-  WeaponControlHandler CreateControlHandler(PlayerController playerController);
+  void StopAttack();
+
+  bool IsAttacking();
+
+  PlayerStateUpdateResult UpdateState(XYAxisState axisState);
 }

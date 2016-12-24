@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -57,7 +56,7 @@ public partial class PlayerController : BaseCharacterController
   public PlayerState PlayerState;
 
   [HideInInspector]
-  public WeaponControlHandler[] WeaponControlHandlers = new WeaponControlHandler[0];
+  public IWeapon[] Weapons = new IWeapon[0];
 
   [HideInInspector]
   public Vector2 StandIdleEnvironmentBoxColliderSize;
@@ -110,18 +109,7 @@ public partial class PlayerController : BaseCharacterController
 
   private void InitializeWeapons()
   {
-    var childTransform = this.GetChildGameObject("Weapons");
-
-    var weapons = childTransform.GetComponents(typeof(IWeapon)).Cast<IWeapon>();
-
-    var controlHandlers = new List<WeaponControlHandler>();
-
-    foreach (var weapon in weapons)
-    {
-      controlHandlers.Add(weapon.CreateControlHandler(this));
-    }
-
-    WeaponControlHandlers = controlHandlers.ToArray();
+    Weapons = GetComponentsInChildren<IWeapon>();
   }
 
   private void InitializeCharacterPhysicsManager()
@@ -323,7 +311,7 @@ public partial class PlayerController : BaseCharacterController
 
   public bool IsAttacking()
   {
-    return WeaponControlHandlers.Any(wh => wh.IsAttacking());
+    return Weapons.Any(wh => wh.IsAttacking());
   }
 
   protected virtual PlayerControlHandler CreateDefaultPlayerControlHandler()

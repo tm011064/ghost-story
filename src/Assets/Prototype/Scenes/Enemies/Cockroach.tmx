@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="15" tilewidth="16" tileheight="16" nextobjectid="5">
+ <tileset firstgid="1" name="blocks_192x120" tilewidth="192" tileheight="240" tilecount="2" columns="2">
+  <image source="../blocks_192x120.png" width="384" height="240"/>
+ </tileset>
+ <tileset firstgid="3" name="blocks_16x16" tilewidth="16" tileheight="16" tilecount="144" columns="12">
+  <image source="../blocks_16x16.png" width="192" height="192"/>
+ </tileset>
+ <layer name="Real Background" width="24" height="15">
+  <properties>
+   <property name="Layer" value="House"/>
+   <property name="Type" value="Background"/>
+   <property name="Universe" value="RealWorld"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Real Platforms" width="24" height="15">
+  <properties>
+   <property name="Layer" value="House"/>
+   <property name="Type" value="Platform"/>
+   <property name="Universe" value="RealWorld"/>
+  </properties>
+  <data encoding="csv">
+141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,141,141,0,0,0,0,0,0,0,0,0,141,141,141,141,0,0,0,0,0,0,0,141,
+141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,141,141,141,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,141,141,141,141,
+141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141,141
+</data>
+ </layer>
+ <objectgroup name="Camera Modifier">
+  <properties>
+   <property name="Commands" value="DestroyPrefab"/>
+   <property name="Layer" value="House"/>
+   <property name="Type" value="CameraModifier"/>
+   <property name="Universe" value="Global"/>
+  </properties>
+  <object id="1" type="Camera Bounds" x="0" y="0" width="384" height="240"/>
+  <object id="4" type="Camera Trigger" x="48" y="160" width="48" height="48"/>
+ </objectgroup>
+ <objectgroup name="Checkpoints">
+  <properties>
+   <property name="Commands" value="DestroyPrefab"/>
+   <property name="Layer" value="House"/>
+   <property name="Type" value="PrefabGroup"/>
+   <property name="Universe" value="RealWorld"/>
+  </properties>
+  <object id="2" type="Checkpoint" gid="9" x="64" y="192" width="16" height="16">
+   <properties>
+    <property name="Is Level Start" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Enemies">
+  <properties>
+   <property name="Commands" value="DestroyPrefab"/>
+   <property name="Layer" value="House"/>
+   <property name="Type" value="PrefabGroup"/>
+   <property name="Universe" value="RealWorld"/>
+  </properties>
+  <object id="3" gid="50" x="224" y="224" width="16" height="16">
+   <properties>
+    <property name="Prefab" value="Cockroach Spawn Location"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

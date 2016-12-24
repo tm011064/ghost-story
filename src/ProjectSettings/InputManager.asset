@@ -71,12 +71,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Jump
-    descriptiveName: Cross
+    descriptiveName: Circle
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: space
     altNegativeButton: 
-    altPositiveButton: joystick button 0
+    altPositiveButton: joystick button 2
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -87,12 +87,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Attack
-    descriptiveName: Square
+    descriptiveName: Triangle
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: c
     altNegativeButton: 
-    altPositiveButton: joystick button 2
+    altPositiveButton: joystick button 3
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -103,12 +103,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Dash
-    descriptiveName: 
+    descriptiveName: Rectangle
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: d
     altNegativeButton: 
-    altPositiveButton: joystick button 2
+    altPositiveButton: joystick button 0
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -135,12 +135,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Switch
-    descriptiveName: 
+    descriptiveName: Cross
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: s
     altNegativeButton: 
-    altPositiveButton: joystick button 2
+    altPositiveButton: joystick button 1
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
