@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 
+using System.Linq;
 using UnityEngine;
 
 public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IInstantiable<InstantiationArguments>
@@ -34,6 +35,11 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IInstantiable
 
   public void Instantiate(InstantiationArguments arguments)
   {
+    SpawnArguments = arguments
+      .Properties
+      .Select(kvp => new SpawnArgument { Key = kvp.Key, Value = kvp.Value })
+      .ToArray();
+
     transform.position = arguments.Bounds.center;
 
     transform.ForEachChildComponent<IInstantiable<InstantiationArguments>>(

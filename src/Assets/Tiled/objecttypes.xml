@@ -4,8 +4,10 @@
   <property name="Is Level Start" type="bool" default="false"/>
   <property name="Prefab" type="string" default="Checkpoint"/>
  </objecttype>
- <objecttype name="Barrel Met" color="#a0a0a4">
-  <property name="Prefab" type="string" default="Barrel Met Spawn Location"/>
+ <objecttype name="Cockroach" color="#a0a0a4">
+  <property name="Prefab" type="string" default="Cockroach Spawn Location"/>
+  <property name="StartDirections" type="string" default="Right"/>
+  <property name="StartLocation" type="string" default="Floor"/>
  </objecttype>
  <objecttype name="Room" color="#a0a0a4">
   <property name="Extension Bottom" type="int" default="14"/>
@@ -23,4 +25,12 @@
   <property name="Triggers Room Transition" type="bool"/>
  </objecttype>
  <objecttype name="Camera Bounds" color="#cccccc"/>
+ <objecttype name="Green Door" color="#00ff7f">
+  <property name="Color" type="string" default="Green"/>
+  <property name="Tag" type="string" default="RealWorld"/>
+ </objecttype>
+ <objecttype name="Red Door" color="#ff007f">
+  <property name="Color" type="string" default="Red"/>
+  <property name="Tag" type="string" default="RealWorld"/>
+ </objecttype>
 </objecttypes>

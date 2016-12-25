@@ -40,4 +40,16 @@ public static class DirectionExtensions
 
     throw new NotSupportedException();
   }
+
+  public static float Multiplier(this Direction direction)
+  {
+    switch (direction)
+    {
+      case Direction.Down:
+      case Direction.Left:
+        return -1;
+    }
+
+    return 1;
+  }
 }

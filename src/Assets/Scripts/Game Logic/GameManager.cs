@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
   [HideInInspector]
   public InputStateManager InputStateManager;
 
+  public InputSettings InputSettings = new InputSettings();
+
   [HideInInspector]
   public Easing Easing;
 
@@ -249,7 +251,7 @@ public class GameManager : MonoBehaviour
 
     InputStateManager = new InputStateManager();
 
-    InputStateManager.InitializeButtons("Jump", "Dash", "Fall", "Attack", "Switch"); // TODO (Roman): move this somewhere else
+    InputStateManager.InitializeButtons("Jump", "Dash", "Fall", "Attack", "Switch", "Pause"); // TODO (Roman): move this somewhere else
     InputStateManager.InitializeAxes("Horizontal", "Vertical");
 
     Easing = new Easing();

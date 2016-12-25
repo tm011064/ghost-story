@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class DictionaryExtensions
 {
-  public static bool GetBoolSafe(this Dictionary<string, string> self, string name, bool defaultValue)
+  public static bool GetBoolSafe(this IDictionary<string, string> self, string name, bool defaultValue)
   {
     if (!self.ContainsKey(name))
     {
@@ -20,7 +20,19 @@ public static class DictionaryExtensions
     return value;
   }
 
-  public static bool GetBool(this Dictionary<string, string> self, string name)
+  public static string GetString(this IDictionary<string, string> self, string name)
+  {
+    string value;
+
+    if (!self.TryGetValue(name, out value))
+    {
+      throw new KeyNotFoundException("No key found with name '" + name + "'");
+    }
+
+    return value;
+  }
+
+  public static bool GetBool(this IDictionary<string, string> self, string name)
   {
     if (!self.ContainsKey(name))
     {
@@ -37,7 +49,7 @@ public static class DictionaryExtensions
     return value;
   }
 
-  public static int GetInt(this Dictionary<string, string> self, string name)
+  public static int GetInt(this IDictionary<string, string> self, string name)
   {
     if (!self.ContainsKey(name))
     {

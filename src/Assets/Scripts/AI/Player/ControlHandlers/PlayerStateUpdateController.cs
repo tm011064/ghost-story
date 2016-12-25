@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 public class PlayerStateUpdateController
 {
   private readonly PlayerController _playerController;
@@ -66,10 +65,8 @@ public class PlayerStateUpdateController
     if ((axisState.XAxis > 0f && _playerController.Sprite.transform.localScale.x < 1f)
       || (axisState.XAxis < 0f && _playerController.Sprite.transform.localScale.x > -1f))
     {
-      _playerController.Sprite.transform.localScale = new Vector3(
-        _playerController.Sprite.transform.localScale.x * -1,
-        _playerController.Sprite.transform.localScale.y,
-        _playerController.Sprite.transform.localScale.z);
+      _playerController.Sprite.transform.localScale = _playerController.Sprite.transform.localScale.SetX(
+        _playerController.Sprite.transform.localScale.x * -1);
     }
   }
 

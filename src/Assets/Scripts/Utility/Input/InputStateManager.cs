@@ -71,7 +71,7 @@ public class InputStateManager
 
   public bool IsAxisDownPressed(InputSettings inputSettings)
   {
-    return _axisStates["Vertical"].Value > inputSettings.AxisSensitivityThreshold;
+    return _axisStates["Vertical"].Value < -inputSettings.AxisSensitivityThreshold;
   }
 
   /// <summary>

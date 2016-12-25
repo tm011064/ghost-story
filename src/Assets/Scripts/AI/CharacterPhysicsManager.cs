@@ -630,12 +630,36 @@ public class CharacterPhysicsManager : BasePhysicsManager
     PerformMove(moveCalculationResult);
   }
 
-  public void WarpToGrounded()
+  public void WarpToCeiling()
+  {
+    do
+    {
+      Move(new Vector3(0, 1f, 0));
+    } while (!LastMoveCalculationResult.CollisionState.Above);
+  }
+
+  public void WarpToFloor()
   {
     do
     {
       Move(new Vector3(0, -1f, 0));
     } while (!LastMoveCalculationResult.CollisionState.Below);
+  }
+
+  public void WarpToRightWall()
+  {
+    do
+    {
+      Move(new Vector3(1, 0, 0));
+    } while (!LastMoveCalculationResult.CollisionState.Right);
+  }
+
+  public void WarpToLeftWall()
+  {
+    do
+    {
+      Move(new Vector3(-1, 0, 0));
+    } while (!LastMoveCalculationResult.CollisionState.Left);
   }
 
   /// <summary>

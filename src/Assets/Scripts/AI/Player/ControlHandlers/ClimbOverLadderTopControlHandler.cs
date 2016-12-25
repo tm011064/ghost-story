@@ -25,7 +25,7 @@ public class ClimbOverLadderTopControlHandler : PlayerControlHandler
     PlayerController.PlayerState &= ~PlayerState.ClimbingLadderTop;
     PlayerController.PlayerState &= ~PlayerState.ClimbingLadder;
 
-    CharacterPhysicsManager.WarpToGrounded();
+    CharacterPhysicsManager.WarpToCeiling();
   }
 
   public override bool TryActivate(BaseControlHandler previousControlHandler)
