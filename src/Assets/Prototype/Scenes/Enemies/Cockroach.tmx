@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="15" tilewidth="16" tileheight="16" nextobjectid="5">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="15" tilewidth="16" tileheight="16" nextobjectid="9">
  <tileset firstgid="1" name="blocks_192x120" tilewidth="192" tileheight="240" tilecount="2" columns="2">
   <image source="../blocks_192x120.png" width="384" height="240"/>
  </tileset>
@@ -41,11 +41,11 @@
 141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
-141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
+141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,141,141,141,141,141,
 141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
-141,141,141,0,0,0,0,0,0,0,0,0,141,141,141,141,0,0,0,0,0,0,0,141,
+141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,141,141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
 141,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,141,
@@ -84,9 +84,25 @@
    <property name="Type" value="PrefabGroup"/>
    <property name="Universe" value="RealWorld"/>
   </properties>
-  <object id="3" gid="50" x="224" y="224" width="16" height="16">
+  <object id="3" type="Cockroach" gid="50" x="224" y="224" width="16" height="16">
    <properties>
     <property name="Prefab" value="Cockroach Spawn Location"/>
+    <property name="StartDirections" value="Right, Left"/>
+    <property name="StartLocation" value="Floor"/>
+   </properties>
+  </object>
+  <object id="6" type="Cockroach" gid="50" x="128" y="32" width="16" height="16">
+   <properties>
+    <property name="Prefab" value="Cockroach Spawn Location"/>
+    <property name="StartDirections" value="Right, Left"/>
+    <property name="StartLocation" value="Ceiling"/>
+   </properties>
+  </object>
+  <object id="8" type="Cockroach" gid="50" x="320" y="64" width="16" height="16">
+   <properties>
+    <property name="Prefab" value="Cockroach Spawn Location"/>
+    <property name="StartDirections" value="Left"/>
+    <property name="StartLocation" value="Floor"/>
    </properties>
   </object>
  </objectgroup>

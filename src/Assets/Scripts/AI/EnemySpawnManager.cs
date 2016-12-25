@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBehaviour, ISceneResetable
@@ -11,6 +12,8 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
 
   [Range(1f / 30.0f, float.MaxValue)]
   public float RespawnOnDestroyDelay = .1f;
+
+  public SpawnArgument[] SpawnArguments;
 
   private readonly List<GameObject> _spawnedEnemies = new List<GameObject>();
 
@@ -68,7 +71,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
 
     var spawnable = spawnedEnemy.GetComponent<ISpawnable>();
 
-    spawnable.Reset();
+    spawnable.Reset(SpawnArguments.ToDictionary(c => c.Key, c => c.Value));
 
     spawnable.GotDisabled += OnEnemyControllerGotDisabled;
 

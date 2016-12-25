@@ -122,6 +122,6 @@ public class Yoyo : MonoBehaviour, IWeapon
   {
     var enemyHealthBehaviour = collider.GetComponentOrThrow<EnemyHealthBehaviour>();
 
-    var damageResult = enemyHealthBehaviour.ApplyDamage(DamageUnits);
+    enemyHealthBehaviour.ApplyDamage(DamageUnits);
   }
 }

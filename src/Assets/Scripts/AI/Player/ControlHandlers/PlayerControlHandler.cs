@@ -71,7 +71,7 @@ public class PlayerControlHandler : BaseControlHandler
       ? GameManager.InputStateManager.GetVerticalAxisState().Value
       : VerticalAxisOverride.Value;
 
-    axisState.SensitivityThreshold = PlayerController.InputSettings.AxisSensitivityThreshold;
+    axisState.SensitivityThreshold = GameManager.InputSettings.AxisSensitivityThreshold;
 
     return axisState;
   }

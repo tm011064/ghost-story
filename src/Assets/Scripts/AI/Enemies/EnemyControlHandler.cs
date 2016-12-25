@@ -17,12 +17,6 @@ public class EnemyControlHandler<TEnemyController> : BaseControlHandler
     _animator = animator;
   }
 
-  [System.Diagnostics.Conditional("DEBUG")]
-  protected void DrawRay(Vector3 start, Vector3 dir, Color color)
-  {
-    Debug.DrawRay(start, dir, color);
-  }
-
   protected void MoveHorizontally(
     ref float moveDirectionFactor,
     float speed,
@@ -152,5 +146,11 @@ public class EnemyControlHandler<TEnemyController> : BaseControlHandler
     TurnAround,
 
     FallOff
+  }
+
+  [System.Diagnostics.Conditional("DEBUG")]
+  protected void DrawRay(Vector3 start, Vector3 dir, Color color)
+  {
+    Debug.DrawRay(start, dir, color);
   }
 }

@@ -12,7 +12,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     {
       if (_isPlayerWithinBoundingBox
         && !GameManager.Instance.InputStateManager.IsVerticalAxisHandled()
-        && GameManager.Instance.InputStateManager.IsUpAxisButtonDown(GameManager.Instance.Player.InputSettings))
+        && GameManager.Instance.InputStateManager.IsUpAxisButtonDown(GameManager.Instance.InputSettings))
       {
         GhostStoryGameContext.Instance.SwitchLayer(TransitionsToLayer);
       }

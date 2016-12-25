@@ -16,7 +16,7 @@ public class DefaultPlayerControlHandler : PlayerControlHandler
       && PlayerController.IsGrounded()
       && (PlayerController.SlideSettings.InputButtonsPressed.Length > 0
           && GameManager.InputStateManager.AreButtonsPressed(
-            PlayerController.InputSettings,
+            GameManager.InputSettings,
             PlayerController.SlideSettings.InputButtonsPressed))
       && (!string.IsNullOrEmpty(PlayerController.SlideSettings.InputButtonDown)
           && GameManager.InputStateManager.IsButtonDown(PlayerController.SlideSettings.InputButtonDown));

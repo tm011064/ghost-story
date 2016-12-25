@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -66,7 +67,7 @@ public class BaseCharacterController : BaseMonoBehaviour
     }
   }
 
-  public void ResetControlHandlers(BaseControlHandler controlHandler = null)
+  public void ResetControlHandlers(params BaseControlHandler[] controlHandlers)
   {
     Logger.Info("Resetting character control handlers.");
 
@@ -81,12 +82,12 @@ public class BaseCharacterController : BaseMonoBehaviour
 
     _activeControlHandler = null;
 
-    if (controlHandler != null)
+    if (controlHandlers.Any())
     {
-      PushControlHandler(controlHandler);
+      PushControlHandlers(controlHandlers);
     }
   }
-
+  
   public void PushControlHandlers(params BaseControlHandler[] controlHandlers)
   {
     for (var i = 0; i < controlHandlers.Length; i++)
@@ -95,6 +96,15 @@ public class BaseCharacterController : BaseMonoBehaviour
 
       _controlHandlers.Push(controlHandlers[i]);
     }
+
+    TryActivateCurrentControlHandler(_activeControlHandler);
+  }
+
+  public void PushControlHandler(BaseControlHandler controlHandler)
+  {
+    Logger.Info("Pushing handler: " + controlHandler.ToString());
+
+    _controlHandlers.Push(controlHandler);
 
     TryActivateCurrentControlHandler(_activeControlHandler);
   }
@@ -120,15 +130,6 @@ public class BaseCharacterController : BaseMonoBehaviour
     Logger.Info("Inserting handler: " + controlHandler.ToString() + " at index " + index);
 
     _controlHandlers.Insert(index, controlHandler);
-  }
-
-  public void PushControlHandler(BaseControlHandler controlHandler)
-  {
-    Logger.Info("Pushing handler: " + controlHandler.ToString());
-
-    _controlHandlers.Push(controlHandler);
-
-    TryActivateCurrentControlHandler(_activeControlHandler);
   }
 
   public void RemoveControlHandler(BaseControlHandler controlHandler)
