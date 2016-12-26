@@ -13,7 +13,24 @@ AnimationClip:
   m_RotationCurves: []
   m_CompressedRotationCurves: []
   m_EulerCurves: []
-  m_PositionCurves: []
+  m_PositionCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: {x: 5, y: 12, z: 0}
+        inSlope: {x: Infinity, y: Infinity, z: Infinity}
+        outSlope: {x: Infinity, y: Infinity, z: Infinity}
+        tangentMode: 0
+      - time: 0.32
+        value: {x: 5, y: 12, z: 0}
+        inSlope: {x: Infinity, y: Infinity, z: Infinity}
+        outSlope: {x: Infinity, y: Infinity, z: Infinity}
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Weapons/Yoyo
   m_ScaleCurves: []
   m_FloatCurves:
   - curve:
@@ -21,34 +38,24 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 14
-        inSlope: 0
-        outSlope: 2700
-        tangentMode: 21
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.02
-        value: 68
-        inSlope: 2700
-        outSlope: -0
-        tangentMode: 21
-      - time: 0.04
-        value: 68
-        inSlope: 0
-        outSlope: -0
-        tangentMode: 21
-      - time: 0.28
-        value: 68
-        inSlope: 0
-        outSlope: -1899.999
-        tangentMode: 21
+        value: 93
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.3
-        value: 30
-        inSlope: -1899.999
-        outSlope: -800.0008
-        tangentMode: 21
+        value: 93
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.32
         value: 14
-        inSlope: -800.0008
-        outSlope: 0
-        tangentMode: 21
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -61,9 +68,14 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 12
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 12
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -75,35 +87,25 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 12
-        inSlope: 1300
-        outSlope: 1300
-        tangentMode: 10
+        value: 7
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.02
-        value: 38
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-      - time: 0.04
-        value: 38
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: 0.28
-        value: 38
-        inSlope: 0
-        outSlope: -899.9995
-        tangentMode: 21
+        value: 46.5
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.3
-        value: 20
-        inSlope: -649.99994
-        outSlope: -649.99994
-        tangentMode: 10
+        value: 46.5
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.32
-        value: 12
-        inSlope: -400.0004
-        outSlope: -400.0004
-        tangentMode: 10
+        value: 7
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -115,10 +117,15 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 12
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -126,20 +133,71 @@ AnimationClip:
     path: Weapons/Yoyo
     classID: 61
     script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 1
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.34
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_Enabled
+    path: Weapons/Yoyo
+    classID: 212
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 1
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.34
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_Enabled
+    path: Weapons/Yoyo
+    classID: 61
+    script: {fileID: 0}
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+      value: {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     - time: 0.02
       value: {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
-    - time: 0.28
-      value: {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     - time: 0.3
-      value: {fileID: 21300012, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+      value: {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     - time: 0.32
-      value: {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+      value: {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     attribute: m_Sprite
     path: 
+    classID: 212
+    script: {fileID: 0}
+  - curve:
+    - time: 0
+      value: {fileID: 21300022, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - time: 0.02
+      value: {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - time: 0.3
+      value: {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - time: 0.32
+      value: {fileID: 21300022, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    attribute: m_Sprite
+    path: Weapons/Yoyo
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 50
@@ -150,13 +208,43 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - path: 371774299
+      attribute: 1
+      script: {fileID: 0}
+      classID: 4
+      customType: 0
+      isPPtrCurve: 0
+    - path: 371774299
       attribute: 4197328169
       script: {fileID: 0}
       classID: 61
       customType: 0
       isPPtrCurve: 0
     - path: 371774299
+      attribute: 2368279999
+      script: {fileID: 0}
+      classID: 61
+      customType: 0
+      isPPtrCurve: 0
+    - path: 371774299
       attribute: 413499720
+      script: {fileID: 0}
+      classID: 61
+      customType: 0
+      isPPtrCurve: 0
+    - path: 371774299
+      attribute: 1872933342
+      script: {fileID: 0}
+      classID: 61
+      customType: 0
+      isPPtrCurve: 0
+    - path: 371774299
+      attribute: 3305885265
+      script: {fileID: 0}
+      classID: 212
+      customType: 0
+      isPPtrCurve: 0
+    - path: 371774299
+      attribute: 3305885265
       script: {fileID: 0}
       classID: 61
       customType: 0
@@ -168,23 +256,20 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     - path: 371774299
-      attribute: 2368279999
+      attribute: 0
       script: {fileID: 0}
-      classID: 61
-      customType: 0
-      isPPtrCurve: 0
-    - path: 371774299
-      attribute: 1872933342
-      script: {fileID: 0}
-      classID: 61
-      customType: 0
-      isPPtrCurve: 0
+      classID: 212
+      customType: 23
+      isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     - {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     - {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
-    - {fileID: 21300012, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - {fileID: 21300004, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - {fileID: 21300022, guid: 33862a161f16cfc42909320b4b936493, type: 3}
     - {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - {fileID: 21300020, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+    - {fileID: 21300022, guid: 33862a161f16cfc42909320b4b936493, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -211,34 +296,24 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 14
-        inSlope: 0
-        outSlope: 2700
-        tangentMode: 21
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.02
-        value: 68
-        inSlope: 2700
-        outSlope: -0
-        tangentMode: 21
-      - time: 0.04
-        value: 68
-        inSlope: 0
-        outSlope: -0
-        tangentMode: 21
-      - time: 0.28
-        value: 68
-        inSlope: 0
-        outSlope: -1899.999
-        tangentMode: 21
+        value: 93
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.3
-        value: 30
-        inSlope: -1899.999
-        outSlope: -800.0008
-        tangentMode: 21
+        value: 93
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.32
         value: 14
-        inSlope: -800.0008
-        outSlope: 0
-        tangentMode: 21
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -251,9 +326,14 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 12
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 12
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -265,35 +345,25 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 12
-        inSlope: 1300
-        outSlope: 1300
-        tangentMode: 10
+        value: 7
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.02
-        value: 38
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-      - time: 0.04
-        value: 38
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
-      - time: 0.28
-        value: 38
-        inSlope: 0
-        outSlope: -899.9995
-        tangentMode: 21
+        value: 46.5
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.3
-        value: 20
-        inSlope: -649.99994
-        outSlope: -649.99994
-        tangentMode: 10
+        value: 46.5
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       - time: 0.32
-        value: 12
-        inSlope: -400.0004
-        outSlope: -400.0004
-        tangentMode: 10
+        value: 7
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -305,14 +375,119 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 12
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 10
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Offset.y
+    path: Weapons/Yoyo
+    classID: 61
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 5
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 5
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: Weapons/Yoyo
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 12
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 12
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: Weapons/Yoyo
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.32
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: Weapons/Yoyo
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 1
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.34
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_Enabled
+    path: Weapons/Yoyo
+    classID: 212
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 1
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      - time: 0.34
+        value: 0
+        inSlope: Infinity
+        outSlope: Infinity
+        tangentMode: 31
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_Enabled
     path: Weapons/Yoyo
     classID: 61
     script: {fileID: 0}
@@ -321,7 +496,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 0.32
+  - time: 0.34
     functionName: StopAttack
     data: 
     objectReferenceParameter: {fileID: 0}

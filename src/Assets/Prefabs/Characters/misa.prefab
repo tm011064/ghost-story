@@ -21,6 +21,7 @@ GameObject:
   - 4: {fileID: 4000011103173308}
   - 114: {fileID: 114000010708376212}
   - 61: {fileID: 61000012535950930}
+  - 212: {fileID: 212000011910640922}
   m_Layer: 14
   m_Name: Yoyo
   m_TagString: Untagged
@@ -283,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8b56cffe4c1d74ba764ca1a3f373f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DamageUnits: 1
 --- !u!114 &114000010952797648
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -346,8 +348,6 @@ MonoBehaviour:
     KnockbackDuration: 0.8
     KnockbackDistance: 8
     InvincibleDurationAfterKnockback: 2
-  InputSettings:
-    AxisSensitivityThreshold: 0.2
   BoxColliderOffsetWallAttached: {x: 0, y: 0}
   BoxColliderSizeWallAttached: {x: 0, y: 0}
   AdjustedGravity: 0
@@ -449,6 +449,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Duration: 10
+--- !u!212 &212000011910640922
+SpriteRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010270721126}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 1
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -752253655
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300022, guid: 33862a161f16cfc42909320b4b936493, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &212000013109681084
 SpriteRenderer:
   m_ObjectHideFlags: 1

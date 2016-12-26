@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 33862a161f16cfc42909320b4b936493
-timeCreated: 1482544766
+timeCreated: 1482762166
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -73,7 +73,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7
-        y: 96
+        y: 480
         width: 18
         height: 31
       alignment: 7
@@ -86,7 +86,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 39
-        y: 96
+        y: 480
         width: 18
         height: 31
       alignment: 7
@@ -99,11 +99,24 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 71
-        y: 96
-        width: 90
+        y: 480
+        width: 18
         height: 31
-      alignment: 9
-      pivot: {x: 0.1, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: misa_3
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 448
+        width: 18
+        height: 31
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -111,8 +124,8 @@ TextureImporter:
       name: misa_4
       rect:
         serializedVersion: 2
-        x: 7
-        y: 64
+        x: 39
+        y: 448
         width: 18
         height: 31
       alignment: 7
@@ -124,10 +137,10 @@ TextureImporter:
       name: misa_5
       rect:
         serializedVersion: 2
-        x: 39
-        y: 64
+        x: 71
+        y: 448
         width: 18
-        height: 31
+        height: 25
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,12 +150,25 @@ TextureImporter:
       name: misa_6
       rect:
         serializedVersion: 2
-        x: 71
-        y: 64
-        width: 45
+        x: 7
+        y: 416
+        width: 18
         height: 31
-      alignment: 9
-      pivot: {x: 0.2, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: misa_7
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 416
+        width: 18
+        height: 31
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -151,7 +177,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7
-        y: 32
+        y: 384
         width: 18
         height: 31
       alignment: 7
@@ -164,7 +190,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 39
-        y: 32
+        y: 384
         width: 18
         height: 31
       alignment: 7
@@ -176,12 +202,25 @@ TextureImporter:
       name: misa_10
       rect:
         serializedVersion: 2
-        x: 71
-        y: 32
-        width: 30
-        height: 31
-      alignment: 9
-      pivot: {x: 0.3, y: 0}
+        x: 2
+        y: 363
+        width: 92
+        height: 10
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: misa_11
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 331
+        width: 13
+        height: 10
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -189,51 +228,12 @@ TextureImporter:
       name: misa_12
       rect:
         serializedVersion: 2
-        x: 7
-        y: 0
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: misa_13
-      rect:
-        serializedVersion: 2
-        x: 39
-        y: 0
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: misa_3
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 32
-        width: 18
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.6125}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: misa_7
-      rect:
-        serializedVersion: 2
-        x: 189
-        y: 32
-        width: 18
-        height: 80
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 13
+        y: 237
+        width: 68
+        height: 68
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
