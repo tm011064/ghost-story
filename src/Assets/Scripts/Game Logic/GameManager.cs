@@ -190,23 +190,21 @@ public class GameManager : MonoBehaviour
     for (var i = 0; i < monoBehaviours.Length; i++)
     {
       var objectPoolBehaviour = monoBehaviours[i] as IObjectPoolBehaviour;
-
-      if (objectPoolBehaviour != null)
+      if (objectPoolBehaviour == null)
       {
-        foreach (var objectPoolRegistrationInfo in objectPoolBehaviour.GetObjectPoolRegistrationInfos())
+        continue;
+      }
+
+      foreach (var objectPoolRegistrationInfo in objectPoolBehaviour.GetObjectPoolRegistrationInfos())
+      {
+        ObjectPoolRegistrationInfo existingObjectPoolRegistrationInfo;
+        if (gameObjectTypes.TryGetValue(objectPoolRegistrationInfo.GameObject.name, out existingObjectPoolRegistrationInfo)
+          && existingObjectPoolRegistrationInfo.TotalInstances >= objectPoolRegistrationInfo.TotalInstances)
         {
-          if (gameObjectTypes.ContainsKey(objectPoolRegistrationInfo.GameObject.name))
-          {
-            if (gameObjectTypes[objectPoolRegistrationInfo.GameObject.name].TotalInstances < objectPoolRegistrationInfo.TotalInstances)
-            {
-              gameObjectTypes[objectPoolRegistrationInfo.GameObject.name] = objectPoolRegistrationInfo.Clone();
-            }
-          }
-          else
-          {
-            gameObjectTypes[objectPoolRegistrationInfo.GameObject.name] = objectPoolRegistrationInfo.Clone();
-          }
+          continue;
         }
+
+        gameObjectTypes[objectPoolRegistrationInfo.GameObject.name] = objectPoolRegistrationInfo.Clone();
       }
     }
 

@@ -89,7 +89,7 @@ public partial class FullScreenScroller : MonoBehaviour, ISceneResetable
     // the scroll transform action.
     var targetPosition = _cameraController.CalculateTargetPosition();
     var player = GameManager.Instance.Player;
-
+    
     var contexts = PlayerTranslationActionContextFactory.Create(
         _cameraController.Transform.position,
         targetPosition,

@@ -115,7 +115,7 @@ public class CameraController : MonoBehaviour
     _cameraMovementSettingsManager.RemoveSettings(cameraMovementSettings);
   }
 
-  void OnCameraMovementSettingsChanged()
+  void OnCameraMovementSettingsChanged(CameraSettingsChangedArguments args)
   {
     CameraOffset = new Vector3(
       _cameraMovementSettingsManager.ActiveSettings.Offset.x,
@@ -141,10 +141,14 @@ public class CameraController : MonoBehaviour
     }
 
     Logger.Info("Camera movement set to: " + _cameraMovementSettingsManager.ActiveSettings.ToString());
-
     Logger.Info("Camera size; current: " + Camera.main.orthographicSize + ", target: " + targetOrthographicSize);
-  }
 
+    if (args.SettingsWereRefreshed)
+    {
+      MoveCameraToTargetPosition(Target.position);
+    }
+  }
+  
   public Vector3 CalculateTargetPosition()
   {
     UpdateParameters updateParameters;
@@ -170,7 +174,7 @@ public class CameraController : MonoBehaviour
 
       Debug.Log("Found " + _cameraTrolleys.Length + " camera trolleys.");
     }
-
+    
     Transform = gameObject.transform;
 
     _gameManager = GameManager.Instance;

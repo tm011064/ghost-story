@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+
+public class CameraSettingsChangedArguments
+{
+  public bool SettingsWereRefreshed;
+}
 
 public class CameraMovementSettingsManager
 {
   private readonly List<CameraMovementSettings> _cameraMovementSettings = new List<CameraMovementSettings>();
 
-  public event Action SettingsChanged;
+  public event Action<CameraSettingsChangedArguments> SettingsChanged;
 
   public CameraMovementSettings ActiveSettings;
 
@@ -19,7 +23,8 @@ public class CameraMovementSettingsManager
 
     if (actionHandler != null)
     {
-      actionHandler();
+      var args = new CameraSettingsChangedArguments { SettingsWereRefreshed = _cameraMovementSettings.Count == 1 };
+      actionHandler(args);
     }
   }
 
@@ -29,7 +34,7 @@ public class CameraMovementSettingsManager
     {
       return;
     }
-    
+
     _cameraMovementSettings.Add(cameraMovementSettings);
 
     ChangeSettings(cameraMovementSettings);
