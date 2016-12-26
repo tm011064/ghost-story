@@ -69,7 +69,7 @@ public class Yoyo : MonoBehaviour, IWeapon
       return "Yoyo Up";
     }
 
-    return "Yoyo";
+    return "Yoyo 180";
   }
 
   public PlayerStateUpdateResult UpdateState(XYAxisState axisState)
