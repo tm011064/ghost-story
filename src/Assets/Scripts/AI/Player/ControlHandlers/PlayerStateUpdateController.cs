@@ -1,4 +1,5 @@
-﻿
+﻿using System.Linq;
+
 public class PlayerStateUpdateController
 {
   private readonly PlayerController _playerController;
@@ -32,7 +33,9 @@ public class PlayerStateUpdateController
 
   private PlayerStateUpdateResult UpdateWeaponControllers(XYAxisState axisState)
   {
-    foreach (var weaponControlHandler in _playerController.Weapons)
+    var enabledWeapons = _playerController.Weapons.Where(w => w.isActiveAndEnabled);
+
+    foreach (var weaponControlHandler in enabledWeapons)
     {
       var playerStateUpdateResult = weaponControlHandler.UpdateState(axisState);
 

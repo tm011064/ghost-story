@@ -8,7 +8,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433718}
-  - 114: {fileID: 114000012318356666}
+  - 114: {fileID: 114000010915316208}
+  - 114: {fileID: 114000010884742090}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -40,7 +41,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 168078}
   m_IsPrefabParent: 1
---- !u!114 &114000012318356666
+--- !u!114 &114000010884742090
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,7 +49,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 168078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6a68fa7034e85845968d934c7916573, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f652d2d1ce35934f8e42dcc97404a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameState:
+    Weapons: []
+    DoorKeys: []
+--- !u!114 &114000010915316208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 168078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913f3d65f751af747b5074268dd57734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
@@ -56,7 +71,7 @@ MonoBehaviour:
   - PlayerController: {fileID: 114000010952797648, guid: 1058e9988b4583745befb236cd9b265f,
       type: 2}
     IsDefault: 1
-  - PlayerController: {fileID: 114000013577865462, guid: 97e2d8c3119525c46a46745d05b4b36f,
+  - PlayerController: {fileID: 114000013790307878, guid: 97e2d8c3119525c46a46745d05b4b36f,
       type: 2}
     IsDefault: 0
   GameSettings:
@@ -74,3 +89,5 @@ MonoBehaviour:
       AddTraceTagToMessage: 1
     ObjectPoolSettings:
       TotalEnemyDeathAnimations: 12
+  InputSettings:
+    AxisSensitivityThreshold: 0.2

@@ -21,7 +21,7 @@ public partial class PlayerController : BaseCharacterController
   public PlayerHealthSettings PlayerHealthSettings = new PlayerHealthSettings();
 
   public DamageSettings DamageSettings = new DamageSettings();
-  
+
   public Vector2 BoxColliderOffsetWallAttached = Vector2.zero;
 
   public Vector2 BoxColliderSizeWallAttached = Vector2.zero;
@@ -54,7 +54,7 @@ public partial class PlayerController : BaseCharacterController
   public PlayerState PlayerState;
 
   [HideInInspector]
-  public IWeapon[] Weapons = new IWeapon[0];
+  public AbstractWeaponBehaviour[] Weapons = new AbstractWeaponBehaviour[0];
 
   [HideInInspector]
   public Vector2 StandIdleEnvironmentBoxColliderSize;
@@ -107,7 +107,7 @@ public partial class PlayerController : BaseCharacterController
 
   private void InitializeWeapons()
   {
-    Weapons = GetComponentsInChildren<IWeapon>();
+    Weapons = GetComponentsInChildren<AbstractWeaponBehaviour>(true);
   }
 
   private void InitializeCharacterPhysicsManager()

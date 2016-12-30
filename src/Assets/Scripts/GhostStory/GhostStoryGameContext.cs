@@ -1,19 +1,142 @@
-﻿using System.Linq;
-using Assets.Scripts.GhostStory;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Serialization;
+using Assets.Scripts.GhostStory.Behaviours;
 using UnityEngine;
 
-public class GhostStoryGameContext
+public class GhostStoryGameContext : MonoBehaviour
 {
   public static GhostStoryGameContext Instance;
 
   private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
 
-  private LayerUniverseKey _activeUniverse;
+  [HideInInspector]
+  public GhostStoryGameState GameState;
 
-  public GhostStoryGameContext(
-    ILookup<LayerUniverseKey, GameObject> gameObjectsByLayerUniverseKey)
+  public event Action<GhostStoryGameState> GameStateChanged;
+
+  void Awake()
   {
-    _gameObjectsByLayerUniverseKey = gameObjectsByLayerUniverseKey;
+    if (Instance == null)
+    {
+      Instance = this;
+    }
+    else if (Instance != this)
+    {
+      Destroy(gameObject);
+    }
+
+    _gameObjectsByLayerUniverseKey = GameObject
+      .FindObjectsOfType<LevelObjectConfig>()
+      .Select(config => new { Keys = CreateKeys(config).ToArray(), GameObject = config.gameObject })
+      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject }))
+      .ToLookup(c => c.Key, c => c.GameObject);
+  }
+
+  void Start()
+  {
+    UpdateGameState(
+      LoadGameState());
+
+    DisableAndHideAllObjects();
+    SwitchLayer(LevelLayer.House);
+    SwitchToRealWorld();
+  }
+
+  private void UpdateGameState(GhostStoryGameState gameState)
+  {
+    GameState = gameState;
+
+    NotifyGameStateChanged();
+  }
+
+  private IEnumerable<LayerUniverseKey> CreateKeys(LevelObjectConfig levelObjectConfig)
+  {
+    if (levelObjectConfig.Universe == Universe.Global)
+    {
+      yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = Universe.AlternateWorld };
+      yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = Universe.RealWorld };
+
+      yield break;
+    }
+
+    yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = levelObjectConfig.Universe };
+  }
+
+  public void NotifyGameStateChanged()
+  {
+    var handler = GameStateChanged;
+    if (handler != null)
+    {
+      handler.Invoke(GameState);
+    }
+  }
+
+  private void CreateDefaultGameState(string fileName)
+  {
+    var weapons = GameManager.Instance
+      .GetPlayerControllers()
+      .SelectMany(p => p.Weapons.Select(w => new InventoryItem
+      {
+        Name = w.Name,
+        IsAvailable = true,
+        IsActive = false
+      }))
+      .ToArray();
+
+    var doorKeys = new InventoryItem[]
+      {
+        new InventoryItem { IsActive = false, IsAvailable = true, Name = "Green" },
+        new InventoryItem { IsActive = false, IsAvailable = true, Name = "Red" },
+        new InventoryItem { IsActive = false, IsAvailable = true, Name = "Purple" }
+      };
+
+    var gameState = new GhostStoryGameState
+    {
+      ActiveUniverse = new LayerUniverseKey { Layer = LevelLayer.House, Universe = Universe.RealWorld },
+      Weapons = weapons,
+      DoorKeys = doorKeys
+    };
+
+    SaveGameState(gameState, fileName);
+  }
+
+  private GhostStoryGameState LoadGameState(string fileName = "gamestate.xml")
+  {
+    var filePath = Application.persistentDataPath + "/" + fileName;
+
+    Logger.Info("Loading game state from file " + filePath);
+
+    if (!File.Exists(filePath))
+    {
+      Logger.Info("Game state file " + filePath + " does not exist. Creating default");
+      CreateDefaultGameState(fileName);
+    }
+
+    using (var fileStream = File.Open(filePath, FileMode.Open))
+    {
+      var serializer = new XmlSerializer(typeof(GhostStoryGameState));
+
+      return (GhostStoryGameState)serializer.Deserialize(fileStream);
+    }
+  }
+
+  public void SaveGameState(
+    GhostStoryGameState gameState,
+    string fileName = "gamestate.xml")
+  {
+    var filePath = Application.persistentDataPath + "/" + fileName;
+
+    Logger.Info("Saving game state file " + filePath);
+
+    using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Write))
+    {
+      var serializer = new XmlSerializer(typeof(GhostStoryGameState));
+
+      serializer.Serialize(fileStream, gameState);
+    }
   }
 
   public void DisableAndHideAllObjects()
@@ -29,17 +152,17 @@ public class GhostStoryGameContext
 
   public bool IsRealWorldActivated()
   {
-    return _activeUniverse.Universe == Universe.RealWorld;
+    return GameState.ActiveUniverse.Universe == Universe.RealWorld;
   }
 
   public bool IsAlternateWorldActivated()
   {
-    return _activeUniverse.Universe == Universe.AlternateWorld;
+    return GameState.ActiveUniverse.Universe == Universe.AlternateWorld;
   }
 
   private void DisableCurrentGameObjects()
   {
-    foreach (var gameObject in _gameObjectsByLayerUniverseKey[_activeUniverse])
+    foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
     {
       gameObject.DisableAndHide();
     }
@@ -47,7 +170,7 @@ public class GhostStoryGameContext
 
   private void EnableCurrentGameObjects()
   {
-    foreach (var gameObject in _gameObjectsByLayerUniverseKey[_activeUniverse])
+    foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
     {
       gameObject.EnableAndShow();
     }
@@ -57,7 +180,7 @@ public class GhostStoryGameContext
   {
     DisableCurrentGameObjects();
 
-    _activeUniverse = new LayerUniverseKey { Layer = _activeUniverse.Layer, Universe = universe };
+    GameState.ActiveUniverse = new LayerUniverseKey { Layer = GameState.ActiveUniverse.Layer, Universe = universe };
 
     EnableCurrentGameObjects();
   }
@@ -78,7 +201,7 @@ public class GhostStoryGameContext
 
     DisableCurrentGameObjects();
 
-    _activeUniverse = new LayerUniverseKey { Layer = layer, Universe = _activeUniverse.Universe };
+    GameState.ActiveUniverse = new LayerUniverseKey { Layer = layer, Universe = GameState.ActiveUniverse.Universe };
 
     EnableCurrentGameObjects();
   }

@@ -68,10 +68,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012664598406}
-  - 114: {fileID: 114000013577865462}
   - 114: {fileID: 114000012203644590}
   - 50: {fileID: 50000014072373306}
   - 114: {fileID: 114000013497037138}
+  - 114: {fileID: 114000013790307878}
   m_Layer: 8
   m_Name: Kino
   m_TagString: Untagged
@@ -262,7 +262,7 @@ MonoBehaviour:
   WalkingJumpHeightWidth: 332
   PlayerDimensions: {x: 86, y: 86}
   SafeAreaBounds: {x: 1920, y: 1080}
---- !u!114 &114000013577865462
+--- !u!114 &114000013790307878
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -270,7 +270,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000012640441032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ae30c20452fd0040a6e7fad419061c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 14c6d2598ea33b8458e69dde67dbb9f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterPhysicsManager: {fileID: 0}
@@ -317,7 +317,7 @@ MonoBehaviour:
   CrouchSettings:
     EnableCrouching: 0
   PlayerHealthSettings:
-    HealthUnits: 20
+    HealthUnits: 28
     DeathAnimationPrefab: {fileID: 0}
     DeathAnimationPrefabOffset: {x: 0, y: 0}
   DamageSettings:
@@ -325,8 +325,6 @@ MonoBehaviour:
     KnockbackDuration: 0.8
     KnockbackDistance: 8
     InvincibleDurationAfterKnockback: 2
-  InputSettings:
-    AxisSensitivityThreshold: 0.2
   BoxColliderOffsetWallAttached: {x: 0, y: 0}
   BoxColliderSizeWallAttached: {x: 0, y: 0}
   AdjustedGravity: 0
@@ -338,6 +336,7 @@ MonoBehaviour:
   SpawnLocation: {x: 0, y: 0, z: 0}
   CurrentPlatform: {fileID: 0}
   PlayerState: 0
+  Weapons: []
   StandIdleEnvironmentBoxColliderSize: {x: 0, y: 0}
 --- !u!212 &212000013109681084
 SpriteRenderer:

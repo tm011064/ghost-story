@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
   private readonly FPSRenderer _fpsRenderer = new FPSRenderer();
 #endif
 
+  public IEnumerable<PlayerController> GetPlayerControllers()
+  {
+    return _playerControllersByName.Values;
+  }
+
   public PlayerController GetPlayerByName(string name)
   {
     return _playerControllersByName[name];
@@ -249,7 +254,17 @@ public class GameManager : MonoBehaviour
 
     InputStateManager = new InputStateManager();
 
-    InputStateManager.InitializeButtons("Jump", "Dash", "Fall", "Attack", "Switch", "Pause"); // TODO (Roman): move this somewhere else
+    InputStateManager.InitializeButtons(
+      "Attack",
+      "Dash",
+      "Fall",
+      "Jump",
+      "Menu Select",
+      "Menu Exit",
+      "Pause",
+      "Switch"
+      ); // TODO (Roman): move this somewhere else
+
     InputStateManager.InitializeAxes("Horizontal", "Vertical");
 
     Easing = new Easing();

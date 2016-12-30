@@ -5,4 +5,6 @@
   bool IsAttacking();
 
   PlayerStateUpdateResult UpdateState(XYAxisState axisState);
+
+  string Name { get; }
 }

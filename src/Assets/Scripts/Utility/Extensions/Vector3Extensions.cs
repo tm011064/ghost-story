@@ -10,6 +10,14 @@ public static class Vector3Extensions
       vector.z);
   }
 
+  public static Vector3 SetY(this Vector3 vector, float y)
+  {
+    return new Vector3(
+      vector.x,
+      y,
+      vector.z);
+  }
+
   public static Vector2 SetX(this Vector2 vector, float x)
   {
     return new Vector2(
