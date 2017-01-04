@@ -5,14 +5,14 @@ using UnityEngine;
 public abstract class ColliderTriggerEnterBehaviour : MonoBehaviour
 {
   private PlayerColliderState _playerColliderState;
-
-  public PlayerState[] PlayerStatesNeededToEnter;
-
+  
   public event EventHandler<TriggerEnterExitEventArgs> Entered;
 
   public event EventHandler<TriggerEnterExitEventArgs> Exited;
 
   protected abstract void InvokeHandler(EventHandler<TriggerEnterExitEventArgs> handler, Collider2D collider);
+
+  protected abstract bool CanEnter();
 
   private void InvokeEnter(Collider2D collider)
   {
@@ -26,17 +26,14 @@ public abstract class ColliderTriggerEnterBehaviour : MonoBehaviour
 
   void OnTriggerStay2D(Collider2D collider)
   {
-    if ((_playerColliderState & PlayerColliderState.WrongStateOnEnter) == 0)
+    if ((_playerColliderState & PlayerColliderState.EntryDenied) == 0)
     {
       return;
     }
 
-    var playerState = GameManager.Instance.Player.PlayerState;
-
-    if (PlayerStatesNeededToEnter.All(ps => (playerState & ps) != 0))
+    if (CanEnter())
     {
-      _playerColliderState &= ~PlayerColliderState.WrongStateOnEnter;
-
+      _playerColliderState &= ~PlayerColliderState.EntryDenied;
       InvokeEnter(collider);
     }
   }
@@ -45,13 +42,9 @@ public abstract class ColliderTriggerEnterBehaviour : MonoBehaviour
   {
     _playerColliderState = PlayerColliderState.Inside;
 
-    var playerState = GameManager.Instance.Player.PlayerState;
-
-    if (PlayerStatesNeededToEnter != null
-      && PlayerStatesNeededToEnter.Any(ps => (playerState & ps) == 0))
+    if (!CanEnter())
     {
-      _playerColliderState |= PlayerColliderState.WrongStateOnEnter;
-
+      _playerColliderState |= PlayerColliderState.EntryDenied;
       return;
     }
 
@@ -74,6 +67,6 @@ public abstract class ColliderTriggerEnterBehaviour : MonoBehaviour
   {
     Outside,
     Inside,
-    WrongStateOnEnter
+    EntryDenied
   }
 }

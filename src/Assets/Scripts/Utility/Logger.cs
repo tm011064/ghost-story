@@ -289,6 +289,12 @@ public class Logger : IDisposable
     return expressionBody.Member.Name + EQUALS_SIGN + memberExpression.Compile().Invoke().ToString();
   }
 
+  [Conditional("DEBUG")]
+  public static void UnityDebugLog(object message)
+  {
+    UnityEngine.Debug.Log(Time.time + ": " + message);
+  }
+
   [Conditional("DEBUG"), Conditional("PROFILE")]
   public static void DebugMember<T1>(Expression<Func<T1>> memberExpression1)
   {

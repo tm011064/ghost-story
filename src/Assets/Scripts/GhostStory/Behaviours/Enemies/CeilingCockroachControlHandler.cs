@@ -64,7 +64,7 @@ public class CeilingCockroachControlHandler : BaseControlHandler
 
   private void StepBackFromWall(Vector3 velocity)
   {
-    _direction = _direction.Reverse();
+    _direction = _direction.Opposite();
 
     velocity.x = _direction.Multiplier() * _enemyMovementSettings.Speed;
 

@@ -11,8 +11,6 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
 
   public AnimationClipInfo AnimationClipInfo;
 
-  public bool AllowHorizontalSpriteFlip;
-
   private PlayerStateUpdateResult()
   {
   }
@@ -21,8 +19,7 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
     int animationHash,
     int animationWeight = 0,
     float animationSpeed = 1f,
-    int[] linkedShortNameHashes = null,
-    bool allowHorizontalSpriteFlip = true)
+    int[] linkedShortNameHashes = null)
   {
     AnimationClipInfo = new AnimationClipInfo
     {
@@ -33,15 +30,13 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
     };
 
     IsHandled = true;
-    AllowHorizontalSpriteFlip = allowHorizontalSpriteFlip;
   }
 
   public static PlayerStateUpdateResult CreateHandled(
     string animationName,
     int animationWeight = 0,
     float animationSpeed = 1f,
-    string[] linkedAnimationNames = null,
-    bool allowHorizontalSpriteFlip = true)
+    string[] linkedAnimationNames = null)
   {
     return new PlayerStateUpdateResult(
       Animator.StringToHash(animationName),
@@ -49,18 +44,20 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
       animationSpeed,
       linkedAnimationNames == null
         ? null
-        : linkedAnimationNames.Select(name => Animator.StringToHash(name)).ToArray(),
-      allowHorizontalSpriteFlip);
+        : linkedAnimationNames.Select(name => Animator.StringToHash(name)).ToArray());
   }
 
   public static PlayerStateUpdateResult CreateHandled(
     int animationHash,
     int animationWeight = 0,
     float animationSpeed = 1f,
-    int[] linkedShortNameHashes = null,
-    bool allowHorizontalSpriteFlip = true)
+    int[] linkedShortNameHashes = null)
   {
-    return new PlayerStateUpdateResult(animationHash, animationWeight, animationSpeed, linkedShortNameHashes, allowHorizontalSpriteFlip);
+    return new PlayerStateUpdateResult(
+      animationHash, 
+      animationWeight, 
+      animationSpeed, 
+      linkedShortNameHashes);
   }
 
   public static PlayerStateUpdateResult Max(
@@ -68,7 +65,7 @@ public class PlayerStateUpdateResult : IComparable<PlayerStateUpdateResult>
     PlayerStateUpdateResult b,
     params PlayerStateUpdateResult[] others)
   {
-    PlayerStateUpdateResult max = a.CompareTo(b) > 0 ? a : b;
+    var max = a.CompareTo(b) > 0 ? a : b;
 
     if (others != null)
     {

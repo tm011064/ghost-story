@@ -6,18 +6,11 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
 
   private bool _isAttacking;
 
-  private bool _canAttack = true;
+  private bool _canExecuteAirborneAttack = true;
 
   protected string AttackAnimation;
 
-  protected GameManager GameManager;
-
   protected abstract string GetAttackAnimation(XYAxisState axisState);
-
-  void Awake()
-  {
-    GameManager = GameManager.Instance;
-  }
 
   protected virtual void OnStartAttack()
   {
@@ -47,14 +40,14 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
 
   private bool IsPlayerAirborneAndGoingUp()
   {
-    return GameManager.Player.IsAirborne()
-      && GameManager.Player.CharacterPhysicsManager.Velocity.y > 0;
+    return Player.IsAirborne()
+      && Player.CharacterPhysicsManager.Velocity.y > 0;
   }
 
   private void StopPlayerUpdwardMovement()
   {
-    GameManager.Player.CharacterPhysicsManager.Velocity = new Vector3(
-      GameManager.Player.CharacterPhysicsManager.Velocity.x,
+    Player.CharacterPhysicsManager.Velocity = new Vector3(
+      Player.CharacterPhysicsManager.Velocity.x,
       0f);
   }
 
@@ -67,19 +60,21 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
   {
     if (_isAttacking)
     {
-      return PlayerStateUpdateResult.CreateHandled(AttackAnimation, 1, allowHorizontalSpriteFlip: false);
+      return PlayerStateUpdateResult.CreateHandled(AttackAnimation, 1);
     }
 
-    if (GameManager.Player.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.BecameGroundedThisFrame)
+    if (Player.IsGrounded())
     {
-      _canAttack = true;
+      _canExecuteAirborneAttack = true;
     }
 
-    if (_canAttack && GameManager.InputStateManager.IsButtonDown("Attack"))
+    if (_canExecuteAirborneAttack && InputStateManager.IsUnhandledButtonDown("Attack"))
     {
-      if (GameManager.Player.IsAirborne())
+      InputStateManager.SetButtonHandled("Attack");
+
+      if (Player.IsAirborne())
       {
-        _canAttack = false;
+        _canExecuteAirborneAttack = false;
       }
 
       _isAttacking = true;
@@ -88,7 +83,7 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
 
       OnStartAttack();
 
-      return PlayerStateUpdateResult.CreateHandled(AttackAnimation, 1, allowHorizontalSpriteFlip: false);
+      return PlayerStateUpdateResult.CreateHandled(AttackAnimation, 1);
     }
 
     return PlayerStateUpdateResult.Unhandled;

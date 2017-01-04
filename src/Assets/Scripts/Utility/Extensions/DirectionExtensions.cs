@@ -28,7 +28,7 @@ public static class DirectionExtensions
     throw new NotSupportedException();
   }
 
-  public static Direction Reverse(this Direction direction)
+  public static Direction Opposite(this Direction direction)
   {
     switch (direction)
     {

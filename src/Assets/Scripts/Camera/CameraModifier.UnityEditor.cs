@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+
 using UnityEngine;
 
 public partial class CameraModifier : IInstantiable<CameraModifierInstantiationArguments>
@@ -93,4 +94,5 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
     }
   }
 }
+
 #endif

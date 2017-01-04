@@ -38,6 +38,12 @@ public class InputStateManager
     return _buttonStates[buttonName].IsHandled;
   }
 
+  public bool IsUnhandledButtonDown(string buttonName)
+  {
+    return (_buttonStates[buttonName].ButtonPressState & ButtonPressState.IsDown) != 0
+      && !_buttonStates[buttonName].IsHandled;
+  }
+
   public bool IsButtonDown(string buttonName)
   {
     return (_buttonStates[buttonName].ButtonPressState & ButtonPressState.IsDown) != 0;

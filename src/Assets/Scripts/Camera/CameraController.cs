@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public partial class CameraController : MonoBehaviour
 {
   public Vector3 CameraOffset;
 
@@ -20,11 +19,27 @@ public class CameraController : MonoBehaviour
   [HideInInspector]
   public Transform Transform;
 
+  [HideInInspector]
+  public CameraTrolley[] CameraTrolleys;
+
+  [HideInInspector]
+  public bool IsAboveJumpHeightLocked;
+
+  [HideInInspector]
+  public CharacterPhysicsManager CharacterPhysicsManager;
+
+  [HideInInspector]
+  public GameManager GameManager;
+
+  [HideInInspector]
+  public Vector3 LastTargetPosition;
+
+  [HideInInspector]
+  public float TargetedTransformPositionX;
+
   private readonly CameraMovementSettingsManager _cameraMovementSettingsManager = new CameraMovementSettingsManager();
 
-  private GameManager _gameManager;
-
-  private CharacterPhysicsManager _characterPhysicsManager;
+  private readonly CameraPositionCalculator _cameraPositionCalculator = new CameraPositionCalculator();
 
   private float _horizontalSmoothDampVelocity;
 
@@ -32,35 +47,31 @@ public class CameraController : MonoBehaviour
 
   private UpdateTimer _zoomTimer;
 
-  private CameraTrolley[] _cameraTrolleys;
+  private readonly TranslateTransformActionsManager _scrollActionManager = new TranslateTransformActionsManager();
 
-  private Vector3 _lastTargetPosition;
+  //private TranslateTransformActions _scrollActions;
 
-  private float _targetedTransformPositionX;
+  //private TranslateTransformAction _activeTranslateTransformAction;
 
-  private bool _isAboveJumpHeightLocked;
+  public event Action<TranslateTransformActions> ScrollActionCompleted;
 
-  private readonly Queue<TranslateTransformAction> _scrollActions = new Queue<TranslateTransformAction>(16);
-
-  private TranslateTransformAction _activeTranslateTransformAction;
-
-  public void EnqueueScrollActions(IEnumerable<TranslateTransformAction> scrollActions)
+  public void RegisterScrollActions(TranslateTransformActions scrollActions)
   {
-    foreach (var scrollAction in scrollActions)
-    {
-      _scrollActions.Enqueue(scrollAction);
-    }
+    _scrollActionManager.EnqueueScrollActions(scrollActions);
+
+    //if (_scrollActions != null)
+    //{
+    //  throw new InvalidOperationException();
+    //}
+
+    //_scrollActions = scrollActions;
   }
 
-  /// <summary>
-  /// This method takes the requested target position and moves the camera to the according coordinates based
-  /// on the current camera move settings.
-  /// </summary>
   public void MoveCameraToTargetPosition(Vector3 targetPosition)
   {
     SetPosition(targetPosition);
 
-    var calculatedPosition = CalculateTargetPosition();
+    var calculatedPosition = CalculateTargetPosition(_cameraMovementSettingsManager.ActiveSettings);
 
     SetPosition(calculatedPosition);
   }
@@ -69,9 +80,9 @@ public class CameraController : MonoBehaviour
   {
     Transform.position = position;
 
-    _lastTargetPosition = position;
+    LastTargetPosition = position;
 
-    _targetedTransformPositionX = _lastTargetPosition.x;
+    TargetedTransformPositionX = LastTargetPosition.x;
 
     _horizontalSmoothDampVelocity = _verticalSmoothDampVelocity = 0f;
   }
@@ -148,17 +159,26 @@ public class CameraController : MonoBehaviour
       MoveCameraToTargetPosition(Target.position);
     }
   }
-  
-  public Vector3 CalculateTargetPosition()
-  {
-    UpdateParameters updateParameters;
-
-    return CalculateTargetPosition(out updateParameters);
-  }
 
   void Awake()
   {
     _cameraMovementSettingsManager.SettingsChanged += OnCameraMovementSettingsChanged;
+    _scrollActionManager.Completed += OnScrollActionManagerCompleted;
+  }
+
+  void OnDestroy()
+  {
+    _cameraMovementSettingsManager.SettingsChanged += OnCameraMovementSettingsChanged;
+    _scrollActionManager.Completed += OnScrollActionManagerCompleted;
+  }
+
+  void OnScrollActionManagerCompleted(TranslateTransformActions translateTransformActions)
+  {
+    var handler = ScrollActionCompleted;
+    if (handler != null)
+    {
+      handler(translateTransformActions);
+    }
   }
 
   void Start()
@@ -168,25 +188,25 @@ public class CameraController : MonoBehaviour
       AssignFixedAspectRatio(FixedAspectRatio.x / FixedAspectRatio.y);
     }
 
-    if (_cameraTrolleys == null)
+    if (CameraTrolleys == null)
     {
-      _cameraTrolleys = FindObjectsOfType<CameraTrolley>();
+      CameraTrolleys = FindObjectsOfType<CameraTrolley>();
 
-      Debug.Log("Found " + _cameraTrolleys.Length + " camera trolleys.");
+      Debug.Log("Found " + CameraTrolleys.Length + " camera trolleys.");
     }
-    
+
     Transform = gameObject.transform;
 
-    _gameManager = GameManager.Instance;
+    GameManager = GameManager.Instance;
 
     // we set the target of the camera to our player through code
-    Target = _gameManager.Player.transform;
+    Target = GameManager.Player.transform;
 
-    _lastTargetPosition = Target.transform.position;
+    LastTargetPosition = Target.transform.position;
 
-    _targetedTransformPositionX = _lastTargetPosition.x;
+    TargetedTransformPositionX = LastTargetPosition.x;
 
-    _characterPhysicsManager = Target.GetComponent<CharacterPhysicsManager>();
+    CharacterPhysicsManager = Target.GetComponent<CharacterPhysicsManager>();
 
     Logger.Info("Window size: " + Screen.width + " x " + Screen.height);
   }
@@ -227,11 +247,14 @@ public class CameraController : MonoBehaviour
       return;
     }
 
-    UpdateParameters updateParameters;
+    CameraPositionCalculator.UpdateParameters updateParameters;
+    var targetPositon = _cameraPositionCalculator.CalculateTargetPosition(
+      this,
+      _cameraMovementSettingsManager.ActiveSettings,
+      out updateParameters);
 
-    var targetPositon = CalculateTargetPosition(out updateParameters);
-
-    _targetedTransformPositionX = updateParameters.XPos;
+    IsAboveJumpHeightLocked = updateParameters.IsAboveJumpHeightLocked;
+    TargetedTransformPositionX = updateParameters.XPos;
 
     Transform.position = new Vector3(
       Mathf.SmoothDamp(
@@ -246,7 +269,7 @@ public class CameraController : MonoBehaviour
         updateParameters.VerticalSmoothDampTime),
       targetPositon.z);
 
-    _lastTargetPosition = Target.transform.position;
+    LastTargetPosition = Target.transform.position;
   }
 
   private void AssignFixedAspectRatio(float targetAspectRatio)
@@ -283,308 +306,28 @@ public class CameraController : MonoBehaviour
     }
   }
 
-  private Vector3 CalculateTargetPosition(out UpdateParameters updateParameters)
+  public Vector3 CalculateTargetPosition(CameraMovementSettings cameraMovementSettings)
   {
-    updateParameters = new UpdateParameters();
+    CameraPositionCalculator.UpdateParameters updateParameters;
 
-    CalculateVerticalCameraPosition(ref updateParameters);
-
-    CalculateHorizontalCameraPosition(ref updateParameters);
-
-    return new Vector3(
-      updateParameters.XPos,
-      updateParameters.YPos - CameraOffset.y,
-      Target.position.z - CameraOffset.z);
+    return _cameraPositionCalculator.CalculateTargetPosition(
+      this,
+      cameraMovementSettings,
+      out updateParameters);
   }
 
   private bool IsCameraControlledByScrollAction()
   {
-    if (_activeTranslateTransformAction == null
-      && _scrollActions.Any())
-    {
-      _activeTranslateTransformAction = _scrollActions.Dequeue();
+    _scrollActionManager.Update(transform.position);
 
-      _activeTranslateTransformAction.Start(transform.position);
-    }
-
-    if (_activeTranslateTransformAction == null)
+    if (!_scrollActionManager.HasActions())
     {
       return false;
     }
 
-    transform.position = _activeTranslateTransformAction.GetPosition();
-
-    if (_activeTranslateTransformAction.IsCompleted())
-    {
-      _activeTranslateTransformAction = null;
-    }
+    transform.position = _scrollActionManager.GetPosition();
 
     return true;
-  }
-
-  private void AdjustFollowWhenGroundedParameters(ref UpdateParameters updateParameters)
-  {
-    if (_isAboveJumpHeightLocked && _characterPhysicsManager.Velocity.y < 0f)
-    {
-      // We set this value to true in order to make the camera follow the character upwards when catapulted above the maximum jump height. The
-      // character can not exceed the maximum jump heihgt without help (trampoline, powerup...).
-      _isAboveJumpHeightLocked = false; // if we reached the peak we unlock
-    }
-
-    if (_isAboveJumpHeightLocked
-      && (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableTopVerticalLock
-       && Target.position.y > _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary))
-    {
-      // we were locked but character has exceeded the top boundary. In that case we set the y pos and smooth damp
-      updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary + CameraOffset.y;
-
-      updateParameters.DoSmoothDamp = true;
-    }
-    else
-    {
-      // we want to adjust the y position on upward movement if:
-      if (_isAboveJumpHeightLocked // either we are locked in above jump height lock
-          || (
-                (
-                  !_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableTopVerticalLock // OR (we either have no top boundary or we are beneath the top boundary in which case we can go up)
-                  || Target.position.y <= _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary)
-                &&
-                (
-                  Target.position.y > Transform.position.y + CameraOffset.y + _gameManager.Player.JumpSettings.RunJumpHeight // (the character has exceeded the jump height which means he has been artifically catapulted upwards)
-                  && _characterPhysicsManager.Velocity.y > 0f // AND we go up  
-                )
-             )
-        )
-      {
-        updateParameters.YPos = Target.position.y - _gameManager.Player.JumpSettings.RunJumpHeight;
-
-        _isAboveJumpHeightLocked = true; // make sure for second if condition
-      }
-      else
-      {
-        updateParameters.IsFallingDown = (_characterPhysicsManager.Velocity.y < 0f
-           && (Target.position.y < Transform.position.y + CameraOffset.y));
-
-        if (_characterPhysicsManager.LastMoveCalculationResult.CollisionState.Below
-          || updateParameters.IsFallingDown)
-        {
-          if (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.Enabled)
-          {
-            updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableDefaultVerticalLockPosition
-              ? _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.DefaultVerticalLockPosition
-              : Target.position.y;
-
-            if (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableTopVerticalLock
-              && Target.position.y > _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary)
-            {
-              updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary + CameraOffset.y;
-
-              // we might have been shot up, so use smooth damp override
-              updateParameters.DoSmoothDamp = true;
-            }
-            else if (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableTopVerticalLock
-              && Target.position.y < _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.BottomBoundary)
-            {
-              updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.BottomBoundary + CameraOffset.y;
-
-              // we might have been falling down, so use smooth damp override
-              updateParameters.DoSmoothDamp = true;
-            }
-          }
-          else
-          {
-            updateParameters.YPos = Target.position.y;
-          }
-        }
-        else
-        {
-          // character is in air, so the camera stays same
-          updateParameters.YPos = Transform.position.y + CameraOffset.y; // we need to add offset bceause we will deduct it later on again
-        }
-      }
-    }
-  }
-
-  private void AdjustFollowAlwaysParameters(ref UpdateParameters updateParameters)
-  {
-    _isAboveJumpHeightLocked = false; // this is not used at this mode
-
-    if (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.Enabled)
-    {
-      updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableDefaultVerticalLockPosition
-        ? _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.DefaultVerticalLockPosition
-        : Target.position.y;
-
-      if (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableTopVerticalLock
-        && Target.position.y > _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary + CameraOffset.y)
-      {
-        updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.TopBoundary + CameraOffset.y;
-
-        // we might have been shot up, so use smooth damp override
-        updateParameters.DoSmoothDamp = true;
-      }
-      else if (_cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.EnableBottomVerticalLock
-        && Target.position.y < _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.BottomBoundary + CameraOffset.y)
-      {
-        updateParameters.YPos = _cameraMovementSettingsManager.ActiveSettings.VerticalLockSettings.BottomBoundary + CameraOffset.y;
-
-        // we might have been falling down, so use smooth damp override
-        updateParameters.DoSmoothDamp = true;
-      }
-    }
-    else
-    {
-      updateParameters.YPos = Target.position.y;
-    }
-  }
-
-  private bool IsCameraOnTrolley(ref UpdateParameters updateParameters)
-  {
-    if (_cameraTrolleys == null)
-    {
-      return false;
-    }
-
-    for (var i = 0; i < _cameraTrolleys.Length; i++)
-    {
-      if (!_cameraTrolleys[i].IsPlayerWithinBoundingBox)
-      {
-        continue;
-      }
-
-      float? posY = _cameraTrolleys[i].GetPositionY(Target.position.x);
-
-      if (posY.HasValue)
-      {
-        updateParameters.YPos = posY.Value;
-
-        return true;
-      }
-
-      break;
-    }
-
-    return false;
-  }
-
-  private bool NeedsHorizontalOffsetAdjustment(ref UpdateParameters updateParameters)
-  {
-    if (_cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.Enabled)
-    {
-      if (_cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.EnableRightHorizontalLock
-        && Target.position.x > _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.RightBoundary - CameraOffset.x)
-      {
-        updateParameters.XPos = _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.RightBoundary;
-
-        return false;
-      }
-      else if (_cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.EnableLeftHorizontalLock
-        && Target.position.x < _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.LeftBoundary + CameraOffset.x)
-      {
-        updateParameters.XPos = _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.LeftBoundary;
-
-        return false;
-      }
-    }
-
-    return CameraOffset.x != 0f;
-  }
-
-  private void AdjustHorizontalOffset(ref UpdateParameters updateParameters)
-  {
-    var horizontalTargetDistance = Target.transform.position.x - _lastTargetPosition.x;
-
-    updateParameters.XPos = _targetedTransformPositionX;
-
-    if ((horizontalTargetDistance >= -.001f && horizontalTargetDistance <= .001f)
-      || CameraOffset.x >= 0f)
-    {
-      return;
-    }
-
-    updateParameters.XPos =
-      _targetedTransformPositionX
-      + horizontalTargetDistance * _cameraMovementSettingsManager.ActiveSettings.HorizontalOffsetDeltaMovementFactor;
-
-    if (horizontalTargetDistance > 0f) // going right
-    {
-      if (updateParameters.XPos + CameraOffset.x > Target.position.x)
-      {
-        updateParameters.XPos = Target.position.x - CameraOffset.x;
-      }
-
-      if (_cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.EnableRightHorizontalLock
-        && updateParameters.XPos > _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.RightBoundary)
-      {
-        updateParameters.XPos = _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.RightBoundary;
-      }
-    }
-    else // going left
-    {
-      if (updateParameters.XPos - CameraOffset.x < Target.position.x)
-      {
-        updateParameters.XPos = Target.position.x + CameraOffset.x;
-      }
-
-      if (_cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.EnableLeftHorizontalLock
-        && updateParameters.XPos < _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.LeftBoundary)
-      {
-        updateParameters.XPos = _cameraMovementSettingsManager.ActiveSettings.HorizontalLockSettings.LeftBoundary;
-      }
-    }
-  }
-
-  private void CalculateVerticalCameraPosition(ref UpdateParameters updateParameters)
-  {
-    if (IsCameraOnTrolley(ref updateParameters))
-    {
-      updateParameters.VerticalSmoothDampTime = _cameraMovementSettingsManager.ActiveSettings.SmoothDampMoveSettings.VerticalSmoothDampTime;
-
-      return;
-    }
-
-    switch (_cameraMovementSettingsManager.ActiveSettings.VerticalCameraFollowMode)
-    {
-      case VerticalCameraFollowMode.FollowWhenGrounded:
-        AdjustFollowWhenGroundedParameters(ref updateParameters);
-        break;
-
-      case VerticalCameraFollowMode.FollowAlways:
-      default:
-        AdjustFollowAlwaysParameters(ref updateParameters);
-        break;
-    }
-
-    updateParameters.VerticalSmoothDampTime = updateParameters.DoSmoothDamp // override
-      ? _cameraMovementSettingsManager.ActiveSettings.SmoothDampMoveSettings.VerticalSmoothDampTime
-      : updateParameters.IsFallingDown
-        ? _cameraMovementSettingsManager.ActiveSettings.SmoothDampMoveSettings.VerticalRapidDescentSmoothDampTime
-        : _isAboveJumpHeightLocked
-          ? _cameraMovementSettingsManager.ActiveSettings.SmoothDampMoveSettings.VerticalAboveRapidAcsentSmoothDampTime
-          : _cameraMovementSettingsManager.ActiveSettings.SmoothDampMoveSettings.VerticalSmoothDampTime;
-  }
-
-  private void CalculateHorizontalCameraPosition(ref UpdateParameters updateParameters)
-  {
-    updateParameters.XPos = Target.position.x;
-
-    if (NeedsHorizontalOffsetAdjustment(ref updateParameters))
-    {
-      AdjustHorizontalOffset(ref updateParameters);
-    }
-  }
-
-  private struct UpdateParameters
-  {
-    public float YPos;
-
-    public float XPos;
-
-    public bool DoSmoothDamp;
-
-    public bool IsFallingDown;
-
-    public float VerticalSmoothDampTime;
   }
 
   class ZoomTimer : UpdateTimer

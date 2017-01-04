@@ -17,10 +17,10 @@ public class PlayerStateUpdateController
   public void UpdatePlayerState(XYAxisState axisState)
   {
     var playerStateUpdateResult = PlayerStateUpdateResult.Max(
-        UpdatePlayerStateControllers(axisState),
-        UpdateWeaponControllers(axisState));
+      UpdatePlayerStateControllers(axisState),
+      UpdateWeaponControllers(axisState));
 
-    if (playerStateUpdateResult.AllowHorizontalSpriteFlip)
+    if ((_playerController.PlayerState & PlayerState.Locked) == 0)
     {
       AdjustSpriteScale(axisState);
     }
@@ -33,6 +33,11 @@ public class PlayerStateUpdateController
 
   private PlayerStateUpdateResult UpdateWeaponControllers(XYAxisState axisState)
   {
+    if ((_playerController.PlayerState & PlayerState.Locked) != 0)
+    {
+      return PlayerStateUpdateResult.Unhandled;
+    }
+
     var enabledWeapons = _playerController.Weapons.Where(w => w.isActiveAndEnabled);
 
     foreach (var weaponControlHandler in enabledWeapons)

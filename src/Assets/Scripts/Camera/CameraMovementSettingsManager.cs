@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class CameraSettingsChangedArguments
-{
-  public bool SettingsWereRefreshed;
-}
-
 public class CameraMovementSettingsManager
 {
   private readonly List<CameraMovementSettings> _cameraMovementSettings = new List<CameraMovementSettings>();
@@ -17,6 +12,8 @@ public class CameraMovementSettingsManager
 
   private void ChangeSettings(CameraMovementSettings cameraMovementSettings)
   {
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> ChangeSettings");
+
     ActiveSettings = cameraMovementSettings;
 
     var actionHandler = SettingsChanged;
@@ -30,8 +27,12 @@ public class CameraMovementSettingsManager
 
   public void AddSettings(CameraMovementSettings cameraMovementSettings)
   {
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> AddSettings");
+
     if (cameraMovementSettings.Equals(ActiveSettings))
     {
+      Logger.UnityDebugLog("CameraMovementSettingsManager -> New settings equal active settings");
+
       return;
     }
 
@@ -47,8 +48,12 @@ public class CameraMovementSettingsManager
 
   public void RemoveSettings(CameraMovementSettings cameraMovementSettings)
   {
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> RemoveSettings");
+
     if (!ActiveSettings.Equals(cameraMovementSettings))
     {
+      Logger.UnityDebugLog("CameraMovementSettingsManager -> Active settings do not equal removed settings");
+
       _cameraMovementSettings.Clear();
       _cameraMovementSettings.Add(ActiveSettings);
 
@@ -57,8 +62,12 @@ public class CameraMovementSettingsManager
 
     if (_cameraMovementSettings.Count() == 1)
     {
+      Logger.UnityDebugLog("CameraMovementSettingsManager -> Only one setting remains");
+
       return;
     }
+
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> Removing active settings");
 
     _cameraMovementSettings.Remove(ActiveSettings);
 

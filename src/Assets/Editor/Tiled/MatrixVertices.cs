@@ -163,7 +163,7 @@ namespace Assets.Editor.Tiled
     {
       var antiClockwiseDirection = direction.RotateAntiClockwise();
       var clockwiseDirection = direction.RotateClockwise();
-      var reverseDirection = direction.Reverse();
+      var reverseDirection = direction.Opposite();
 
       if (!vertex.Edges[antiClockwiseDirection].To.Edges[reverseDirection].IsColliderEdge)
       {

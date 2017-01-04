@@ -101,7 +101,7 @@ public class FloorCockroachControlHandler : BaseControlHandler
 
   private void RegisterTurnOnNextSpurt()
   {
-    _direction = _direction.Reverse();
+    _direction = _direction.Opposite();
     _shouldTurnAroundOnNextSpurt = true;
   }
 

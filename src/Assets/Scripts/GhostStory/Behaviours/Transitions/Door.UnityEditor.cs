@@ -11,64 +11,155 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     public void Instantiate(CameraTransitionInstantiationArguments arguments)
     {
       var center = arguments.TransitionObjectBounds.center;
+      transform.position = center;
+
+      var boxCollider = this.GetComponentOrThrow<BoxCollider2D>();
+      boxCollider.size = arguments.TransitionObjectBounds.size;
 
       foreach (var intersectingCameraBounds in arguments.IntersectingCameraBounds)
       {
-        var assetPath = arguments.PrefabsAssetPathsByShortName["Full Screen Scroller"];
+        var assetPath = arguments.PrefabsAssetPathsByShortName["Door Scroller"];
         var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
-        var fullScreenScrollerGameObject = GameObject.Instantiate(asset, center, Quaternion.identity) as GameObject;
+        var scrollerGameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
 
-        fullScreenScrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
-        fullScreenScrollerGameObject.transform.parent = gameObject.transform;
+        scrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
+        scrollerGameObject.transform.parent = gameObject.transform;
 
-        fullScreenScrollerGameObject
-          .GetComponent<FullScreenScroller>()
-          .Instantiate(new CameraModifierInstantiationArguments
+        var doorLocation = GetDoorLocation(
+          arguments.TransitionObjectBounds,
+          intersectingCameraBounds);
+
+        var triggerBounds = GetOuterCameraModifierBounds(
+          arguments.TransitionObjectBounds,
+          doorLocation,
+          CameraModifierPadding);
+
+        var cameraModifierBounds = GetInnerCameraModifierBounds(
+          arguments.TransitionObjectBounds,
+          intersectingCameraBounds,
+          CameraModifierPadding);
+
+        scrollerGameObject
+          .GetComponent<DoorCameraScroller>()
+          .Instantiate(new DoorInstantiationArguments
             {
-              Bounds = intersectingCameraBounds,
-              BoundsPropertyInfos = new CameraModifierInstantiationArguments.BoundsPropertyInfo[] 
-                {
-                  new CameraModifierInstantiationArguments.BoundsPropertyInfo
-                  {
-                    Bounds = GetCameraModifierBounds(arguments, intersectingCameraBounds)
-                  }
-                }
+              CameraBounds = intersectingCameraBounds,
+              TriggerBounds = triggerBounds,
+              CameraModifierBounds = cameraModifierBounds,
+              DoorKey = DoorKey,
+              DoorLocation = doorLocation
             });
       }
     }
 
-    private Bounds GetCameraModifierBounds(CameraTransitionInstantiationArguments arguments, Bounds cameraBounds)
+    private void CreateTriggerEnterBehaviour(GameObject boxColliderGameObject)
     {
-      var center = arguments.TransitionObjectBounds.center;
+      var triggerEnterBehaviour = boxColliderGameObject.AddComponent<DoorTriggerEnterBehaviour>();
+      triggerEnterBehaviour.DoorKeysNeededToEnter = new DoorKey[] { DoorKey };
+    }
 
-      if (CameraBoundsAreToTheRight(arguments.TransitionObjectBounds, cameraBounds))
+    private Direction GetDoorLocation(
+      Bounds transitionObjectBounds,
+      Bounds cameraBounds)
+    {
+      if (transitionObjectBounds.ContainLeftEdgeOf(cameraBounds))
       {
-        var cameraModifierCenter = new Vector3(center.x + CameraModifierPadding.x / 2, center.y, center.z);
-        var cameraModifierSize = new Vector2(Size.x - CameraModifierPadding.x, Size.y);
+        return Direction.Right;
+      }
+
+      if (transitionObjectBounds.ContainRightEdgeOf(cameraBounds))
+      {
+        return Direction.Left;
+      }
+
+      if (transitionObjectBounds.ContainBottomEdgeOf(cameraBounds))
+      {
+        return Direction.Down;
+      }
+
+      if (transitionObjectBounds.ContainTopEdgeOf(cameraBounds))
+      {
+        return Direction.Up;
+      }
+
+      throw new InvalidOperationException();
+    }
+
+    protected Bounds GetOuterCameraModifierBounds(
+      Bounds transitionObjectBounds,
+      Direction doorLocation,
+      Vector2 padding)
+    {
+      var center = transitionObjectBounds.center;
+
+      Vector3 cameraModifierCenter;
+      Vector2 cameraModifierSize;
+
+      switch (doorLocation)
+      {
+        case Direction.Left:
+          cameraModifierCenter = center.SetX(transitionObjectBounds.max.x + padding.x / 2);
+          cameraModifierSize = new Vector2(padding.x, transitionObjectBounds.size.y);
+
+          return new Bounds(cameraModifierCenter, cameraModifierSize);
+
+        case Direction.Right:
+          cameraModifierCenter = center.SetX(transitionObjectBounds.min.x - padding.x / 2);
+          cameraModifierSize = new Vector2(padding.x, transitionObjectBounds.size.y);
+
+          return new Bounds(cameraModifierCenter, cameraModifierSize);
+
+        case Direction.Up:
+          cameraModifierCenter = center.SetY(transitionObjectBounds.max.y + padding.y / 2);
+          cameraModifierSize = new Vector2(transitionObjectBounds.size.x, padding.y);
+
+          return new Bounds(cameraModifierCenter, cameraModifierSize);
+
+        case Direction.Down:
+          cameraModifierCenter = center.SetY(transitionObjectBounds.min.y - padding.y / 2);
+          cameraModifierSize = new Vector2(transitionObjectBounds.size.x, padding.y);
+
+          return new Bounds(cameraModifierCenter, cameraModifierSize);
+      }
+
+      throw new InvalidOperationException();
+    }
+
+    protected Bounds GetInnerCameraModifierBounds(
+      Bounds transitionObjectBounds,
+      Bounds cameraBounds,
+      Vector2 padding)
+    {
+      var center = transitionObjectBounds.center;
+
+      if (CameraBoundsAreToTheRight(transitionObjectBounds, cameraBounds))
+      {
+        var cameraModifierCenter = new Vector3(center.x + padding.x / 2, center.y, center.z);
+        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x - padding.x, transitionObjectBounds.size.y);
 
         return new Bounds(cameraModifierCenter, cameraModifierSize);
       }
 
-      if (CameraBoundsAreToTheLeft(arguments.TransitionObjectBounds, cameraBounds))
+      if (CameraBoundsAreToTheLeft(transitionObjectBounds, cameraBounds))
       {
-        var cameraModifierCenter = new Vector3(center.x - CameraModifierPadding.x / 2, center.y, center.z);
-        var cameraModifierSize = new Vector2(Size.x - CameraModifierPadding.x, Size.y);
+        var cameraModifierCenter = new Vector3(center.x - padding.x / 2, center.y, center.z);
+        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x - padding.x, transitionObjectBounds.size.y);
 
         return new Bounds(cameraModifierCenter, cameraModifierSize);
       }
 
-      if (CameraBoundsAreAbove(arguments.TransitionObjectBounds, cameraBounds))
+      if (CameraBoundsAreAbove(transitionObjectBounds, cameraBounds))
       {
-        var cameraModifierCenter = new Vector3(center.x, center.y + CameraModifierPadding.y / 2, center.z);
-        var cameraModifierSize = new Vector2(Size.x, Size.y - CameraModifierPadding.y);
+        var cameraModifierCenter = new Vector3(center.x, center.y + padding.y / 2, center.z);
+        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x, transitionObjectBounds.size.y - padding.y);
 
         return new Bounds(cameraModifierCenter, cameraModifierSize);
       }
 
-      if (CameraBoundsAreBelow(arguments.TransitionObjectBounds, cameraBounds))
+      if (CameraBoundsAreBelow(transitionObjectBounds, cameraBounds))
       {
-        var cameraModifierCenter = new Vector3(center.x, center.y - CameraModifierPadding.y / 2, center.z);
-        var cameraModifierSize = new Vector2(Size.x, Size.y - CameraModifierPadding.y);
+        var cameraModifierCenter = new Vector3(center.x, center.y - padding.y / 2, center.z);
+        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x, transitionObjectBounds.size.y - padding.y);
 
         return new Bounds(cameraModifierCenter, cameraModifierSize);
       }
@@ -76,22 +167,22 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       throw new InvalidOperationException();
     }
 
-    private bool CameraBoundsAreToTheRight(Bounds transitionObjectBounds, Bounds cameraBounds)
+    protected bool CameraBoundsAreToTheRight(Bounds transitionObjectBounds, Bounds cameraBounds)
     {
       return transitionObjectBounds.ContainLeftEdgeOf(cameraBounds);
     }
 
-    private bool CameraBoundsAreToTheLeft(Bounds transitionObjectBounds, Bounds cameraBounds)
+    protected bool CameraBoundsAreToTheLeft(Bounds transitionObjectBounds, Bounds cameraBounds)
     {
       return transitionObjectBounds.ContainRightEdgeOf(cameraBounds);
     }
 
-    private bool CameraBoundsAreAbove(Bounds transitionObjectBounds, Bounds cameraBounds)
+    protected bool CameraBoundsAreAbove(Bounds transitionObjectBounds, Bounds cameraBounds)
     {
       return transitionObjectBounds.ContainBottomEdgeOf(cameraBounds);
     }
 
-    private bool CameraBoundsAreBelow(Bounds transitionObjectBounds, Bounds cameraBounds)
+    protected bool CameraBoundsAreBelow(Bounds transitionObjectBounds, Bounds cameraBounds)
     {
       return transitionObjectBounds.ContainTopEdgeOf(cameraBounds);
     }

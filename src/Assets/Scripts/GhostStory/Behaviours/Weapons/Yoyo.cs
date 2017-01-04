@@ -9,22 +9,22 @@ public class Yoyo : AbstractYoyo, IWeapon
   protected override void OnStartAttack()
   {
     _controlHandler = new FreezePlayerControlHandler(
-      GameManager.Player,
+      Player,
       10f,
       Animator.StringToHash(AttackAnimation));
 
-    GameManager.Player.PushControlHandler(_controlHandler);
+    Player.PushControlHandler(_controlHandler);
   }
 
   protected override void OnStopAttack()
   {
-    GameManager.Player.RemoveControlHandler(_controlHandler);
+    Player.RemoveControlHandler(_controlHandler);
     _controlHandler = null;
   }
 
   protected override string GetAttackAnimation(XYAxisState axisState)
   {
-    if (GameManager.Player.IsAirborne()
+    if (Player.IsAirborne()
         && axisState.IsDown())
     {
       return "Yoyo Down";

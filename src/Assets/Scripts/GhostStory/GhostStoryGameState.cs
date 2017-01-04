@@ -14,4 +14,9 @@ public class GhostStoryGameState
   {
     return Weapons.Single(w => w.Name == name);
   }
+
+  public InventoryItem GetDoorKey(string name)
+  {
+    return DoorKeys.Single(w => w.Name == name);
+  }
 }

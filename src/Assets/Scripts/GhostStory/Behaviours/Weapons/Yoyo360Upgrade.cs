@@ -8,14 +8,14 @@ public class Yoyo360Upgrade : AbstractYoyo, IWeapon
 
   protected override void OnStartAttack()
   {
-    if (GameManager.Player.IsGrounded())
+    if (Player.IsGrounded())
     {
       _controlHandler = new FreezePlayerControlHandler(
-        GameManager.Player,
+        Player,
         10f,
         Animator.StringToHash(AttackAnimation));
 
-      GameManager.Player.PushControlHandler(_controlHandler);
+      Player.PushControlHandler(_controlHandler);
     }
   }
 
@@ -23,7 +23,7 @@ public class Yoyo360Upgrade : AbstractYoyo, IWeapon
   {
     if (_controlHandler != null)
     {
-      GameManager.Player.RemoveControlHandler(_controlHandler);
+      Player.RemoveControlHandler(_controlHandler);
       _controlHandler = null;
     }
   }

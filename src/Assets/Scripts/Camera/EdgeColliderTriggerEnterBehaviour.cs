@@ -9,4 +9,9 @@ public partial class EdgeColliderTriggerEnterBehaviour : ColliderTriggerEnterBeh
 
     handler(this, new TriggerEnterExitEventArgs(edgeCollider, collider));
   }
+
+  protected override bool CanEnter()
+  {
+    return true;
+  }
 }

@@ -9,6 +9,6 @@ public class CameraModifierInstantiationArguments : InstantiationArguments
   {
     public Bounds Bounds;
 
-    public Dictionary<string, string> Properties = new Dictionary<string,string>();
+    public Dictionary<string, string> Properties = new Dictionary<string, string>();
   }
 }

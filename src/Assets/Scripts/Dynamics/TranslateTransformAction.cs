@@ -51,6 +51,11 @@ public class TranslateTransformAction
 
   public float Duration { get { return _duration; } }
 
+  public bool IsStarted()
+  {
+    return _startTime.HasValue;
+  }
+
   public bool IsCompleted()
   {
     return _endTime.HasValue && Time.time >= _endTime.Value;
