@@ -23,10 +23,12 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
   public override void Dispose()
   {
     GhostStoryGameContext.Instance.SwitchToRealWorld();
-
+    
     GameManager.Player.DisableAndHide();
 
-    GameManager.ActivatePlayer(PlayableCharacterNames.Misa.ToString());
+    GameManager.ActivatePlayer(
+      PlayableCharacterNames.Misa.ToString(),
+      GameManager.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).transform.position);
 
     base.Dispose();
   }

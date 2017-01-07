@@ -145,10 +145,17 @@ public class GameManager : MonoBehaviour
 #endif
   }
 
-  public void ActivatePlayer(string name, Vector3? position = null)
+  public void ActivatePlayer(string name, Vector3 position)
+  {
+    Player = GetPlayerController(name);
+    Player.transform.position = position;
+
+    _cameraController.Target = Player.transform;
+  }
+
+  private PlayerController GetPlayerController(string name)
   {
     PlayerController playerController;
-
     if (!_playerControllersByName.TryGetValue(name, out playerController))
     {
       var prefab = PlayableCharacters.Single(
@@ -156,14 +163,13 @@ public class GameManager : MonoBehaviour
 
       playerController = Instantiate(
         prefab.PlayerController,
-        position ?? Vector3.zero,
+        Vector3.zero,
         Quaternion.identity) as PlayerController;
 
       _playerControllersByName[name] = playerController;
     }
 
-    Player = playerController;
-    _cameraController.Target = Player.transform;
+    return playerController;
   }
 
   private IEnumerable<T> FindComponents<T>()

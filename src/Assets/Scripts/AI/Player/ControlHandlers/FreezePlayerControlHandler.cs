@@ -43,7 +43,7 @@ public class FreezePlayerControlHandler : DefaultPlayerControlHandler
         GameManager.Instance.Easing);
     }
 
-    ResetOverrideEndTime();
+    ResetOverrideEndTime(Duration);
 
     return true;
   }
@@ -56,16 +56,11 @@ public class FreezePlayerControlHandler : DefaultPlayerControlHandler
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
-    if (Time.time <= OverrideEndTime)
+    if (_translateTransformAction != null)
     {
-      if (_translateTransformAction != null)
-      {
-        PlayerController.transform.position = _translateTransformAction.GetPosition();
-      }
-
-      return ControlHandlerAfterUpdateStatus.KeepAlive;
+      PlayerController.transform.position = _translateTransformAction.GetPosition();
     }
 
-    return base.DoUpdate();
+    return ControlHandlerAfterUpdateStatus.KeepAlive;
   }
 }

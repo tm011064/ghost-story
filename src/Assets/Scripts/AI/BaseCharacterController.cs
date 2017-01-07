@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +12,11 @@ public class BaseCharacterController : BaseMonoBehaviour
 
   private CustomStack<BaseControlHandler> _controlHandlers = new CustomStack<BaseControlHandler>();
 
-  private BaseControlHandler _activeControlHandler = null;
+  private BaseControlHandler _activeControlHandler;
+
+  private bool _isFrozen;
+
+  private float _freezeStartTime;
 
   public BaseControlHandler ActiveControlHandler { get { return _activeControlHandler; } }
 
@@ -32,38 +35,78 @@ public class BaseCharacterController : BaseMonoBehaviour
 
       _activeControlHandler = _controlHandlers.Peek();
     }
+
+    Logger.Assert(_activeControlHandler != null, "Game object " + name + " has no active control handler");
   }
 
-  protected virtual void Update()
+  public void Freeze()
   {
-    try
+    if (_isFrozen)
     {
-      if (_activeControlHandler != null)
-      {
-        while (_activeControlHandler.Update() == ControlHandlerAfterUpdateStatus.CanBeDisposed)
-        {
-          var poppedHandler = _controlHandlers.Pop();
-
-          poppedHandler.Dispose();
-
-          Logger.Info("Popped handler: " + poppedHandler.ToString());
-
-          TryActivateCurrentControlHandler(poppedHandler);
-        }
-
-        // after we updated the control handler, we now want to notify all stack members (excluding the current handler/peek) that an update
-        // has occurred. This is necessary in case stacked handlers need to react to actions, for example: melee attack is interrupted by wall jump handler
-        for (var i = _controlHandlers.Count - 2; i >= 0; i--)
-        {
-          _controlHandlers[i].OnAfterStackPeekUpdate();
-        }
-      }
+      return;
     }
-    catch (Exception err)
-    {
-      Logger.Error("Game object " + name + " misses default control handler.", err);
 
-      throw;
+    _isFrozen = true;
+    _freezeStartTime = Time.time;
+
+    if (_activeControlHandler != null)
+    {
+      _activeControlHandler.OnFreeze();
+    }
+  }
+
+  public void Unfreeze()
+  {
+    if (!_isFrozen)
+    {
+      return;
+    }
+
+    _isFrozen = false;
+    var freezeDuration = Time.time - _freezeStartTime;
+
+    OnUnfreeze(freezeDuration);
+
+    if (_activeControlHandler != null)
+    {
+      _activeControlHandler.OnUnfreeze(freezeDuration);
+    }
+  }
+
+  protected virtual void OnFreeze()
+  {
+  }
+
+  protected virtual void OnUnfreeze(float freezeDuration)
+  {
+  }
+
+  void Update()
+  {
+    if (_isFrozen)
+    {
+      return;
+    }
+
+    if (_activeControlHandler != null)
+    {
+      while (_activeControlHandler.Update() == ControlHandlerAfterUpdateStatus.CanBeDisposed)
+      {
+        var poppedHandler = _controlHandlers.Pop();
+
+        poppedHandler.Dispose();
+
+        Logger.Info("Popped handler: " + poppedHandler.ToString());
+
+        TryActivateCurrentControlHandler(poppedHandler);
+      }
+
+      // after we updated the control handler, we now want to notify all stack members (excluding the current handler/peek) that an update
+      // has occurred. This is necessary in case stacked handlers need to react to actions, for example: melee attack is interrupted by wall jump handler
+      for (var i = _controlHandlers.Count - 2; i >= 0; i--)
+      {
+        _controlHandlers[i].OnAfterStackPeekUpdate();
+      }
     }
   }
 
@@ -87,7 +130,7 @@ public class BaseCharacterController : BaseMonoBehaviour
       PushControlHandlers(controlHandlers);
     }
   }
-  
+
   public void PushControlHandlers(params BaseControlHandler[] controlHandlers)
   {
     for (var i = 0; i < controlHandlers.Length; i++)

@@ -10,7 +10,7 @@ public class BaseControlHandler : IDisposable
 {
   protected GameManager GameManager;
 
-  protected float? OverrideEndTime;
+  private float? _timeRemaining;
 
   protected float Duration;
 
@@ -28,12 +28,9 @@ public class BaseControlHandler : IDisposable
   public BaseControlHandler(CharacterPhysicsManager characterPhysicsManager, float duration)
   {
     GameManager = GameManager.Instance;
-
     CharacterPhysicsManager = characterPhysicsManager;
 
-    Duration = duration;
-
-    ResetOverrideEndTime();
+    ResetOverrideEndTime(duration);
   }
 
   protected virtual void OnAfterUpdate()
@@ -48,16 +45,28 @@ public class BaseControlHandler : IDisposable
   {
   }
 
+  public virtual void OnFreeze()
+  {
+  }
+
+  public virtual void OnUnfreeze(float freezeDuration)
+  {
+  }
+
   public virtual BaseControlHandler Clone()
   {
     return MemberwiseClone() as BaseControlHandler;
   }
 
-  protected void ResetOverrideEndTime()
+  protected void ResetOverrideEndTime(float duration)
   {
-    OverrideEndTime = Duration >= 0f
-      ? (float?)(Time.time + Duration)
-      : null;
+    Duration = duration;
+    _timeRemaining = duration >= 0f ? (float?)duration : null;
+  }
+
+  protected float? GetTimeRemaining()
+  {
+    return _timeRemaining;
   }
 
   protected virtual ControlHandlerAfterUpdateStatus DoUpdate()
@@ -81,9 +90,14 @@ public class BaseControlHandler : IDisposable
 
   public ControlHandlerAfterUpdateStatus Update()
   {
-    if (OverrideEndTime.HasValue && OverrideEndTime < Time.time)
+    if (_timeRemaining.HasValue)
     {
-      return ControlHandlerAfterUpdateStatus.CanBeDisposed;
+      _timeRemaining -= Time.deltaTime;
+
+      if (_timeRemaining <= 0f)
+      {
+        return ControlHandlerAfterUpdateStatus.CanBeDisposed;
+      }
     }
 
     var doUpdate = DoUpdate();

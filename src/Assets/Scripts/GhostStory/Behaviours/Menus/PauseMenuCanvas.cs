@@ -11,6 +11,8 @@ public class PauseMenuCanvas : MonoBehaviour
 
   private PauseMenuItemGroup _focusedMenuItemGroup;
 
+  private PlayerState _playerStateWhenEnabled;
+
   void Start()
   {
     _itemGroups = BuildItems();
@@ -18,12 +20,27 @@ public class PauseMenuCanvas : MonoBehaviour
 
   void OnEnable()
   {
+    LockPlayer();
+
     Time.timeScale = 0f;
   }
 
   void OnDisable()
   {
+    UnlockPlayer();
+
     Time.timeScale = 1f;
+  }
+
+  private void LockPlayer()
+  {
+    _playerStateWhenEnabled = GameManager.Instance.Player.PlayerState;
+    GameManager.Instance.Player.PlayerState |= PlayerState.Locked;
+  }
+
+  private void UnlockPlayer()
+  {
+    GameManager.Instance.Player.PlayerState = _playerStateWhenEnabled;
   }
 
   private PauseMenuItemGroup[] BuildItems()

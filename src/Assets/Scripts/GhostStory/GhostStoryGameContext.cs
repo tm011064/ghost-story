@@ -12,6 +12,8 @@ public class GhostStoryGameContext : MonoBehaviour
 
   private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
 
+  private ILookup<LayerUniverseKey, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
+
   [HideInInspector]
   public GhostStoryGameState GameState;
 
@@ -28,11 +30,19 @@ public class GhostStoryGameContext : MonoBehaviour
       Destroy(gameObject);
     }
 
-    _gameObjectsByLayerUniverseKey = GameObject
+    var items = GameObject
       .FindObjectsOfType<LevelObjectConfig>()
-      .Select(config => new { Keys = CreateKeys(config).ToArray(), GameObject = config.gameObject })
-      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject }))
+      .Select(config => new { Keys = CreateKeys(config).ToArray(), GameObject = config.gameObject, FreezableComponent = config.gameObject.GetComponent<IFreezable>() })
+      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
+      .ToArray();
+
+    _gameObjectsByLayerUniverseKey = items
+      .Where(i => i.FreezableComponent == null)
       .ToLookup(c => c.Key, c => c.GameObject);
+
+    _freezeableGameObjectsByLayerUniverseKey = items
+      .Where(i => i.FreezableComponent != null)
+      .ToLookup(c => c.Key, c => c.FreezableComponent);
   }
 
   void Start()
@@ -166,6 +176,11 @@ public class GhostStoryGameContext : MonoBehaviour
     {
       gameObject.DisableAndHide();
     }
+
+    foreach (var freezable in _freezeableGameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    {
+      freezable.Freeze();
+    }
   }
 
   private void EnableCurrentGameObjects()
@@ -173,6 +188,11 @@ public class GhostStoryGameContext : MonoBehaviour
     foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
     {
       gameObject.EnableAndShow();
+    }
+
+    foreach (var freezable in _freezeableGameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    {
+      freezable.Unfreeze();
     }
   }
 

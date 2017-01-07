@@ -20,7 +20,7 @@ public class WallJumpEvaluationControlHandler : DefaultPlayerControlHandler
 
   public void Reset(float duration, Direction wallDirection, WallJumpSettings wallJumpSettings)
   {
-    OverrideEndTime = Time.time + duration;
+    ResetOverrideEndTime(duration);
 
     _wallDirection = wallDirection;
 
@@ -31,7 +31,7 @@ public class WallJumpEvaluationControlHandler : DefaultPlayerControlHandler
 
   public override string ToString()
   {
-    return "WallJumpEvaluationControlHandler; override end time: " + OverrideEndTime + "; has detached from wall: " + _hasDetached;
+    return "WallJumpEvaluationControlHandler; time remaining: " + GetTimeRemaining() + "; has detached from wall: " + _hasDetached;
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()

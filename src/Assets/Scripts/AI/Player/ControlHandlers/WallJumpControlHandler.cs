@@ -20,9 +20,7 @@ public class WallJumpControlHandler : PlayerControlHandler
 
   public void Reset(float duration, Direction wallDirection, WallJumpSettings wallJumpSettings)
   {
-    OverrideEndTime = duration < 0f
-      ? null
-      : (float?)(Time.time + duration);
+    ResetOverrideEndTime(duration);
 
     _hasJumpedFromWall = false;
 
@@ -66,7 +64,7 @@ public class WallJumpControlHandler : PlayerControlHandler
 
   public override string ToString()
   {
-    return "WallJumpControlHandler; override end time: " + OverrideEndTime + "; has jumped from wall: " + _hasJumpedFromWall;
+    return "WallJumpControlHandler; time remaining: " + GetTimeRemaining() + "; has jumped from wall: " + _hasJumpedFromWall;
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
@@ -121,7 +119,7 @@ public class WallJumpControlHandler : PlayerControlHandler
       isWallJump = true;
 
       // we want to override x axis buttons for a certain amount of time so the sprite can push off from the wall
-      OverrideEndTime = Time.time + _wallJumpSettings.WallJumpPushOffAxisOverrideTime;
+      ResetOverrideEndTime(_wallJumpSettings.WallJumpPushOffAxisOverrideDuration);
 
       // set jump height as usual
       velocity.y = Mathf.Sqrt(2f * PlayerController.JumpSettings.WalkJumpHeight * -PlayerController.JumpSettings.Gravity);

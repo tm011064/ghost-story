@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public interface ISpawnable
+public interface ISpawnable : IFreezable
 {
   bool CanSpawn();
 

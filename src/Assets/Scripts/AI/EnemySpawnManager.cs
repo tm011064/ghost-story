@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBehaviour, ISceneResetable
+public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBehaviour, ISceneResetable, IFreezable
 {
   public RespawnMode RespawnMode = RespawnMode.SpawnOnce;
 
@@ -186,5 +186,23 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
     }
 
     return GetObjectPoolRegistrationInfos(_enemyToSpawnPrefab);
+  }
+
+  public void Freeze()
+  {
+    foreach (var spawned in _spawnedEnemies)
+    {
+      var spawnable = spawned.GetComponent<ISpawnable>();
+      spawnable.Freeze();
+    }
+  }
+
+  public void Unfreeze()
+  {
+    foreach (var spawned in _spawnedEnemies)
+    {
+      var spawnable = spawned.GetComponent<ISpawnable>();
+      spawnable.Unfreeze();
+    }
   }
 }

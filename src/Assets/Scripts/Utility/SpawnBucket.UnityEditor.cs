@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+
 using UnityEngine;
 
 public partial class SpawnBucket : BaseMonoBehaviour
@@ -39,4 +40,5 @@ public partial class SpawnBucket : BaseMonoBehaviour
     _children = gameObject.GetComponentsInChildren<SpawnBucketItemBehaviour>();
   }
 }
+
 #endif

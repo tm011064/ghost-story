@@ -14,7 +14,7 @@ public class WallJumpSettings
   public float WallVelocityDownThreshold = -200f;
 
   [Tooltip("This is the duration of the period where the player can not move the character horizontally after the wall jump has been performed. This can be used to prevent the player from climbing up a wall by moving the player towards the wall after the jump.")]
-  public float WallJumpPushOffAxisOverrideTime = .2f;
+  public float WallJumpPushOffAxisOverrideDuration = .2f;
 
   [Tooltip("This is the gravity used when the player sticks to a wall and slides down.")]
   public float WallStickGravity = -100f;

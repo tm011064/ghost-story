@@ -13,8 +13,7 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
-    if (GameManager.InputStateManager.IsButtonDown("Switch")
-      && !GameManager.InputStateManager.IsButtonHandled("Switch")
+    if (GameManager.InputStateManager.IsUnhandledButtonDown("Switch")
       && GhostStoryGameContext.Instance.IsRealWorldActivated()
       && GameManager.Player.IsGrounded())
     {
@@ -26,10 +25,7 @@ public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
           _worldSwitchSettings));
 
       GameManager.ActivatePlayer(PlayableCharacterNames.Kino.ToString(), position);
-
       GameManager.Player.EnableAndShow();
-      GameManager.Player.SpawnLocation = position;
-      GameManager.Player.Respawn();
 
       GhostStoryGameContext.Instance.SwitchToAlternateWorld();
     }

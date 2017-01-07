@@ -11,7 +11,6 @@ public class Cockroach : MovingEnemyController
 
   public override void OnPlayerCollide(PlayerController playerController)
   {
-
   }
 
   public override bool CanSpawn()

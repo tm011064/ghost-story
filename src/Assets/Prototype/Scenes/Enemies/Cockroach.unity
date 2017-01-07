@@ -371,6 +371,21 @@ Prefab:
       propertyPath: ZoomSettings.ZoomPercentage
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000010415949344, guid: 07b38fc471243eb468fa279bc4976db7,
+        type: 2}
+      propertyPath: DestroySpawnedEnemiesWhenGettingDisabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000013371596426, guid: 07b38fc471243eb468fa279bc4976db7,
+        type: 2}
+      propertyPath: DestroySpawnedEnemiesWhenGettingDisabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010044370984, guid: 07b38fc471243eb468fa279bc4976db7,
+        type: 2}
+      propertyPath: DestroySpawnedEnemiesWhenGettingDisabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 07b38fc471243eb468fa279bc4976db7, type: 2}
   m_IsPrefabParent: 0
