@@ -49,6 +49,8 @@ public class BaseCharacterController : BaseMonoBehaviour
     _isFrozen = true;
     _freezeStartTime = Time.time;
 
+    OnFreeze();
+
     if (_activeControlHandler != null)
     {
       _activeControlHandler.OnFreeze();

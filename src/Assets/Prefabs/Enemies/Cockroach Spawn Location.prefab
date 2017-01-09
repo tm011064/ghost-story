@@ -55,6 +55,7 @@ GameObject:
   - 61: {fileID: 61000012497482016}
   - 114: {fileID: 114000013327593978}
   - 114: {fileID: 114000011243495214}
+  - 114: {fileID: 114000011647721714}
   - 50: {fileID: 50000014234175438}
   - 114: {fileID: 114000010200674820}
   m_Layer: 10
@@ -215,6 +216,19 @@ MonoBehaviour:
   DeathAnimationPrefab: {fileID: 1000011066839002, guid: e0ee80e8ee3adae43a9c2593bb7a75bb,
     type: 2}
   DeathAnimationPrefabOffset: {x: 0, y: 0}
+--- !u!114 &114000011647721714
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014081318236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a12e1df7a79f7949a6b5c11c150ebd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Universe: 0
+  DamageUnits: 3
 --- !u!114 &114000011730624048
 MonoBehaviour:
   m_ObjectHideFlags: 1

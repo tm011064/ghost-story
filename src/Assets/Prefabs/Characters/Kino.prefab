@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013424351330}
   - 61: {fileID: 61000013592942526}
+  - 114: {fileID: 114000011051842462}
   m_Layer: 19
   m_Name: Enemy Collider
   m_TagString: Untagged
@@ -72,13 +73,16 @@ GameObject:
   - 50: {fileID: 50000014072373306}
   - 114: {fileID: 114000013497037138}
   - 114: {fileID: 114000013790307878}
+  - 114: {fileID: 114000011099568694}
+  - 114: {fileID: 114000012254581500}
+  - 114: {fileID: 114000014111143568}
   m_Layer: 8
   m_Name: Kino
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4000010270791750
 Transform:
   m_ObjectHideFlags: 1
@@ -99,7 +103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012640441032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.153351, y: -296.06842, z: 0}
+  m_LocalPosition: {x: 166.8027, y: -272.72, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -196,6 +200,28 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114000011051842462
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011556767440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32b35f925f22b541b1ceca9f48ad8cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114000011099568694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10e651f2e98eadd4c926b2e31e331048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000012203644590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -243,6 +269,17 @@ MonoBehaviour:
   EnableEdgeSlideUpHelp: 1
   EdgeSlideUpCornerWidth: 33
   _skinWidth: 2
+--- !u!114 &114000012254581500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b6c53f8029c40c43bc09c3545f94b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000013497037138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -278,7 +315,7 @@ MonoBehaviour:
     EnableWallJumps: 0
     WallJumpEnabledTime: 0.5
     WallVelocityDownThreshold: -200
-    WallJumpPushOffAxisOverrideTime: 0.2
+    WallJumpPushOffAxisOverrideDuration: 0.2
     WallStickGravity: -100
     WallJumpWallEvaluationDuration: 0.1
     MaxWallDownwardSpeed: -1000
@@ -316,15 +353,6 @@ MonoBehaviour:
     InputButtonDown: Jump
   CrouchSettings:
     EnableCrouching: 0
-  PlayerHealthSettings:
-    HealthUnits: 28
-    DeathAnimationPrefab: {fileID: 0}
-    DeathAnimationPrefabOffset: {x: 0, y: 0}
-  DamageSettings:
-    SpriteBlinkInterval: 0.1
-    KnockbackDuration: 0.8
-    KnockbackDistance: 8
-    InvincibleDurationAfterKnockback: 2
   BoxColliderOffsetWallAttached: {x: 0, y: 0}
   BoxColliderSizeWallAttached: {x: 0, y: 0}
   AdjustedGravity: 0
@@ -338,6 +366,19 @@ MonoBehaviour:
   PlayerState: 0
   Weapons: []
   StandIdleEnvironmentBoxColliderSize: {x: 0, y: 0}
+  Health: {fileID: 0}
+--- !u!114 &114000014111143568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe2ee7b0f2a57064bbbf8324c73bef05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthUnits: 28
 --- !u!212 &212000013109681084
 SpriteRenderer:
   m_ObjectHideFlags: 1

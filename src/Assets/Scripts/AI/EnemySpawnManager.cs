@@ -21,13 +21,13 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
 
   private bool _isDisabling;
 
-  private float _nextSpawnTime;
-
   private GameObject _enemyToSpawnPrefab;
 
   private ISpawnable _spawnablePrefabComponent;
 
   private bool _isEnemyToSpawnPrefabLoaded;
+
+  private GhostStoryGameContext _gameContext;
 
   void Awake()
   {
@@ -35,6 +35,8 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
     {
       LoadEnemyToSpawnPrefab();
     }
+
+    _gameContext = GhostStoryGameContext.Instance;
   }
 
   private void LoadEnemyToSpawnPrefab()
@@ -76,6 +78,8 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
     spawnable.GotDisabled += OnEnemyControllerGotDisabled;
 
     _spawnedEnemies.Add(spawnedEnemy);
+
+    ScheduleNextSpawn();
   }
 
   private void ScheduleSpawn()
@@ -85,7 +89,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
       if (isActiveAndEnabled
         && RespawnMode == RespawnMode.SpawnWhenDestroyed)
       {
-        Invoke("Spawn", RespawnOnDestroyDelay);
+        _gameContext.RegisterCallback(RespawnOnDestroyDelay, Spawn, "Spawn");
       }
     }
     catch (MissingReferenceException)
@@ -107,22 +111,12 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
     }
   }
 
-  void Update()
+  private void ScheduleNextSpawn()
   {
-    if (_nextSpawnTime >= 0f
-      && Time.time > _nextSpawnTime)
-    {
-      Spawn();
-
-      if (RespawnMode == RespawnMode.SpawnContinuously
+    if (RespawnMode == RespawnMode.SpawnContinuously
         && ContinuousSpawnInterval > 0f)
-      {
-        _nextSpawnTime = Time.time + ContinuousSpawnInterval;
-      }
-      else
-      {
-        _nextSpawnTime = -1f;
-      }
+    {
+      _gameContext.RegisterCallback(ContinuousSpawnInterval, Spawn, "Spawn");
     }
   }
 
@@ -166,7 +160,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
       _isDisabling = false;
     }
 
-    CancelInvoke("Spawn");
+    _gameContext.CancelCallback("Spawn");
   }
 
   void OnEnable()
@@ -175,7 +169,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
 
     _objectPoolingManager = ObjectPoolingManager.Instance;
 
-    _nextSpawnTime = Time.time;
+    _gameContext.RegisterCallback(0f, Spawn, "Spawn");
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()

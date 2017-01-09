@@ -10,12 +10,14 @@ public class GhostStoryGameContext : MonoBehaviour
 {
   public static GhostStoryGameContext Instance;
 
+  [HideInInspector]
+  public GhostStoryGameState GameState;
+
   private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
 
   private ILookup<LayerUniverseKey, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
 
-  [HideInInspector]
-  public GhostStoryGameState GameState;
+  private FreezableTimer _freezableTimer;
 
   public event Action<GhostStoryGameState> GameStateChanged;
 
@@ -30,9 +32,16 @@ public class GhostStoryGameContext : MonoBehaviour
       Destroy(gameObject);
     }
 
+    _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
+
     var items = GameObject
       .FindObjectsOfType<LevelObjectConfig>()
-      .Select(config => new { Keys = CreateKeys(config).ToArray(), GameObject = config.gameObject, FreezableComponent = config.gameObject.GetComponent<IFreezable>() })
+      .Select(config => new
+        {
+          Keys = CreateKeys(config).ToArray(),
+          GameObject = config.gameObject,
+          FreezableComponent = config.gameObject.GetComponent<IFreezable>()
+        })
       .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
       .ToArray();
 
@@ -103,13 +112,18 @@ public class GhostStoryGameContext : MonoBehaviour
         new InventoryItem { IsActive = false, IsAvailable = true, Name = "Purple" }
       };
 
+    var misaHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
+    var kinoHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
+
     var gameState = new GhostStoryGameState
     {
       ActiveUniverse = new LayerUniverseKey { Layer = LevelLayer.House, Universe = Universe.RealWorld },
       Weapons = weapons,
-      DoorKeys = doorKeys
+      DoorKeys = doorKeys,
+      MisaHealthUnits = misaHealth,
+      KinoHealthUnits = kinoHealth
     };
-
+    
     SaveGameState(gameState, fileName);
   }
 
@@ -117,6 +131,7 @@ public class GhostStoryGameContext : MonoBehaviour
   {
     var filePath = Application.persistentDataPath + "/" + fileName;
 
+    Logger.UnityDebugLog("Loading game state from file " + filePath);
     Logger.Info("Loading game state from file " + filePath);
 
     if (!File.Exists(filePath))
@@ -207,11 +222,15 @@ public class GhostStoryGameContext : MonoBehaviour
 
   public void SwitchToRealWorld()
   {
+    _freezableTimer.Unfreeze();
+
     SwitchUniverse(Universe.RealWorld);
   }
 
   public void SwitchToAlternateWorld()
   {
+    _freezableTimer.Freeze();
+
     SwitchUniverse(Universe.AlternateWorld);
   }
 
@@ -224,5 +243,15 @@ public class GhostStoryGameContext : MonoBehaviour
     GameState.ActiveUniverse = new LayerUniverseKey { Layer = layer, Universe = GameState.ActiveUniverse.Universe };
 
     EnableCurrentGameObjects();
+  }
+
+  public void RegisterCallback(float delay, Action action, string name)
+  {
+    _freezableTimer.RegisterCallback(delay, action, name);
+  }
+
+  public void CancelCallback(string name)
+  {
+    _freezableTimer.CancelCallback(name);
   }
 }

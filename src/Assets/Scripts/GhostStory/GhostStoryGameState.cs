@@ -10,6 +10,10 @@ public class GhostStoryGameState
 
   public InventoryItem[] DoorKeys;
 
+  public int MisaHealthUnits;
+
+  public int KinoHealthUnits;
+
   public InventoryItem GetWeapon(string name)
   {
     return Weapons.Single(w => w.Name == name);

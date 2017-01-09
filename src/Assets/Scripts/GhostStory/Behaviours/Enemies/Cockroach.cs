@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Cockroach : MovingEnemyController
+public class Cockroach : GhostStoryMovingEnemyController
 {
   public EnemyMovementSettings MovementSettings;
 
@@ -11,6 +11,10 @@ public class Cockroach : MovingEnemyController
 
   public override void OnPlayerCollide(PlayerController playerController)
   {
+    if (GhostStoryGameContext.GameState.ActiveUniverse.Universe == EnemyDamageBehaviour.Universe)
+    {
+      playerController.Health.ApplyDamage(EnemyDamageBehaviour.DamageUnits);
+    }
   }
 
   public override bool CanSpawn()

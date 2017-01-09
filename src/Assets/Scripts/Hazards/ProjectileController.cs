@@ -27,7 +27,7 @@ public class ProjectileController : MonoBehaviour
 
       ObjectPoolingManager.Instance.Deactivate(gameObject);
 
-      _gameManager.Player.PlayerHealth.ApplyDamage(PlayerDamageUnits);
+      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits);
     }
   }
 
@@ -43,7 +43,7 @@ public class ProjectileController : MonoBehaviour
 
       ObjectPoolingManager.Instance.Deactivate(gameObject);
 
-      _gameManager.Player.PlayerHealth.ApplyDamage(PlayerDamageUnits);
+      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits);
     }
   }
 

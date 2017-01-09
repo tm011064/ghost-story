@@ -149,6 +149,7 @@ public class GameManager : MonoBehaviour
   {
     Player = GetPlayerController(name);
     Player.transform.position = position;
+    Player.gameObject.SetActive(true);
 
     _cameraController.Target = Player.transform;
   }

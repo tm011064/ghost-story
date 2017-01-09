@@ -29,7 +29,6 @@ public class BaseMonoBehaviour : MonoBehaviour
   protected virtual void OnEnable()
   {
     var handler = GotEnabled;
-
     if (handler != null)
     {
       handler(this);
@@ -41,7 +40,6 @@ public class BaseMonoBehaviour : MonoBehaviour
     IsVisible = false;
 
     var handler = GotDisabled;
-
     if (handler != null)
     {
       handler(this);
