@@ -27,6 +27,8 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
       return;
     }
 
+    Logger.Info("Finished Yoyo Attack");
+
     _isAttacking = false;
     AttackAnimation = null;
 
@@ -56,7 +58,7 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
     return _isAttacking;
   }
 
-  public override PlayerStateUpdateResult UpdateState(XYAxisState axisState)
+  public override PlayerStateUpdateResult UpdatePlayerState(XYAxisState axisState)
   {
     if (_isAttacking)
     {
@@ -80,6 +82,8 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
       _isAttacking = true;
 
       AttackAnimation = GetAttackAnimation(axisState);
+
+      Logger.Info("Start Yoyo Attack");
 
       OnStartAttack();
 

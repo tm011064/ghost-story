@@ -37,6 +37,10 @@ public class BaseControlHandler : IDisposable
   {
   }
 
+  public virtual void OnControlHandlerDisposed()
+  {
+  }
+
   public virtual void OnAfterStackPeekUpdate()
   {
   }
@@ -96,13 +100,24 @@ public class BaseControlHandler : IDisposable
 
       if (_timeRemaining <= 0f)
       {
+        OnControlHandlerDisposed();
+
         return ControlHandlerAfterUpdateStatus.CanBeDisposed;
       }
     }
 
     var doUpdate = DoUpdate();
 
-    OnAfterUpdate();
+    switch (doUpdate)
+    {
+      case ControlHandlerAfterUpdateStatus.CanBeDisposed:
+        OnControlHandlerDisposed();
+        break;
+
+      case ControlHandlerAfterUpdateStatus.KeepAlive:
+        OnAfterUpdate();
+        break;
+    }
 
     return doUpdate;
   }

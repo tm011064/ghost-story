@@ -135,6 +135,15 @@ public partial class PlayerController : BaseCharacterController
     SpriteRenderer = childTransform.gameObject.GetComponent<SpriteRenderer>();
 
     Animator = childTransform.gameObject.GetComponent<Animator>();
+
+    AnimationHashLookup.Register(
+      "Idle",
+      "Run Start",
+      "Run",
+      "Freeze",
+      "Jump",
+      "Fall",
+      "Enemy Contact Knockback");
   }
 
   private BoxCollider2D GetEnvironmentCollider()

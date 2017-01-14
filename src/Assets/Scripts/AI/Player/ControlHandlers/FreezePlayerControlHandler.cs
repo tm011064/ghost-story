@@ -1,19 +1,14 @@
 ﻿using UnityEngine;
 
-public class FreezePlayerControlHandler : DefaultPlayerControlHandler
+public class FreezePlayerControlHandler : PlayerControlHandler
 {
-  private TranslateTransformAction _translateTransformAction;
-
-  private readonly Vector3? _playerTranslationVector;
-
-  private readonly EasingType _playerTranslationEasingType;
+  private readonly PlayerState[] _playerStates;
 
   public FreezePlayerControlHandler(
     PlayerController playerController,
     float suspendPhysicsTime,
     int animationShortNameHash,
-    Vector3? playerTranslationVector = null,
-    EasingType playerTranslationEasingType = EasingType.Linear)
+    PlayerState[] playerStates)
     : base(
       playerController,
       new PlayerStateController[] 
@@ -24,23 +19,14 @@ public class FreezePlayerControlHandler : DefaultPlayerControlHandler
   {
     SetDebugDraw(Color.red, true);
 
-    _playerTranslationVector = playerTranslationVector;
-    _playerTranslationEasingType = playerTranslationEasingType;
+    _playerStates = playerStates;
   }
 
   public override bool TryActivate(BaseControlHandler previousControlHandler)
   {
-    PlayerController.PlayerState |= PlayerState.Invincible;
-    PlayerController.PlayerState |= PlayerState.Locked;
-
-    if (_playerTranslationVector.HasValue)
+    foreach (var playerState in _playerStates)
     {
-      _translateTransformAction = TranslateTransformAction.Start(
-        PlayerController.transform.position,
-        PlayerController.transform.position + _playerTranslationVector.Value,
-        Duration,
-        _playerTranslationEasingType,
-        GameManager.Instance.Easing);
+      PlayerController.PlayerState |= playerState;
     }
 
     ResetOverrideEndTime(Duration);
@@ -50,17 +36,14 @@ public class FreezePlayerControlHandler : DefaultPlayerControlHandler
 
   public override void Dispose()
   {
-    PlayerController.PlayerState &= ~PlayerState.Invincible;
-    PlayerController.PlayerState &= ~PlayerState.Locked;
+    foreach (var playerState in _playerStates)
+    {
+      PlayerController.PlayerState &= ~playerState;
+    }
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
-    if (_translateTransformAction != null)
-    {
-      PlayerController.transform.position = _translateTransformAction.GetPosition();
-    }
-
     return ControlHandlerAfterUpdateStatus.KeepAlive;
   }
 }

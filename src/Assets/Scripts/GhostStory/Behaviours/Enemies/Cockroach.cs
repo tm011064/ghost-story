@@ -13,7 +13,7 @@ public class Cockroach : GhostStoryMovingEnemyController
   {
     if (GhostStoryGameContext.GameState.ActiveUniverse.Universe == EnemyDamageBehaviour.Universe)
     {
-      playerController.Health.ApplyDamage(EnemyDamageBehaviour.DamageUnits);
+      playerController.Health.ApplyDamage(EnemyDamageBehaviour.DamageUnits, EnemyContactReaction.Knockback);
     }
   }
 

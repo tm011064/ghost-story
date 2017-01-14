@@ -5,6 +5,8 @@ public class ProjectileController : MonoBehaviour
 {
   public int PlayerDamageUnits = 1;
 
+  public EnemyContactReaction EnemyContactReaction = EnemyContactReaction.Knockback;
+
   private GameManager _gameManager;
 
   private CustomStack<BaseProjectileControlHandler> _controlHandlers = new CustomStack<BaseProjectileControlHandler>();
@@ -27,7 +29,7 @@ public class ProjectileController : MonoBehaviour
 
       ObjectPoolingManager.Instance.Deactivate(gameObject);
 
-      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits);
+      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
     }
   }
 
@@ -43,7 +45,7 @@ public class ProjectileController : MonoBehaviour
 
       ObjectPoolingManager.Instance.Deactivate(gameObject);
 
-      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits);
+      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
     }
   }
 

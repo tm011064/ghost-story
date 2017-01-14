@@ -27,6 +27,7 @@ public class EnemyContactKnockbackPlayerControlHandler : PlayerControlHandler
   {
     PlayerController.PlayerState |= PlayerState.Invincible;
     PlayerController.PlayerState |= PlayerState.EnemyContactKnockback;
+    PlayerController.PlayerState |= PlayerState.Locked;
 
     _distancePerSecond = (1f / _knockbackDuration)
       * _knockbackDistance;
@@ -42,6 +43,7 @@ public class EnemyContactKnockbackPlayerControlHandler : PlayerControlHandler
   public override void Dispose()
   {
     PlayerController.PlayerState &= ~PlayerState.EnemyContactKnockback;
+    PlayerController.PlayerState &= ~PlayerState.Locked;
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()

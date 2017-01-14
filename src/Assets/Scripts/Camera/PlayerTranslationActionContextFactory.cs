@@ -95,7 +95,8 @@ public static class PlayerTranslationActionContextFactory
     var playerControlHandler = new FreezePlayerControlHandler(
         GameManager.Instance.Player,
         duration,
-        playerAnimationShortHash);
+        playerAnimationShortHash,
+        new PlayerState[] { PlayerState.Locked, PlayerState.Invincible });
 
     return new PlayerTranslationActionContext
     {
@@ -146,7 +147,7 @@ public static class PlayerTranslationActionContextFactory
       currentPosition,
       distance);
 
-    return new FreezePlayerControlHandler(
+    return new TranslateFrozenPlayerControlHandler(
       GameManager.Instance.Player,
       duration,
       playerAnimationShortHash,
@@ -161,14 +162,14 @@ public static class PlayerTranslationActionContextFactory
       : AxisType.Horizontal;
   }
 
-  private static Vector3? GetPlayerTranslationVector(
+  private static Vector3 GetPlayerTranslationVector(
     Vector3 cameraTargetPosition,
     Vector3 cameraPosition,
     float distance)
   {
     if (distance == 0f)
     {
-      return null;
+      return Vector3.zero;
     }
 
     var translationAxis = GetTranslationAxis(cameraTargetPosition, cameraPosition);

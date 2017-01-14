@@ -4,7 +4,7 @@ public abstract class PlayerDamageBehaviour : MonoBehaviour
 {
   private PlayerHealthBehaviour _playerHealth;
 
-  protected abstract void OnHealthChanged(int totalHealthUnits);
+  protected abstract void OnHealthChanged(int totalHealthUnits, EnemyContactReaction enemyContactReaction);
 
   void Awake()
   {

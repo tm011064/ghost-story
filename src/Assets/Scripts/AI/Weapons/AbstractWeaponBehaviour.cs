@@ -22,7 +22,11 @@ public abstract class AbstractWeaponBehaviour : MonoBehaviour
 
   public abstract bool IsAttacking();
 
-  public abstract PlayerStateUpdateResult UpdateState(XYAxisState axisState);
+  public abstract PlayerStateUpdateResult UpdatePlayerState(XYAxisState axisState);
+
+  public virtual void Dispose()
+  {
+  }
 
   public abstract string Name { get; }
 }
