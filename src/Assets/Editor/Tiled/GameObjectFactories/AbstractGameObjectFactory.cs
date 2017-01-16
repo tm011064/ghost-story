@@ -9,7 +9,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
   {
     protected readonly Map Map;
 
-    protected readonly GameObject RootGameObject;
+    protected readonly GameObject Root;
 
     protected readonly Dictionary<string, Objecttype> ObjecttypesByName;
 
@@ -20,12 +20,12 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     protected readonly TiledTileLayerConfig[] TileLayerConfigs;
 
     protected AbstractGameObjectFactory(
-      GameObject rootGameObject,
+      GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
     {
-      RootGameObject = rootGameObject;
+      Root = root;
       PrefabLookup = prefabLookup;
       ObjecttypesByName = objecttypesByName;
 
@@ -130,7 +130,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       var assignTileToPrefab = layerConfig.Commands.Contains("AssignTileToPrefab");
       if (assignTileToPrefab)
       {
-        var rootTiledTransform = RootGameObject.transform.FindFirstRecursive(gameObjectName);
+        var rootTiledTransform = Root.transform.FindFirstRecursive(gameObjectName);
 
         var meshTransform = rootTiledTransform.GetComponentInChildren<MeshRenderer>().transform;
 

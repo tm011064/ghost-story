@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 
 using UnityEngine;
+
 public partial class InventoryItemBehaviour : IInstantiable<InstantiationArguments>
 {
   public void Instantiate(InstantiationArguments arguments)
