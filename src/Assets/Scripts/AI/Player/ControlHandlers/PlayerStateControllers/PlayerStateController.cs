@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public abstract class PlayerStateController
+﻿public abstract class PlayerStateController : IPlayerStateUpdatable
 {
   protected readonly PlayerController PlayerController;
 
@@ -10,6 +8,10 @@ public abstract class PlayerStateController
   }
 
   public abstract PlayerStateUpdateResult GetPlayerStateUpdateResult(XYAxisState axisState);
+
+  public virtual void Dispose()
+  {
+  }
 
   public virtual void UpdateState(XYAxisState axisState)
   {

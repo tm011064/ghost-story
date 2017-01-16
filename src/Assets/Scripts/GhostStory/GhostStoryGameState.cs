@@ -10,6 +10,10 @@ public class GhostStoryGameState
 
   public InventoryItem[] DoorKeys;
 
+  public int MisaHealthUnits;
+
+  public int KinoHealthUnits;
+
   public InventoryItem GetWeapon(string name)
   {
     return Weapons.Single(w => w.Name == name);
@@ -18,5 +22,14 @@ public class GhostStoryGameState
   public InventoryItem GetDoorKey(string name)
   {
     return DoorKeys.Single(w => w.Name == name);
+  }
+
+  public InventoryItem Find(string name)
+  {
+    var allItems = Weapons.Union(DoorKeys).ToArray();
+
+    Logger.UnityDebugLog(allItems.Where(i => i.Name == name).FirstOrDefault().Name);
+
+    return allItems.First(i => i.Name == name);
   }
 }

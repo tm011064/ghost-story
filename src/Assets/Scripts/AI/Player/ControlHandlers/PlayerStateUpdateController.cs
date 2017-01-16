@@ -4,21 +4,23 @@ public class PlayerStateUpdateController
 {
   private readonly PlayerController _playerController;
 
-  private readonly PlayerStateController[] _playerStateControllers;
+  private readonly AbstractPlayerStateControllerSet[] _playerStateControllerSets;
 
   public PlayerStateUpdateController(
     PlayerController playerController,
-    PlayerStateController[] playerStateControllers)
+    AbstractPlayerStateControllerSet[] playerStateControllerSets)
   {
     _playerController = playerController;
-    _playerStateControllers = playerStateControllers;
+    _playerStateControllerSets = playerStateControllerSets;
   }
 
   public void UpdatePlayerState(XYAxisState axisState)
   {
-    var playerStateUpdateResult = PlayerStateUpdateResult.Max(
-      UpdatePlayerStateControllers(axisState),
-      UpdateWeaponControllers(axisState));
+    var results = _playerStateControllerSets
+      .Select(p => p.Update(axisState))
+      .ToArray();
+
+    var playerStateUpdateResult = PlayerStateUpdateResult.Max(results);
 
     if ((_playerController.PlayerState & PlayerState.Locked) == 0)
     {
@@ -31,41 +33,26 @@ public class PlayerStateUpdateController
     }
   }
 
-  private PlayerStateUpdateResult UpdateWeaponControllers(XYAxisState axisState)
+  private void PlayAnimation(AnimationClipInfo animationClipInfo)
   {
-    if ((_playerController.PlayerState & PlayerState.Locked) != 0)
+    _playerController.Animator.speed = animationClipInfo.Speed;
+
+    var animatorStateInfo = _playerController.Animator.GetCurrentAnimatorStateInfo(animationClipInfo.LayerIndex);
+
+    if (animatorStateInfo.shortNameHash == animationClipInfo.ShortNameHash)
     {
-      return PlayerStateUpdateResult.Unhandled;
+      return;
     }
 
-    var enabledWeapons = _playerController.Weapons.Where(w => w.isActiveAndEnabled);
-
-    foreach (var weaponControlHandler in enabledWeapons)
+    if (animationClipInfo.LinkedShortNameHashes.Contains(animatorStateInfo.shortNameHash))
     {
-      var playerStateUpdateResult = weaponControlHandler.UpdateState(axisState);
-
-      if (playerStateUpdateResult.IsHandled)
-      {
-        return playerStateUpdateResult;
-      }
+      return;
     }
 
-    return PlayerStateUpdateResult.Unhandled;
-  }
+    Logger.Info("Start playing new animation clip: " + AnimationHashLookup.GetName(animationClipInfo.ShortNameHash)
+      + " [" + animationClipInfo.ShortNameHash + "]");
 
-  private PlayerStateUpdateResult UpdatePlayerStateControllers(XYAxisState axisState)
-  {
-    for (var i = 0; i < _playerStateControllers.Length; i++)
-    {
-      var playerStateUpdateResult = _playerStateControllers[i].UpdatePlayerState(axisState);
-
-      if (playerStateUpdateResult.IsHandled)
-      {
-        return playerStateUpdateResult;
-      }
-    }
-
-    return PlayerStateUpdateResult.Unhandled;
+    _playerController.Animator.Play(animationClipInfo.ShortNameHash);
   }
 
   private void AdjustSpriteScale(XYAxisState axisState)
@@ -78,22 +65,12 @@ public class PlayerStateUpdateController
     }
   }
 
-  private void PlayAnimation(AnimationClipInfo animationClipInfo)
+  public void Dispose()
   {
-    _playerController.Animator.speed = animationClipInfo.Speed;
-
-    var animatorStateInfo = _playerController.Animator.GetCurrentAnimatorStateInfo(0);
-
-    if (animatorStateInfo.shortNameHash == animationClipInfo.ShortNameHash)
+    for (var i = 0; i < _playerStateControllerSets.Length; i++)
     {
-      return;
+      _playerStateControllerSets[i].Dispose();
     }
-
-    if (animationClipInfo.LinkedShortNameHashes.Contains(animatorStateInfo.shortNameHash))
-    {
-      return;
-    }
-
-    _playerController.Animator.Play(animationClipInfo.ShortNameHash);
   }
+
 }

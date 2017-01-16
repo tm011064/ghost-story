@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerControlHandler : BaseControlHandler
@@ -35,21 +36,27 @@ public class PlayerControlHandler : BaseControlHandler
 
     PlayerMetricSettings = GameManager.GameSettings.PlayerMetricSettings;
 
-    _playerUpdateController = new PlayerStateUpdateController(
-      PlayerController,
-      playerStateControllers == null
-        ? BuildPlayerStateControllers(playerController)
-        : playerStateControllers);
+    var updateSets = new AbstractPlayerStateControllerSet[]
+    {
+      new PlayerWeaponStateControllerSet(playerController),
+      new PlayerStateControllerSet(
+        playerStateControllers == null
+          ? BuildPlayerStateControllers(playerController).ToArray()
+          : playerStateControllers)
+    };
+
+    _playerUpdateController = new PlayerStateUpdateController(PlayerController, updateSets);
   }
 
-  private PlayerStateController[] BuildPlayerStateControllers(PlayerController playerController)
+  private IEnumerable<PlayerStateController> BuildPlayerStateControllers(PlayerController playerController)
   {
-    var controllers = new List<PlayerStateController>();
+    yield return new GroundedController(playerController);
+    yield return new AirborneController(playerController);
+  }
 
-    controllers.Add(new GroundedController(playerController));
-    controllers.Add(new AirborneController(playerController));
-
-    return controllers.ToArray();
+  public override void OnControlHandlerDisposed()
+  {
+    _playerUpdateController.Dispose();
   }
 
   protected override void OnAfterUpdate()

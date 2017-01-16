@@ -2,32 +2,35 @@
 
 public class EnemyContactKnockbackPlayerControlHandler : PlayerControlHandler
 {
-  private readonly SpriteRendererBlinkTimer _blinkTimer;
-
   private float _distancePerSecond;
 
-  public EnemyContactKnockbackPlayerControlHandler(PlayerController playerController)
+  private float _knockbackDuration;
+
+  private float _knockbackDistance;
+
+  public EnemyContactKnockbackPlayerControlHandler(
+    PlayerController playerController,
+    float knockbackDuration,
+    float knockbackDistance)
     : base(
       playerController,
       new PlayerStateController[] { new EnemyContactKnockbackPlayerStateController(playerController) },
-      playerController.DamageSettings.KnockbackDuration)
+      knockbackDuration)
   {
     SetDebugDraw(Color.red, true);
 
-    _blinkTimer = new SpriteRendererBlinkTimer(
-      playerController.DamageSettings.SpriteBlinkInterval,
-      playerController.SpriteRenderer);
+    _knockbackDuration = knockbackDuration;
+    _knockbackDistance = knockbackDistance;
   }
 
   public override bool TryActivate(BaseControlHandler previousControlHandler)
   {
     PlayerController.PlayerState |= PlayerState.Invincible;
     PlayerController.PlayerState |= PlayerState.EnemyContactKnockback;
+    PlayerController.PlayerState |= PlayerState.Locked;
 
-    _blinkTimer.Reset();
-
-    _distancePerSecond = (1f / PlayerController.DamageSettings.KnockbackDuration)
-      * PlayerController.DamageSettings.KnockbackDistance;
+    _distancePerSecond = (1f / _knockbackDuration)
+      * _knockbackDistance;
 
     if (PlayerController.IsFacingRight())
     {
@@ -39,15 +42,12 @@ public class EnemyContactKnockbackPlayerControlHandler : PlayerControlHandler
 
   public override void Dispose()
   {
-    _blinkTimer.ShowSprite();
-
     PlayerController.PlayerState &= ~PlayerState.EnemyContactKnockback;
+    PlayerController.PlayerState &= ~PlayerState.Locked;
   }
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
-    _blinkTimer.Update();
-
     var deltaMovement = new Vector2(
       Time.deltaTime * _distancePerSecond,
       Mathf.Max(

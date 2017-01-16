@@ -18,6 +18,22 @@ public static class Vector3Extensions
       vector.z);
   }
 
+  public static Vector3 AddX(this Vector3 vector, float value)
+  {
+    return new Vector3(
+      vector.x + value,
+      vector.y,
+      vector.z);
+  }
+
+  public static Vector3 AddY(this Vector3 vector, float value)
+  {
+    return new Vector3(
+      vector.x,
+      vector.y + value,
+      vector.z);
+  }
+
   public static Vector2 SetX(this Vector2 vector, float x)
   {
     return new Vector2(

@@ -1,10 +1,8 @@
-﻿public interface IWeapon
+﻿public interface IWeapon : IPlayerStateUpdatable
 {
   void StopAttack();
 
   bool IsAttacking();
-
-  PlayerStateUpdateResult UpdateState(XYAxisState axisState);
 
   string Name { get; }
 }

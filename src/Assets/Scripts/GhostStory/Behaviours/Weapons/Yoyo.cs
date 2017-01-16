@@ -10,8 +10,9 @@ public class Yoyo : AbstractYoyo, IWeapon
   {
     _controlHandler = new FreezePlayerControlHandler(
       Player,
-      10f,
-      Animator.StringToHash(AttackAnimation));
+      -1,
+      Animator.StringToHash(AttackAnimation),
+      new PlayerState[] { PlayerState.Locked });
 
     Player.PushControlHandler(_controlHandler);
   }

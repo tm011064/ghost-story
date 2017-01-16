@@ -6,6 +6,8 @@ public class ApplyDamageHazard : MonoBehaviour
 
   public bool DestroyHazardOnCollision = false;
 
+  public EnemyContactReaction EnemyContactReaction = EnemyContactReaction.Knockback;
+
   private GameManager _gameManager;
 
   void OnTriggerStay2D(Collider2D col)
@@ -22,7 +24,7 @@ public class ApplyDamageHazard : MonoBehaviour
         ObjectPoolingManager.Instance.Deactivate(gameObject);
       }
 
-      _gameManager.Player.PlayerHealth.ApplyDamage(PlayerDamageUnits);
+      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
     }
   }
 
@@ -41,7 +43,7 @@ public class ApplyDamageHazard : MonoBehaviour
         ObjectPoolingManager.Instance.Deactivate(gameObject);
       }
 
-      _gameManager.Player.PlayerHealth.ApplyDamage(PlayerDamageUnits);
+      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
     }
   }
 

@@ -100,6 +100,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013424351330}
   - 61: {fileID: 61000013592942526}
+  - 114: {fileID: 114000011299734218}
   m_Layer: 19
   m_Name: Enemy Collider
   m_TagString: Untagged
@@ -182,18 +183,21 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012664598406}
-  - 114: {fileID: 114000010952797648}
-  - 114: {fileID: 114000012203644590}
   - 50: {fileID: 50000014072373306}
+  - 114: {fileID: 114000012203644590}
   - 114: {fileID: 114000013497037138}
+  - 114: {fileID: 114000010952797648}
   - 114: {fileID: 114000014100412196}
+  - 114: {fileID: 114000013249210432}
+  - 114: {fileID: 114000012104058610}
+  - 114: {fileID: 114000014249619662}
   m_Layer: 8
   m_Name: misa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4000010017800916
 Transform:
   m_ObjectHideFlags: 1
@@ -465,7 +469,7 @@ MonoBehaviour:
     EnableWallJumps: 0
     WallJumpEnabledTime: 0.5
     WallVelocityDownThreshold: -200
-    WallJumpPushOffAxisOverrideTime: 0.2
+    WallJumpPushOffAxisOverrideDuration: 0.2
     WallStickGravity: -100
     WallJumpWallEvaluationDuration: 0.1
     MaxWallDownwardSpeed: -1000
@@ -503,15 +507,6 @@ MonoBehaviour:
     InputButtonDown: Jump
   CrouchSettings:
     EnableCrouching: 0
-  PlayerHealthSettings:
-    HealthUnits: 20
-    DeathAnimationPrefab: {fileID: 0}
-    DeathAnimationPrefabOffset: {x: 0, y: 0}
-  DamageSettings:
-    SpriteBlinkInterval: 0.1
-    KnockbackDuration: 0.8
-    KnockbackDistance: 8
-    InvincibleDurationAfterKnockback: 2
   BoxColliderOffsetWallAttached: {x: 0, y: 0}
   BoxColliderSizeWallAttached: {x: 0, y: 0}
   AdjustedGravity: 0
@@ -525,6 +520,18 @@ MonoBehaviour:
   PlayerState: 0
   Weapons: []
   StandIdleEnvironmentBoxColliderSize: {x: 0, y: 0}
+  Health: {fileID: 0}
+--- !u!114 &114000011299734218
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011556767440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32b35f925f22b541b1ceca9f48ad8cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000011613035860
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -537,6 +544,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamageUnits: 1
+--- !u!114 &114000012104058610
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1b0d2aeaae3d940a7aac654a27a8f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000012203644590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -595,6 +613,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b5c5db9ba419a4da6386247650c429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114000013249210432
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28f2a0af2986544897becf49c54e399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000013497037138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -650,6 +679,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Duration: 10
+--- !u!114 &114000014249619662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8735e586990606e489caaa21157e17f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthUnits: 28
 --- !u!212 &212000012844252114
 SpriteRenderer:
   m_ObjectHideFlags: 1

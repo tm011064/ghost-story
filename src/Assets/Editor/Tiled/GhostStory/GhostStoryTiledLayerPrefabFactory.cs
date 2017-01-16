@@ -7,10 +7,11 @@ namespace Assets.Editor.Tiled.GhostStory
   public class GhostStoryTiledLayerPrefabFactory : TiledLayerPrefabFactory
   {
     public GhostStoryTiledLayerPrefabFactory(
+      GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
-      : base(map, prefabLookup, objecttypesByName)
+      : base(root, map, prefabLookup, objecttypesByName)
     {
     }
 

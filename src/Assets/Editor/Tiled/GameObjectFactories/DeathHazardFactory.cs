@@ -7,10 +7,11 @@ namespace Assets.Editor.Tiled.GameObjectFactories
   public class DeathHazardFactory : AbstractGameObjectFactory
   {
     public DeathHazardFactory(
+      GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
-      : base(map, prefabLookup, objecttypesByName)
+      : base(root, map, prefabLookup, objecttypesByName)
     {
     }
 

@@ -88,12 +88,12 @@ namespace Assets.Editor.Tiled.GhostStory
         prefab,
         new AbstractGameObjectFactory[]
         {
-          new GhostStoryPlatformColliderFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryCamerBoundsTransitionObjectFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryCameraModifierFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryTiledObjectPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryTiledLayerPrefabFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryCamerBoundsLayerTransitionObjectFactory(importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)
+          new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryCamerBoundsTransitionObjectFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryCamerBoundsLayerTransitionObjectFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);

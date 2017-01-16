@@ -18,10 +18,6 @@ public partial class PlayerController : BaseCharacterController
 
   public CrouchSettings CrouchSettings = new CrouchSettings();
 
-  public PlayerHealthSettings PlayerHealthSettings = new PlayerHealthSettings();
-
-  public DamageSettings DamageSettings = new DamageSettings();
-
   public Vector2 BoxColliderOffsetWallAttached = Vector2.zero;
 
   public Vector2 BoxColliderSizeWallAttached = Vector2.zero;
@@ -60,7 +56,7 @@ public partial class PlayerController : BaseCharacterController
   public Vector2 StandIdleEnvironmentBoxColliderSize;
 
   [HideInInspector]
-  public PlayerHealth PlayerHealth;
+  public PlayerHealthBehaviour Health;
 
   private RaycastHit2D _lastControllerColliderHit;
 
@@ -80,7 +76,7 @@ public partial class PlayerController : BaseCharacterController
   {
     _gameManager = GameManager.Instance;
 
-    PlayerHealth = new PlayerHealth(this);
+    Health = this.GetComponentOrThrow<PlayerHealthBehaviour>();
 
     InitializeBoxCollider();
 
@@ -139,28 +135,37 @@ public partial class PlayerController : BaseCharacterController
     SpriteRenderer = childTransform.gameObject.GetComponent<SpriteRenderer>();
 
     Animator = childTransform.gameObject.GetComponent<Animator>();
+
+    AnimationHashLookup.Register(
+      "Idle",
+      "Run Start",
+      "Run",
+      "Freeze",
+      "Jump",
+      "Fall",
+      "Enemy Contact Knockback");
   }
 
   private BoxCollider2D GetEnvironmentCollider()
   {
     var spriteAndAnimator = transform.GetChildGameObject("SpriteAndAnimator");
 
-    var environmentCollider = spriteAndAnimator.transform.GetChildGameObject("Environment Collider");
+    var colliderObject = spriteAndAnimator.transform.GetChildGameObject("Environment Collider");
 
-    var boxCollider = environmentCollider.GetComponentOrThrow<BoxCollider2D>();
+    var collider = colliderObject.GetComponentOrThrow<BoxCollider2D>();
 
-    return boxCollider;
+    return collider;
   }
 
   private BoxCollider2D GetEnemyCollider()
   {
     var spriteAndAnimator = transform.GetChildGameObject("SpriteAndAnimator");
 
-    var environmentCollider = spriteAndAnimator.transform.GetChildGameObject("Enemy Collider");
+    var colliderObject = spriteAndAnimator.transform.GetChildGameObject("Enemy Collider");
 
-    var boxCollider = environmentCollider.GetComponentOrThrow<BoxCollider2D>();
+    var collider = colliderObject.GetComponentOrThrow<BoxCollider2D>();
 
-    return boxCollider;
+    return collider;
   }
 
   public bool IsFacingRight()
@@ -282,11 +287,6 @@ public partial class PlayerController : BaseCharacterController
     }
   }
 
-  public void OnPlayerDied()
-  {
-    Respawn();
-  }
-
   public void Respawn()
   {
     transform.parent = null; // just in case we were still attached
@@ -299,7 +299,7 @@ public partial class PlayerController : BaseCharacterController
 
     _gameManager.RefreshScene(SpawnLocation);
 
-    PlayerHealth.Reset();
+    Health.Reset();
   }
 
   private void EnableClimbing()

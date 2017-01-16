@@ -110,7 +110,8 @@ public partial class CameraScroller : MonoBehaviour
       playerControlHandlersStack.Push(new FreezePlayerControlHandler(
         player,
         FullScreenScrollSettings.EndScrollFreezeTime,
-        _animationShortNameHash));
+        _animationShortNameHash,
+        new PlayerState[] { PlayerState.Locked, PlayerState.Invincible }));
     }
 
     player.ExchangeActiveControlHandler(playerControlHandlersStack.Pop());
@@ -164,7 +165,8 @@ public partial class CameraScroller : MonoBehaviour
         new FreezePlayerControlHandler(
           GameManager.Instance.Player,
           FullScreenScrollSettings.StartScrollFreezeTime + (float)delay.TotalSeconds,
-          _animationShortNameHash));
+          _animationShortNameHash,
+          new PlayerState[] { PlayerState.Locked, PlayerState.Invincible }));
 
       this.Invoke(delay, () => StartScroll(collider));
     }

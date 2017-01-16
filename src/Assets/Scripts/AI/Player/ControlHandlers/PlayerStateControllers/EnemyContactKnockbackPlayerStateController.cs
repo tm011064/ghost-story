@@ -4,7 +4,7 @@
     : base(playerController)
   {
   }
-
+  
   public override PlayerStateUpdateResult GetPlayerStateUpdateResult(XYAxisState axisState)
   {
     return PlayerStateUpdateResult.CreateHandled("Enemy Contact Knockback");

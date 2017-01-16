@@ -36,10 +36,8 @@ namespace Assets.Editor.Tiled
     {
       if (gameObjectFactories == null)
       {
-        gameObjectFactories = CreateDefaultGameObjectFactories().ToArray();
+        gameObjectFactories = CreateDefaultGameObjectFactories(parent).ToArray();
       }
-
-      ExecuteCommands(parent);
 
       var tiledObjectsGameObject = new GameObject("Tiled Objects");
       tiledObjectsGameObject.transform.position = Vector3.zero;
@@ -48,17 +46,19 @@ namespace Assets.Editor.Tiled
         gameObjectFactories.SelectMany(f => f.Create()));
 
       tiledObjectsGameObject.transform.parent = parent.transform;
+
+      ExecuteCommands(parent);
     }
 
     private void ExecuteCommands(GameObject prefab)
     {
       var objectCommands = Map
         .ForEachObjectGroupWithPropertyName("Commands")
-        .Select(og => new { Name = og.Name, Commands = GetCommands(og) });
+        .Select(og => new { Name = og.Name, Commands = og.GetCommands() });
 
       var layerCommands = Map
         .ForEachLayerWithPropertyName("Commands")
-        .Select(layer => new { Name = layer.Name, Commands = GetCommands(layer) });
+        .Select(layer => new { Name = layer.Name, Commands = layer.GetCommands() });
 
       foreach (var command in objectCommands.Concat(layerCommands))
       {
@@ -90,28 +90,14 @@ namespace Assets.Editor.Tiled
       }
     }
 
-    private IEnumerable<string> GetCommands(Objectgroup objectgroup)
+    private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories(GameObject parent)
     {
-      return objectgroup.GetPropertyValue("Commands")
-        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-        .Select(s => s.Trim());
-    }
-
-    private IEnumerable<string> GetCommands(Layer layer)
-    {
-      return layer.GetPropertyValue("Commands")
-        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-        .Select(s => s.Trim());
-    }
-
-    private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories()
-    {
-      yield return new PlatformColliderFactory(Map, PrefabLookup, ObjecttypesByName);
-      yield return new OneWayPlatformColliderFactory(Map, PrefabLookup, ObjecttypesByName);
-      yield return new DeathHazardFactory(Map, PrefabLookup, ObjecttypesByName);
-      yield return new TiledLayerPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
-      yield return new TiledObjectPrefabFactory(Map, PrefabLookup, ObjecttypesByName);
-      yield return new CameraModifierFactory(Map, PrefabLookup, ObjecttypesByName);
+      yield return new PlatformColliderFactory(parent, Map, PrefabLookup, ObjecttypesByName);
+      yield return new OneWayPlatformColliderFactory(parent, Map, PrefabLookup, ObjecttypesByName);
+      yield return new DeathHazardFactory(parent, Map, PrefabLookup, ObjecttypesByName);
+      yield return new TiledLayerPrefabFactory(parent, Map, PrefabLookup, ObjecttypesByName);
+      yield return new TiledObjectPrefabFactory(parent, Map, PrefabLookup, ObjecttypesByName);
+      yield return new CameraModifierFactory(parent, Map, PrefabLookup, ObjecttypesByName);
     }
 
     private string GetPrefabName(string assetPath)

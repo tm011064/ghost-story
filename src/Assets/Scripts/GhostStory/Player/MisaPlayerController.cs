@@ -6,6 +6,13 @@
   {
     _worldSwitchSettings = GetComponent<WorldSwitchSettings>();
 
+    AnimationHashLookup.Register(
+      "Yoyo",
+      "Yoyo Up",
+      "Yoyo Down",
+      "Yoyo 360",
+      "Yoyo 180");
+
     base.OnAwake();
   }
 

@@ -10,7 +10,8 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
     : base(
       playerController,
       worldSwitchSettings.Duration,
-      Animator.StringToHash("Freeze"))
+      Animator.StringToHash("Freeze"),
+      new PlayerState[] { PlayerState.Locked, PlayerState.Invincible })
   {
     _frozenAxisState = base.GetAxisState();
   }
@@ -23,7 +24,7 @@ public class FreezeRealWorldPlayerControlHandler : FreezePlayerControlHandler
   public override void Dispose()
   {
     GhostStoryGameContext.Instance.SwitchToRealWorld();
-    
+
     GameManager.Player.DisableAndHide();
 
     GameManager.ActivatePlayer(
