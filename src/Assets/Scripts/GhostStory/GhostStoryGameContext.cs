@@ -84,6 +84,13 @@ public class GhostStoryGameContext : MonoBehaviour
     yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = levelObjectConfig.Universe };
   }
 
+  public void OnInventoryItemAcquired(InventoryItem inventoryItem)
+  {
+    inventoryItem.IsAvailable = true;
+
+    NotifyGameStateChanged();
+  }
+
   public void NotifyGameStateChanged()
   {
     var handler = GameStateChanged;
@@ -123,7 +130,7 @@ public class GhostStoryGameContext : MonoBehaviour
       MisaHealthUnits = misaHealth,
       KinoHealthUnits = kinoHealth
     };
-    
+
     SaveGameState(gameState, fileName);
   }
 

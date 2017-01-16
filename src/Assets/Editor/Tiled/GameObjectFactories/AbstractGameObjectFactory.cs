@@ -9,6 +9,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
   {
     protected readonly Map Map;
 
+    protected readonly GameObject RootGameObject;
+
     protected readonly Dictionary<string, Objecttype> ObjecttypesByName;
 
     protected readonly Dictionary<string, string> PrefabLookup = new Dictionary<string, string>();
@@ -18,10 +20,12 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     protected readonly TiledTileLayerConfig[] TileLayerConfigs;
 
     protected AbstractGameObjectFactory(
+      GameObject rootGameObject,
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
     {
+      RootGameObject = rootGameObject;
       PrefabLookup = prefabLookup;
       ObjecttypesByName = objecttypesByName;
 
@@ -39,7 +43,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
           TiledObjectgroup = og,
           Layer = og.GetPropertyValue("Layer"),
           Type = og.GetPropertyValue("Type"),
-          Universe = og.GetPropertyValue("Universe")
+          Universe = og.GetPropertyValue("Universe"),
+          Commands = og.GetCommands().ToArray()
         })
         .ToArray();
     }
@@ -121,6 +126,19 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       where TInstantiationArguments : AbstractInstantiationArguments
     {
       var gameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
+
+      var assignTileToPrefab = layerConfig.Commands.Contains("AssignTileToPrefab");
+      if (assignTileToPrefab)
+      {
+        var rootTiledTransform = RootGameObject.transform.FindFirstRecursive(gameObjectName);
+
+        var meshTransform = rootTiledTransform.GetComponentInChildren<MeshRenderer>().transform;
+
+        meshTransform.position = Vector3.zero;
+        meshTransform.parent = gameObject.transform;
+        meshTransform.gameObject.name = "Tiled Mesh";
+        meshTransform.gameObject.layer = LayerMask.NameToLayer("Background");
+      }
 
       OnGameObjectCreated(layerConfig, gameObject);
 

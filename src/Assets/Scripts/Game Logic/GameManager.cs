@@ -259,20 +259,7 @@ public class GameManager : MonoBehaviour
       throw new InvalidOperationException("GameManager must have exactly one default playable character defined");
     }
 
-    InputStateManager = new InputStateManager();
-
-    InputStateManager.InitializeButtons(
-      "Attack",
-      "Dash",
-      "Fall",
-      "Jump",
-      "Menu Select",
-      "Menu Exit",
-      "Pause",
-      "Switch"
-      ); // TODO (Roman): move this somewhere else
-
-    InputStateManager.InitializeAxes("Horizontal", "Vertical");
+    InitializeInputStateManager();
 
     Easing = new Easing();
 
@@ -281,6 +268,35 @@ public class GameManager : MonoBehaviour
     _cameraController = Camera.main.GetComponent<CameraController>();
 
     OnAwake();
+  }
+
+  void InitializeInputStateManager()
+  {
+    var buttonNames = new string[]
+    {
+      "Attack",
+      "Dash",
+      "Fall",
+      "Jump",
+      "Menu Select",
+      "Menu Exit",
+      "Menu Debug Toggle Available",
+      "Pause",
+      "Switch"
+    };
+
+#if DEBUG
+    buttonNames.Concat(new string[] 
+      {
+        "Menu Debug Toggle Available"
+      });
+#endif
+
+    InputStateManager = new InputStateManager();
+
+    InputStateManager.InitializeButtons(buttonNames); // TODO (Roman): move this somewhere else
+
+    InputStateManager.InitializeAxes("Horizontal", "Vertical");
   }
 
   protected virtual void OnAwake()

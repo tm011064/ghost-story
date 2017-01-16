@@ -7,5 +7,7 @@
     public string Layer;
 
     public string Universe;
+
+    public string[] Commands = new string[0];
   }
 }

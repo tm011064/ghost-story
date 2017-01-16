@@ -340,5 +340,29 @@ namespace Assets.Editor.Tiled
         yield return func(obj);
       }
     }
+
+    public static IEnumerable<string> GetCommands(this Layer layer)
+    {
+      if (!layer.HasProperty("Commands"))
+      {
+        return Enumerable.Empty<string>();
+      }
+
+      return layer.GetPropertyValue("Commands")
+        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => s.Trim());
+    }
+
+    public static IEnumerable<string> GetCommands(this Objectgroup objectgroup)
+    {
+      if (!objectgroup.HasProperty("Commands"))
+      {
+        return Enumerable.Empty<string>();
+      }
+
+      return objectgroup.GetPropertyValue("Commands")
+        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => s.Trim());
+    }
   }
 }

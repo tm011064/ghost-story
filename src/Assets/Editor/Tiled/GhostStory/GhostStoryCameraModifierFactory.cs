@@ -7,10 +7,11 @@ namespace Assets.Editor.Tiled.GhostStory
   public class GhostStoryCameraModifierFactory : CameraModifierFactory
   {
     public GhostStoryCameraModifierFactory(
+      GameObject parent,
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
-      : base(map, prefabLookup, objecttypesByName)
+      : base(parent, map, prefabLookup, objecttypesByName)
     {
     }
 

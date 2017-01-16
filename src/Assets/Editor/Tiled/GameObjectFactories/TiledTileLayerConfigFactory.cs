@@ -1,4 +1,8 @@
-﻿namespace Assets.Editor.Tiled.GameObjectFactories
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Assets.Editor.Tiled.GameObjectFactories
 {
   public static class TiledTileLayerConfigFactory
   {
@@ -9,7 +13,8 @@
         TiledLayer = layer,
         Layer = layer.GetPropertyValue("Layer"),
         Type = layer.GetPropertyValue("Type"),
-        Universe = layer.GetPropertyValue("Universe")
+        Universe = layer.GetPropertyValue("Universe"),
+        Commands = layer.GetCommands().ToArray()
       };
     }
   }
