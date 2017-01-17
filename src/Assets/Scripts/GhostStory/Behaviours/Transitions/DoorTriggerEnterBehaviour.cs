@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.GhostStory.Behaviours.Transitions
@@ -35,7 +36,8 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     {
       if (_isInsideTriggerBounds
         && IsPlayerFacingDoor()
-        && GameManager.Instance.InputStateManager.IsUnhandledButtonDown("Attack"))
+        && GameManager.Instance.InputStateManager.IsUnhandledButtonDown("Attack")
+        && DoorKeysNeededToEnter.All(x => GhostStoryGameContext.Instance.GameState.GetDoorKey(x).IsActive))
       {
         GameManager.Instance.InputStateManager.SetButtonHandled("Attack");
         _doorCameraScroller.TriggerScroll(_collider);

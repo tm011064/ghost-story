@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012324234522}
-  - 114: {fileID: 114000010422874962}
+  - 114: {fileID: 114000014255591984}
   m_Layer: 15
   m_Name: Item Green Key
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &114000010422874962
+--- !u!114 &114000014255591984
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010541469932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16ab758b3850ea249b8e2370e21ad7d0, type: 3}
+  m_Script: {fileID: 11500000, guid: a9b28c4c362bd434db5a3d3ef1e05957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemName: Green
+  DoorKey: 0

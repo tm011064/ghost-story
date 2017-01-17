@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public partial class InventoryItemBehaviour : MonoBehaviour
+public abstract partial class InventoryItemBehaviour : MonoBehaviour
 {
-  public string ItemName;
+  protected abstract string GetItemName();
 
   void Start()
   {
@@ -23,9 +23,15 @@ public partial class InventoryItemBehaviour : MonoBehaviour
       return;
     }
 
-    var inventoryItem = GhostStoryGameContext.Instance.GameState.Find(ItemName);
+    var inventoryItem = GhostStoryGameContext.Instance.GameState.Find(GetItemName());
 
     GhostStoryGameContext.Instance.OnInventoryItemAcquired(inventoryItem);
+
+    OnItemAcquired(inventoryItem);
+  }
+
+  protected virtual void OnItemAcquired(InventoryItem inventoryItem)
+  {
   }
 
   void OnGameStateChanged(GhostStoryGameState obj)
@@ -35,7 +41,7 @@ public partial class InventoryItemBehaviour : MonoBehaviour
 
   private void EvaluateActive()
   {
-    var inventoryItem = GhostStoryGameContext.Instance.GameState.Find(ItemName);
+    var inventoryItem = GhostStoryGameContext.Instance.GameState.Find(GetItemName());
 
     gameObject.SetActive(!inventoryItem.IsAvailable);
   }

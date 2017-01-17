@@ -112,12 +112,10 @@ public class GhostStoryGameContext : MonoBehaviour
       }))
       .ToArray();
 
-    var doorKeys = new InventoryItem[]
-      {
-        new InventoryItem { IsActive = false, IsAvailable = true, Name = "Green" },
-        new InventoryItem { IsActive = false, IsAvailable = true, Name = "Red" },
-        new InventoryItem { IsActive = false, IsAvailable = true, Name = "Purple" }
-      };
+    var doorKeys = Enum.GetValues(typeof(DoorKey))
+      .Cast<DoorKey>()
+      .Select(doorKey => new InventoryItem { Name = doorKey.ToString() })
+      .ToArray();
 
     var misaHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
     var kinoHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;

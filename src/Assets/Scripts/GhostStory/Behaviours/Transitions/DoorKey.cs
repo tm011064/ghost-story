@@ -1,9 +1,6 @@
-﻿namespace Assets.Scripts.GhostStory.Behaviours.Transitions
+﻿public enum DoorKey
 {
-  public enum DoorKey
-  {
-    Green,
-    Red,
-    Purple
-  }
+  GreenHouseDoorKey,
+  RedHouseDoorKey,
+  PurpleHouseDoorKey
 }

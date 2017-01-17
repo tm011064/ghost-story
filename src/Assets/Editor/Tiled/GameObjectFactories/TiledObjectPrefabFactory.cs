@@ -53,7 +53,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
            Properties = properties,
            IsFlippedHorizontally = obj.Gid >= 2000000000,
            IsFlippedVertically = (obj.Gid >= 1000000000 && obj.Gid < 2000000000) || obj.Gid >= 3000000000
-         });
+         },
+         obj.Name);
       }
     }
   }

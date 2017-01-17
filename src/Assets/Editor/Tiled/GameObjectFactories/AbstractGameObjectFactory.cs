@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -122,23 +123,13 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       GameObject asset,
       string gameObjectName,
       AbstractTiledLayerConfig layerConfig,
-      TInstantiationArguments arguments)
+      TInstantiationArguments arguments,
+      string tiledObjectName = null)
       where TInstantiationArguments : AbstractInstantiationArguments
     {
       var gameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
 
-      var assignTileToPrefab = layerConfig.Commands.Contains("AssignTileToPrefab");
-      if (assignTileToPrefab)
-      {
-        var rootTiledTransform = Root.transform.FindFirstRecursive(gameObjectName);
-
-        var meshTransform = rootTiledTransform.GetComponentInChildren<MeshRenderer>().transform;
-
-        meshTransform.position = Vector3.zero;
-        meshTransform.parent = gameObject.transform;
-        meshTransform.gameObject.name = "Tiled Mesh";
-        meshTransform.gameObject.layer = LayerMask.NameToLayer("Background");
-      }
+      AssignTileToPrefab(layerConfig, tiledObjectName, gameObjectName, gameObject);
 
       OnGameObjectCreated(layerConfig, gameObject);
 
@@ -149,6 +140,33 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       instantiable.Instantiate(arguments);
 
       return gameObject;
+    }
+
+    private void AssignTileToPrefab(
+      AbstractTiledLayerConfig layerConfig,
+      string tiledObjectName,
+      string gameObjectName,
+      GameObject gameObject)
+    {
+      var assignTileToPrefab = layerConfig.Commands.Contains("AssignTileToPrefab");
+      if (!assignTileToPrefab)
+      {
+        return;
+      }
+
+      if (tiledObjectName == null)
+      {
+        throw new ArgumentException("Tiled Object name must be set when assigning tiles to prefabs. Prefab = " + gameObjectName);
+      }
+
+      var rootTiledTransform = Root.transform.FindFirstRecursive(tiledObjectName);
+
+      var meshTransform = rootTiledTransform.GetComponentInChildren<MeshRenderer>().transform;
+
+      meshTransform.position = Vector3.zero;
+      meshTransform.parent = gameObject.transform;
+      meshTransform.gameObject.name = "Tiled Mesh";
+      meshTransform.gameObject.layer = LayerMask.NameToLayer("Background");
     }
   }
 }

@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000012324234522}
   - 114: {fileID: 114000013032657214}
   m_Layer: 15
-  m_Name: Item Red Key
+  m_Name: Item Purple Key
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,4 +51,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b28c4c362bd434db5a3d3ef1e05957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DoorKey: 1
+  DoorKey: 2
