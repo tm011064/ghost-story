@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 using Assets.Scripts.GhostStory.Behaviours;
 using UnityEngine;
@@ -161,11 +162,16 @@ public class GhostStoryGameContext : MonoBehaviour
 
     Logger.Info("Saving game state file " + filePath);
 
-    using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Write))
+    using (var memoryStream = new MemoryStream())
     {
-      var serializer = new XmlSerializer(typeof(GhostStoryGameState));
+      using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
+      {
+        var serializer = new XmlSerializer(typeof(GhostStoryGameState));
 
-      serializer.Serialize(fileStream, gameState);
+        serializer.Serialize(streamWriter, gameState);
+
+        File.WriteAllBytes(filePath, memoryStream.ToArray());
+      }
     }
   }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +11,9 @@ public class GameManager : MonoBehaviour
   public PlayerController Player;
 
   public PlayableCharacter[] PlayableCharacters;
+
+  [HideInInspector]
+  public ISceneManager SceneManager;
 
   [HideInInspector]
   public GameSettings GameSettings;
@@ -24,7 +26,7 @@ public class GameManager : MonoBehaviour
   [HideInInspector]
   public Easing Easing;
 
-  private Checkpoint[] _orderedSceneCheckpoints;
+  private Checkpoint[] _orderedSceneCheckpoints = new Checkpoint[0];
 
   private CameraController _cameraController;
 
@@ -117,28 +119,13 @@ public class GameManager : MonoBehaviour
 
   public void LoadScene()
   {
-    GameObject checkpoint;
-
-    switch (SceneManager.GetActiveScene().name)
-    {
-      default:
-
-        _orderedSceneCheckpoints = GameObject.FindObjectsOfType<Checkpoint>();
-
-        Array.Sort(_orderedSceneCheckpoints, (a, b) => a.Index.CompareTo(b.Index));
-
-        _currentCheckpointIndex = 0;
-
-        checkpoint = _orderedSceneCheckpoints[_currentCheckpointIndex].gameObject;
-
-        break;
-    }
-
     ResetPooledObjects();
 
     ActivatePlayer(
       PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
-      checkpoint.transform.position);
+      GameObject.FindObjectsOfType<Checkpoint>().First().transform.position); // TODO (Roman):...
+
+    SceneManager.LoadScene();
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
@@ -258,6 +245,8 @@ public class GameManager : MonoBehaviour
     {
       throw new InvalidOperationException("GameManager must have exactly one default playable character defined");
     }
+
+    SceneManager = gameObject.GetComponentOrThrow<ISceneManager>();
 
     InitializeInputStateManager();
 

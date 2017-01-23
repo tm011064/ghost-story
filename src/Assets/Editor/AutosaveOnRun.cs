@@ -15,7 +15,7 @@ public class AutosaveOnRun
 
         EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
         
-        EditorApplication.SaveAssets();
+        AssetDatabase.SaveAssets();
       }
     };
   }
