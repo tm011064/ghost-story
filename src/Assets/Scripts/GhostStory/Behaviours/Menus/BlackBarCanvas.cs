@@ -4,30 +4,36 @@ using UnityEngine.UI;
 
 public class BlackBarCanvas : MonoBehaviour
 {
+  public EasingType Easing = EasingType.Linear;
+
   private Image _image;
 
-  private float? _fadeOutStartTime;
+  private float? _fadeStartTime;
 
-  private float? _fadeInStartTime;
+  private float _fadeDuration;
 
-  private float _fadeOutDuration;
+  private Func<float, float> _alphaCalculator;
 
-  private float _fadeInDuration;
+  public bool IsFading()
+  {
+    return _fadeStartTime.HasValue;
+  }
 
-  public event Action FadeOutCompleted;
-
-  public event Action FadeInCompleted;
+  private void StartFade(float duration, Func<float, float> alphaCalculator)
+  {
+    _fadeStartTime = Time.time;
+    _fadeDuration = duration;
+    _alphaCalculator = alphaCalculator;
+  }
 
   public void StartFadeIn(float duration)
   {
-    _fadeInStartTime = Time.time;
-    _fadeInDuration = duration;
+    StartFade(duration, (float progressPercentage) => 1f - progressPercentage);
   }
 
   public void StartFadeOut(float duration)
   {
-    _fadeOutStartTime = Time.time;
-    _fadeOutDuration = duration;
+    StartFade(duration, (float progressPercentage) => progressPercentage);
   }
 
   void Awake()
@@ -37,60 +43,31 @@ public class BlackBarCanvas : MonoBehaviour
       _image.color.r,
       _image.color.g,
       _image.color.b,
-      1);
+      0);
+  }
+
+  void OnDisable()
+  {
+    _fadeStartTime = null;
   }
 
   void Update()
   {
-    if (_fadeOutStartTime.HasValue)
+    if (_fadeStartTime.HasValue)
     {
       var progressPercentage = Mathf.Min(
         1,
-        GameManager.Instance.Easing.GetValue(
-          EasingType.Linear,
-          Time.time - _fadeOutStartTime.Value,
-          _fadeOutDuration));
+        GameManager.Instance.Easing.GetValue(Easing, Time.time - _fadeStartTime.Value, _fadeDuration));
 
       _image.color = new Color(
         _image.color.r,
         _image.color.g,
         _image.color.b,
-        progressPercentage);
+        _alphaCalculator(progressPercentage));
 
       if (progressPercentage == 1)
       {
-        _fadeOutStartTime = null;
-
-        if (FadeOutCompleted != null)
-        {
-          FadeOutCompleted();
-        }
-      }
-    }
-    // TODO (Roman): refactor
-    if (_fadeInStartTime.HasValue)
-    {
-      var progressPercentage = Mathf.Min(
-        1,
-        GameManager.Instance.Easing.GetValue(
-          EasingType.Linear,
-          Time.time - _fadeInStartTime.Value,
-          _fadeInDuration));
-
-      _image.color = new Color(
-        _image.color.r,
-        _image.color.g,
-        _image.color.b,
-        1f - progressPercentage);
-
-      if (progressPercentage == 1)
-      {
-        _fadeInStartTime = null;
-
-        if (FadeInCompleted != null)
-        {
-          FadeInCompleted();
-        }
+        _fadeStartTime = null;
       }
     }
   }

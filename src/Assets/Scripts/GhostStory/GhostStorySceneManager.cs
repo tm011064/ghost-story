@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,47 +10,71 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
 
   public float FadeDuration = 1;
 
-  private GameObject _blackBar;
+  public GameObject BlackBarPrefab;
 
-  private AsyncOperation _sceneLoadOperation;
+  private GameObject _blackBarPrefabInstance;
+
+  private IDontDestroyOnLoad[] _persistedComponents;
 
   void Awake()
   {
-    var blackBarGameObject = GameObject.Find("Black Bar");
-    _blackBar = blackBarGameObject.transform.FindChild("Canvas").gameObject;
-
-    _blackBar.SetActive(false);
-    _blackBar.GetComponent<BlackBarCanvas>().FadeOutCompleted += FadeCompleted;
-    _blackBar.GetComponent<BlackBarCanvas>().FadeInCompleted += FadeCompleted;
+    _persistedComponents = gameObject.GetComponents<IDontDestroyOnLoad>();
   }
 
-  void FadeCompleted()
+  public void FadeIn()
   {
-    _blackBar.SetActive(false);
-    // _sceneLoadOperation.allowSceneActivation = true;
+    var blackBarCanvas = GetBlackBarCanvas();
+
+    blackBarCanvas.gameObject.SetActive(true);
+    blackBarCanvas.StartFadeIn(FadeDuration);
   }
 
   public void LoadScene(string sceneName, string portalName)
   {
-    _blackBar.SetActive(true);
-    _blackBar.GetComponent<BlackBarCanvas>().StartFadeOut(FadeDuration);
+    var blackBarCanvas = GetBlackBarCanvas();
 
-    //StartCoroutine(LoadSceneAsync(sceneName));
+    blackBarCanvas.gameObject.SetActive(true);
+    blackBarCanvas.StartFadeOut(FadeDuration);
+
+    StartCoroutine(LoadSceneAsync(sceneName, blackBarCanvas));
   }
 
-  IEnumerator LoadSceneAsync(string sceneName)
+  IEnumerator LoadSceneAsync(string sceneName, BlackBarCanvas blackBarCanvas)
   {
-    _sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-    _sceneLoadOperation.allowSceneActivation = false;
+    var currentSceneName = SceneManager.GetActiveScene().name;
 
-    yield return _sceneLoadOperation;
+    var sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+    sceneLoadOperation.allowSceneActivation = false;
+
+    while (blackBarCanvas.IsFading())
+    {
+      yield return null;
+    }
+
+    sceneLoadOperation.allowSceneActivation = true;
+
+    while (!sceneLoadOperation.isDone)
+    {
+      yield return null;
+    }
+
+    foreach (var component in _persistedComponents)
+    {
+      component.OnSceneLoad();
+    }
   }
 
-  public void LoadScene()
+  private BlackBarCanvas GetBlackBarCanvas()
   {
-    GameManager.Instance.Player.transform.position = GameObject.FindObjectsOfType<Checkpoint>().First().transform.position;
+    if (_blackBarPrefabInstance == null)
+    {
+      _blackBarPrefabInstance = Instantiate(BlackBarPrefab);
+    }
 
-    _blackBar.SetActive(true);
-    _blackBar.GetComponent<BlackBarCanvas>().StartFadeIn(FadeDuration);
+    return _blackBarPrefabInstance
+      .transform
+      .FindChild("Canvas")
+      .gameObject
+      .GetComponent<BlackBarCanvas>();
   }
 }

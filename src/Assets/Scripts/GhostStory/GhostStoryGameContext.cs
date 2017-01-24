@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using Assets.Scripts.GhostStory.Behaviours;
 using UnityEngine;
 
-public class GhostStoryGameContext : MonoBehaviour
+public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 {
   public static GhostStoryGameContext Instance;
 
@@ -33,26 +33,7 @@ public class GhostStoryGameContext : MonoBehaviour
       Destroy(gameObject);
     }
 
-    _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
-
-    var items = GameObject
-      .FindObjectsOfType<LevelObjectConfig>()
-      .Select(config => new
-        {
-          Keys = CreateKeys(config).ToArray(),
-          GameObject = config.gameObject,
-          FreezableComponent = config.gameObject.GetComponent<IFreezable>()
-        })
-      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
-      .ToArray();
-
-    _gameObjectsByLayerUniverseKey = items
-      .Where(i => i.FreezableComponent == null)
-      .ToLookup(c => c.Key, c => c.GameObject);
-
-    _freezeableGameObjectsByLayerUniverseKey = items
-      .Where(i => i.FreezableComponent != null)
-      .ToLookup(c => c.Key, c => c.FreezableComponent);
+    Reset();
   }
 
   void Start()
@@ -63,6 +44,39 @@ public class GhostStoryGameContext : MonoBehaviour
     DisableAndHideAllObjects();
     SwitchLayer(LevelLayer.House);
     SwitchToRealWorld();
+  }
+
+  public void OnSceneLoad()
+  {
+    Reset();
+
+    DisableAndHideAllObjects();
+    SwitchLayer(LevelLayer.House);
+    SwitchToRealWorld();
+  }
+
+  public void Reset()
+  {
+    _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
+
+    var items = GameObject
+      .FindObjectsOfType<LevelObjectConfig>()
+      .Select(config => new
+      {
+        Keys = CreateKeys(config).ToArray(),
+        GameObject = config.gameObject,
+        FreezableComponent = config.gameObject.GetComponent<IFreezable>()
+      })
+      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
+      .ToArray();
+
+    _gameObjectsByLayerUniverseKey = items
+      .Where(i => i.FreezableComponent == null)
+      .ToLookup(c => c.Key, c => c.GameObject);
+
+    _freezeableGameObjectsByLayerUniverseKey = items
+      .Where(i => i.FreezableComponent != null)
+      .ToLookup(c => c.Key, c => c.FreezableComponent);
   }
 
   private void UpdateGameState(GhostStoryGameState gameState)

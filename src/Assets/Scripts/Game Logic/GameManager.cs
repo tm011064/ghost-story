@@ -119,13 +119,15 @@ public class GameManager : MonoBehaviour
 
   public void LoadScene()
   {
-    ResetPooledObjects();
+    BuildPooledObjects();
+
+    _playerControllersByName.Clear();
 
     ActivatePlayer(
       PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
       GameObject.FindObjectsOfType<Checkpoint>().First().transform.position); // TODO (Roman):...
 
-    SceneManager.LoadScene();
+    SceneManager.FadeIn();
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
@@ -176,11 +178,11 @@ public class GameManager : MonoBehaviour
     }
   }
 
-  private void ResetPooledObjects()
+  private void BuildPooledObjects()
   {
     var objectPoolingManager = ObjectPoolingManager.Instance;
 
-    objectPoolingManager.DeactivateAndClearAll();
+    objectPoolingManager.Reset();
 
     var monoBehaviours = GameObject.FindObjectsOfType<MonoBehaviour>();
 
@@ -306,6 +308,14 @@ public class GameManager : MonoBehaviour
     InputStateManager.Update();
 
     // TODO (Roman): this must not make it into release
+    if (Input.GetKeyUp("["))
+    {
+      SceneManager.LoadScene("three_rooms", null);
+    }
+    if (Input.GetKeyUp("]"))
+    {
+      SceneManager.LoadScene("cockroach", null);
+    }
     if (Input.GetKey("escape"))
     {
       Logger.Info("quit");

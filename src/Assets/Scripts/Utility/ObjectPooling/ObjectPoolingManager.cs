@@ -19,6 +19,23 @@ public class ObjectPoolingManager
     _objectPools = new Dictionary<String, ObjectPool>();
   }
 
+  public void Reset()
+  {
+    Logger.Info("Reset object pool.");
+
+    DeactivateAll();
+
+    foreach (ObjectPool objectPool in _objectPools.Values)
+    {
+      foreach (GameObject item in objectPool.GetGameObjects())
+      {
+        GameObject.Destroy(item);
+      }
+    }
+
+    _objectPools = new Dictionary<string, ObjectPool>();
+  }
+
   public static ObjectPoolingManager Instance
   {
     get
@@ -91,15 +108,6 @@ public class ObjectPoolingManager
     }
   }
 
-  public void DeactivateAndClearAll()
-  {
-    DeactivateAll();
-
-    Logger.Info("Clearing object pool.");
-
-    _objectPools = new Dictionary<string, ObjectPool>();
-  }
-
   public void DeactivateAll()
   {
     Logger.Info("Deactivating all pooled objects.");
@@ -108,10 +116,7 @@ public class ObjectPoolingManager
     {
       foreach (GameObject item in objectPool.GetGameObjects())
       {
-        if (item.activeSelf)
-        {
-          Deactivate(item);
-        }
+        Deactivate(item);
       }
     }
   }

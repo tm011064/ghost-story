@@ -1,6 +1,6 @@
 ﻿public interface ISceneManager
 {
-  void LoadScene();
+  void FadeIn();
 
   void LoadScene(string sceneName, string startPointPrefabName);
 }

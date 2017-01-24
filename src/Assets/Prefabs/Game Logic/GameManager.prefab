@@ -123,4 +123,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartScene: scene_transition_test_right_door
   StartScenePortalName: House Green Right Door
-  FadeDuration: 2
+  FadeDuration: 0.6
+  BlackBarPrefab: {fileID: 1701881029022068, guid: 7634c563b11c6b04e982e270aa7344e5,
+    type: 2}
