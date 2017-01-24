@@ -26,14 +26,10 @@ public class GameManager : MonoBehaviour
   [HideInInspector]
   public Easing Easing;
 
-  private Checkpoint[] _orderedSceneCheckpoints = new Checkpoint[0];
-
   private CameraController _cameraController;
 
   private readonly Dictionary<string, PlayerController> _playerControllersByName
     = new Dictionary<string, PlayerController>(StringComparer.OrdinalIgnoreCase);
-
-  private int _currentCheckpointIndex = 0;
 
 #if !FINAL
   private readonly FPSRenderer _fpsRenderer = new FPSRenderer();
@@ -49,69 +45,6 @@ public class GameManager : MonoBehaviour
     return _playerControllersByName[name];
   }
 
-  public void SpawnPlayerAtNextCheckpoint(bool doCycle)
-  {
-    if (_currentCheckpointIndex >= _orderedSceneCheckpoints.Length - 1)
-    {
-      if (doCycle)
-      {
-        _currentCheckpointIndex = 0;
-      }
-      else
-      {
-        _currentCheckpointIndex = _orderedSceneCheckpoints.Length - 1;
-      }
-    }
-    else
-    {
-      _currentCheckpointIndex++;
-    }
-
-    var checkpoint = _orderedSceneCheckpoints[_currentCheckpointIndex].gameObject;
-
-    Player.SpawnLocation = checkpoint.gameObject.transform.position;
-
-    Player.Respawn();
-  }
-
-  public void SpawnPlayerAtCheckpoint(int checkpointIndex)
-  {
-    if (checkpointIndex < 0)
-    {
-      _currentCheckpointIndex = 0;
-    }
-    else if (checkpointIndex >= _orderedSceneCheckpoints.Length)
-    {
-      _currentCheckpointIndex = _orderedSceneCheckpoints.Length - 1;
-    }
-    else
-    {
-      _currentCheckpointIndex = checkpointIndex;
-    }
-
-    var checkpoint = _orderedSceneCheckpoints[_currentCheckpointIndex].gameObject;
-
-    Player.SpawnLocation = checkpoint.gameObject.transform.position;
-
-    Player.Respawn();
-  }
-
-  public void RefreshScene(Vector3 cameraPosition)
-  {
-    ObjectPoolingManager.Instance.DeactivateAll();
-
-    ResetCameraPosition(cameraPosition);
-
-    foreach (ISceneResetable sceneResetable in FindComponents<ISceneResetable>())
-    {
-      sceneResetable.OnSceneReset();
-    }
-
-#if !FINAL
-    _fpsRenderer.SceneStartTime = Time.time;
-#endif
-  }
-
   private void ResetCameraPosition(Vector3 position)
   {
     _cameraController.MoveCameraToTargetPosition(position);
@@ -125,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     ActivatePlayer(
       PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
-      GameObject.FindObjectsOfType<Checkpoint>().First().transform.position); // TODO (Roman):...
+      GameObject.FindObjectsOfType<Checkpoint>().First().transform.position); // TODO (Roman): this needs sorting
 
     SceneManager.FadeIn();
 

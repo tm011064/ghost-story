@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public partial class SpawnBucket : BaseMonoBehaviour, ISceneResetable
+public partial class SpawnBucket : BaseMonoBehaviour
 {
   [SerializeField]
   [InspectorReadOnlyAttribute]
@@ -36,19 +36,6 @@ public partial class SpawnBucket : BaseMonoBehaviour, ISceneResetable
     }
 
     base.OnEnable();
-  }
-
-  public void OnSceneReset()
-  {
-    for (var i = 0; i < _children.Length; i++)
-    {
-      if (_children[i].gameObject.activeSelf)
-      {
-        _children[i].gameObject.SetActive(false);
-      }
-    }
-
-    IsVisible = false;
   }
 
   void Start()

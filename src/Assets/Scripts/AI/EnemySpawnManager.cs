@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBehaviour, ISceneResetable, IFreezable
+public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBehaviour, IFreezable
 {
   public RespawnMode RespawnMode = RespawnMode.SpawnOnce;
 
@@ -119,15 +119,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
       _gameContext.RegisterCallback(ContinuousSpawnInterval, Spawn, "Spawn");
     }
   }
-
-  public void OnSceneReset()
-  {
-    if (!DestroySpawnedEnemiesWhenGettingDisabled)
-    {
-      DeactivateSpawnedObjects();
-    }
-  }
-
+  
   public void DeactivateSpawnedObjects()
   {
     _isDisabling = true;

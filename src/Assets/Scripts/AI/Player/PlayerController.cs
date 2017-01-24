@@ -66,16 +66,12 @@ public partial class PlayerController : BaseCharacterController
 
   private WallJumpEvaluationControlHandler _reusableWallJumpEvaluationControlHandler;
 
-  private GameManager _gameManager;
-
   public event Action<GroundedPlatformChangedInfo> GroundedPlatformChanged;
 
   public event Action JumpedThisFrame;
 
   void Awake()
   {
-    _gameManager = GameManager.Instance;
-
     Health = this.GetComponentOrThrow<PlayerHealthBehaviour>();
 
     InitializeBoxCollider();
@@ -285,21 +281,6 @@ public partial class PlayerController : BaseCharacterController
         }
       }
     }
-  }
-
-  public void Respawn()
-  {
-    transform.parent = null; // just in case we were still attached
-
-    AdjustedGravity = JumpSettings.Gravity;
-
-    CharacterPhysicsManager.Reset(SpawnLocation);
-
-    ResetControlHandlers(CreateDefaultPlayerControlHandler());
-
-    _gameManager.RefreshScene(SpawnLocation);
-
-    Health.Reset();
   }
 
   private void EnableClimbing()
