@@ -28,8 +28,6 @@ public class GhostStoryGameState
   {
     var allItems = Weapons.Union(DoorKeys).ToArray();
 
-    Logger.UnityDebugLog(allItems.Where(i => i.Name == name).FirstOrDefault().Name);
-
     return allItems.First(i => i.Name == name);
   }
 }

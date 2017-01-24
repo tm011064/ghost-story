@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 using Assets.Scripts.GhostStory.Behaviours;
 using UnityEngine;
 
-public class GhostStoryGameContext : MonoBehaviour
+public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 {
   public static GhostStoryGameContext Instance;
 
@@ -32,26 +33,7 @@ public class GhostStoryGameContext : MonoBehaviour
       Destroy(gameObject);
     }
 
-    _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
-
-    var items = GameObject
-      .FindObjectsOfType<LevelObjectConfig>()
-      .Select(config => new
-        {
-          Keys = CreateKeys(config).ToArray(),
-          GameObject = config.gameObject,
-          FreezableComponent = config.gameObject.GetComponent<IFreezable>()
-        })
-      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
-      .ToArray();
-
-    _gameObjectsByLayerUniverseKey = items
-      .Where(i => i.FreezableComponent == null)
-      .ToLookup(c => c.Key, c => c.GameObject);
-
-    _freezeableGameObjectsByLayerUniverseKey = items
-      .Where(i => i.FreezableComponent != null)
-      .ToLookup(c => c.Key, c => c.FreezableComponent);
+    Reset();
   }
 
   void Start()
@@ -62,6 +44,39 @@ public class GhostStoryGameContext : MonoBehaviour
     DisableAndHideAllObjects();
     SwitchLayer(LevelLayer.House);
     SwitchToRealWorld();
+  }
+
+  public void OnSceneLoad()
+  {
+    Reset();
+
+    DisableAndHideAllObjects();
+    SwitchLayer(LevelLayer.House);
+    SwitchToRealWorld();
+  }
+
+  public void Reset()
+  {
+    _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
+
+    var items = GameObject
+      .FindObjectsOfType<LevelObjectConfig>()
+      .Select(config => new
+      {
+        Keys = CreateKeys(config).ToArray(),
+        GameObject = config.gameObject,
+        FreezableComponent = config.gameObject.GetComponent<IFreezable>()
+      })
+      .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
+      .ToArray();
+
+    _gameObjectsByLayerUniverseKey = items
+      .Where(i => i.FreezableComponent == null)
+      .ToLookup(c => c.Key, c => c.GameObject);
+
+    _freezeableGameObjectsByLayerUniverseKey = items
+      .Where(i => i.FreezableComponent != null)
+      .ToLookup(c => c.Key, c => c.FreezableComponent);
   }
 
   private void UpdateGameState(GhostStoryGameState gameState)
@@ -161,11 +176,16 @@ public class GhostStoryGameContext : MonoBehaviour
 
     Logger.Info("Saving game state file " + filePath);
 
-    using (var fileStream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Write))
+    using (var memoryStream = new MemoryStream())
     {
-      var serializer = new XmlSerializer(typeof(GhostStoryGameState));
+      using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
+      {
+        var serializer = new XmlSerializer(typeof(GhostStoryGameState));
 
-      serializer.Serialize(fileStream, gameState);
+        serializer.Serialize(streamWriter, gameState);
+
+        File.WriteAllBytes(filePath, memoryStream.ToArray());
+      }
     }
   }
 

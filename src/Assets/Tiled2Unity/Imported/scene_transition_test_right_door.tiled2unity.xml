@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Tiled2Unity generated xml data-->
+<!--Do not modify by hand-->
+<!--Last exported: 24/01/2017 22:25:09-->
+<Tiled2Unity version="1.0.7.7">
+  <AssignMaterial mesh="mesh_0001" material="blocks_192x128" />
+  <AssignMaterial mesh="mesh_0002" material="blocks_16x16" />
+  <AssignMaterial mesh="mesh_tile_0148" material="doors_tiled" />
+  <AssignMaterial mesh="mesh_tile_0008" material="blocks_16x16" />
+  <Prefab name="scene_transition_test_right_door" orientation="Orthogonal" staggerAxis="Y" staggerIndex="Odd" hexSideLength="0" numLayers="2" numTilesWide="64" numTilesHigh="32" tileWidth="16" tileHeight="16" exportScale="1" mapWidthInPixels="1024" mapHeightInPixels="512">
+    <GameObject name="Real Background" x="0" y="0" z="0">
+      <GameObject name="blocks_192x128" copy="mesh_0001" sortingLayerName="" sortingOrder="0" opacity="1" />
+      <Property name="Layer" value="House" />
+      <Property name="Type" value="Background" />
+      <Property name="Universe" value="RealWorld" />
+    </GameObject>
+    <GameObject name="Real Platforms" x="0" y="0" z="0">
+      <GameObject name="blocks_16x16" copy="mesh_0002" sortingLayerName="" sortingOrder="1" opacity="1" />
+      <Property name="Layer" value="House" />
+      <Property name="Type" value="Platform" />
+      <Property name="Universe" value="RealWorld" />
+    </GameObject>
+    <GameObject name="House Doors" x="0" y="0" z="0">
+      <Property name="Commands" value="DestroyPrefab" />
+      <Property name="Layer" value="House" />
+      <Property name="Type" value="PrefabGroup" />
+      <Property name="Universe" value="RealWorld" />
+      <GameObject name="Right Door" x="704" y="-352" rotation="0" layer="House Green Right Door" scaleX="1" scaleY="1">
+        <Property name="Transition To Portal" value="Left Door" />
+        <Property name="Transition To Scene" value="scene_transition_test_left_door" />
+        <GameObject name="TileObject">
+          <GameObject name="tile_obj" copy="mesh_tile_0148" sortingLayerName="" sortingOrder="2" x="0" y="64" />
+        </GameObject>
+      </GameObject>
+    </GameObject>
+    <GameObject name="Camera Bounds" x="0" y="0" z="0">
+      <Property name="Commands" value="DestroyPrefab" />
+      <Property name="Layer" value="House" />
+      <Property name="Type" value="CameraBounds" />
+      <Property name="Universe" value="RealWorld" />
+      <GameObject name="RectangleObject" x="336" y="-128" rotation="0" layer="">
+        <BoxCollider2D width="384" height="240" />
+      </GameObject>
+    </GameObject>
+    <GameObject name="Checkpoints" x="0" y="0" z="0">
+      <Property name="Commands" value="DestroyPrefab" />
+      <Property name="Layer" value="House" />
+      <Property name="Type" value="PrefabGroup" />
+      <Property name="Universe" value="RealWorld" />
+      <GameObject name="TileObject" x="528" y="-320" rotation="0" layer="Checkpoint" scaleX="1" scaleY="1">
+        <GameObject name="TileObject">
+          <GameObject name="tile_obj" copy="mesh_tile_0008" sortingLayerName="" sortingOrder="4" x="0" y="16" />
+        </GameObject>
+      </GameObject>
+    </GameObject>
+    <GameObject name="Camera Modifier" x="0" y="0" z="0">
+      <Property name="Commands" value="DestroyPrefab" />
+      <Property name="Layer" value="House" />
+      <Property name="Type" value="CameraModifier" />
+      <Property name="Universe" value="Global" />
+      <GameObject name="RectangleObject" x="336" y="-128" rotation="0" layer="Camera Bounds">
+        <BoxCollider2D width="384" height="240" />
+      </GameObject>
+      <GameObject name="RectangleObject" x="512" y="-288" rotation="0" layer="Camera Trigger">
+        <BoxCollider2D width="48" height="48" />
+      </GameObject>
+    </GameObject>
+  </Prefab>
+  <ImportMesh filename="scene_transition_test_right_door.obj">IyBXYXZlZnJvbnQgT0JKIGZpbGUgYXV0b21hdGljYWxseSBnZW5lcmF0ZWQgYnkgVGlsZWQyVW5pdHkNCg0KIyBWZXJ0aWNlcyAoQ291bnQgPSAxNTIpDQp2IC0zMzYgLTI0MCAwDQp2IC01MjggLTI0MCAwDQp2IC01MjggLTExMiAwDQp2IC0zMzYgLTExMiAwDQp2IC03MjAgLTI0MCAwDQp2IC03MjAgLTExMiAwDQp2IC0zMzYgLTM2OCAwDQp2IC01MjggLTM2OCAwDQp2IC03MjAgLTM2OCAwDQp2IC0zMzYgLTE0NCAwDQp2IC0zNTIgLTE0NCAwDQp2IC0zNTIgLTEyOCAwDQp2IC0zMzYgLTEyOCAwDQp2IC0zNjggLTE0NCAwDQp2IC0zNjggLTEyOCAwDQp2IC0zODQgLTE0NCAwDQp2IC0zODQgLTEyOCAwDQp2IC00MDAgLTE0NCAwDQp2IC00MDAgLTEyOCAwDQp2IC00MTYgLTE0NCAwDQp2IC00MTYgLTEyOCAwDQp2IC00MzIgLTE0NCAwDQp2IC00MzIgLTEyOCAwDQp2IC00NDggLTE0NCAwDQp2IC00NDggLTEyOCAwDQp2IC00NjQgLTE0NCAwDQp2IC00NjQgLTEyOCAwDQp2IC00ODAgLTE0NCAwDQp2IC00ODAgLTEyOCAwDQp2IC00OTYgLTE0NCAwDQp2IC00OTYgLTEyOCAwDQp2IC01MTIgLTE0NCAwDQp2IC01MTIgLTEyOCAwDQp2IC01MjggLTE0NCAwDQp2IC01MjggLTEyOCAwDQp2IC01NDQgLTE0NCAwDQp2IC01NDQgLTEyOCAwDQp2IC01NjAgLTE0NCAwDQp2IC01NjAgLTEyOCAwDQp2IC01NzYgLTE0NCAwDQp2IC01NzYgLTEyOCAwDQp2IC01OTIgLTE0NCAwDQp2IC01OTIgLTEyOCAwDQp2IC02MDggLTE0NCAwDQp2IC02MDggLTEyOCAwDQp2IC02MjQgLTE0NCAwDQp2IC02MjQgLTEyOCAwDQp2IC02NDAgLTE0NCAwDQp2IC02NDAgLTEyOCAwDQp2IC02NTYgLTE0NCAwDQp2IC02NTYgLTEyOCAwDQp2IC02NzIgLTE0NCAwDQp2IC02NzIgLTEyOCAwDQp2IC02ODggLTE0NCAwDQp2IC02ODggLTEyOCAwDQp2IC03MDQgLTE0NCAwDQp2IC03MDQgLTEyOCAwDQp2IC03MjAgLTE0NCAwDQp2IC03MjAgLTEyOCAwDQp2IC0zMzYgLTE2MCAwDQp2IC0zNTIgLTE2MCAwDQp2IC03MDQgLTE2MCAwDQp2IC03MjAgLTE2MCAwDQp2IC0zMzYgLTE3NiAwDQp2IC0zNTIgLTE3NiAwDQp2IC03MDQgLTE3NiAwDQp2IC03MjAgLTE3NiAwDQp2IC0zMzYgLTE5MiAwDQp2IC0zNTIgLTE5MiAwDQp2IC03MDQgLTE5MiAwDQp2IC03MjAgLTE5MiAwDQp2IC0zMzYgLTIwOCAwDQp2IC0zNTIgLTIwOCAwDQp2IC03MDQgLTIwOCAwDQp2IC03MjAgLTIwOCAwDQp2IC0zMzYgLTIyNCAwDQp2IC0zNTIgLTIyNCAwDQp2IC03MDQgLTIyNCAwDQp2IC03MjAgLTIyNCAwDQp2IC0zNTIgLTI0MCAwDQp2IC03MDQgLTI0MCAwDQp2IC0zMzYgLTI1NiAwDQp2IC0zNTIgLTI1NiAwDQp2IC03MDQgLTI1NiAwDQp2IC03MjAgLTI1NiAwDQp2IC0zMzYgLTI3MiAwDQp2IC0zNTIgLTI3MiAwDQp2IC03MDQgLTI3MiAwDQp2IC03MjAgLTI3MiAwDQp2IC0zMzYgLTI4OCAwDQp2IC0zNTIgLTI4OCAwDQp2IC03MDQgLTI4OCAwDQp2IC03MjAgLTI4OCAwDQp2IC0zMzYgLTMwNCAwDQp2IC0zNTIgLTMwNCAwDQp2IC0zMzYgLTMyMCAwDQp2IC0zNTIgLTMyMCAwDQp2IC0zMzYgLTMzNiAwDQp2IC0zNTIgLTMzNiAwDQp2IC0zMzYgLTM1MiAwDQp2IC0zNTIgLTM1MiAwDQp2IC0zNTIgLTM2OCAwDQp2IC0zNjggLTM2OCAwDQp2IC0zNjggLTM1MiAwDQp2IC0zODQgLTM2OCAwDQp2IC0zODQgLTM1MiAwDQp2IC00MDAgLTM2OCAwDQp2IC00MDAgLTM1MiAwDQp2IC00MTYgLTM2OCAwDQp2IC00MTYgLTM1MiAwDQp2IC00MzIgLTM2OCAwDQp2IC00MzIgLTM1MiAwDQp2IC00NDggLTM2OCAwDQp2IC00NDggLTM1MiAwDQp2IC00NjQgLTM2OCAwDQp2IC00NjQgLTM1MiAwDQp2IC00ODAgLTM2OCAwDQp2IC00ODAgLTM1MiAwDQp2IC00OTYgLTM2OCAwDQp2IC00OTYgLTM1MiAwDQp2IC01MTIgLTM2OCAwDQp2IC01MTIgLTM1MiAwDQp2IC01MjggLTM1MiAwDQp2IC01NDQgLTM2OCAwDQp2IC01NDQgLTM1MiAwDQp2IC01NjAgLTM2OCAwDQp2IC01NjAgLTM1MiAwDQp2IC01NzYgLTM2OCAwDQp2IC01NzYgLTM1MiAwDQp2IC01OTIgLTM2OCAwDQp2IC01OTIgLTM1MiAwDQp2IC02MDggLTM2OCAwDQp2IC02MDggLTM1MiAwDQp2IC02MjQgLTM2OCAwDQp2IC02MjQgLTM1MiAwDQp2IC02NDAgLTM2OCAwDQp2IC02NDAgLTM1MiAwDQp2IC02NTYgLTM2OCAwDQp2IC02NTYgLTM1MiAwDQp2IC02NzIgLTM2OCAwDQp2IC02NzIgLTM1MiAwDQp2IC02ODggLTM2OCAwDQp2IC02ODggLTM1MiAwDQp2IC03MDQgLTM2OCAwDQp2IC03MDQgLTM1MiAwDQp2IC03MjAgLTM1MiAwDQp2IDAgLTY0IDANCnYgLTE2IC02NCAwDQp2IC0xNiAwIDANCnYgMCAwIDANCnYgMCAtMTYgMA0KdiAtMTYgLTE2IDANCg0KIyBUZXh0dXJlIGNvb3JpZGluYXRlcyAoQ291bnQgPSAxNikNCnZ0IDYuMTAzNTE2RS0wNSAwLjAwMDEyMjA3MDMNCnZ0IDAuNDk5OTM5IDAuMDAwMTIyMDcwMw0KdnQgMC40OTk5MzkgMC45OTk4Nzc5DQp2dCA2LjEwMzUxNkUtMDUgMC45OTk4Nzc5DQp2dCAwLjkxNjY3NjggMC4wODMzNDM1MQ0KdnQgMC45OTk5ODk4IDAuMDgzMzQzNTENCnZ0IDAuOTk5OTg5OCAwLjE2NjY1NjUNCnZ0IDAuOTE2Njc2OCAwLjE2NjY1NjUNCnZ0IDAuMDYyNTA3NjMgMC43NTAwMzA1DQp2dCAwLjEyNDk5MjQgMC43NTAwMzA1DQp2dCAwLjEyNDk5MjQgMC45OTk5Njk1DQp2dCAwLjA2MjUwNzYzIDAuOTk5OTY5NQ0KdnQgMC41ODMzNDM1IDAuOTE2Njc2OA0KdnQgMC42NjY2NTY1IDAuOTE2Njc2OA0KdnQgMC42NjY2NTY1IDAuOTk5OTg5OA0KdnQgMC41ODMzNDM1IDAuOTk5OTg5OA0KDQojIE5vcm1hbA0Kdm4gMCAwIC0xDQoNCiMgR3JvdXBzIChDb3VudCA9IDQpDQoKZyBtZXNoXzAwMDEKZiAxLzEvMSAyLzIvMSAzLzMvMSA0LzQvMQpmIDIvMS8xIDUvMi8xIDYvMy8xIDMvNC8xCmYgNy8xLzEgOC8yLzEgMi8zLzEgMS80LzEKZiA4LzEvMSA5LzIvMSA1LzMvMSAyLzQvMQoKZyBtZXNoXzAwMDIKZiAxMC81LzEgMTEvNi8xIDEyLzcvMSAxMy84LzEKZiAxMS81LzEgMTQvNi8xIDE1LzcvMSAxMi84LzEKZiAxNC81LzEgMTYvNi8xIDE3LzcvMSAxNS84LzEKZiAxNi81LzEgMTgvNi8xIDE5LzcvMSAxNy84LzEKZiAxOC81LzEgMjAvNi8xIDIxLzcvMSAxOS84LzEKZiAyMC81LzEgMjIvNi8xIDIzLzcvMSAyMS84LzEKZiAyMi81LzEgMjQvNi8xIDI1LzcvMSAyMy84LzEKZiAyNC81LzEgMjYvNi8xIDI3LzcvMSAyNS84LzEKZiAyNi81LzEgMjgvNi8xIDI5LzcvMSAyNy84LzEKZiAyOC81LzEgMzAvNi8xIDMxLzcvMSAyOS84LzEKZiAzMC81LzEgMzIvNi8xIDMzLzcvMSAzMS84LzEKZiAzMi81LzEgMzQvNi8xIDM1LzcvMSAzMy84LzEKZiAzNC81LzEgMzYvNi8xIDM3LzcvMSAzNS84LzEKZiAzNi81LzEgMzgvNi8xIDM5LzcvMSAzNy84LzEKZiAzOC81LzEgNDAvNi8xIDQxLzcvMSAzOS84LzEKZiA0MC81LzEgNDIvNi8xIDQzLzcvMSA0MS84LzEKZiA0Mi81LzEgNDQvNi8xIDQ1LzcvMSA0My84LzEKZiA0NC81LzEgNDYvNi8xIDQ3LzcvMSA0NS84LzEKZiA0Ni81LzEgNDgvNi8xIDQ5LzcvMSA0Ny84LzEKZiA0OC81LzEgNTAvNi8xIDUxLzcvMSA0OS84LzEKZiA1MC81LzEgNTIvNi8xIDUzLzcvMSA1MS84LzEKZiA1Mi81LzEgNTQvNi8xIDU1LzcvMSA1My84LzEKZiA1NC81LzEgNTYvNi8xIDU3LzcvMSA1NS84LzEKZiA1Ni81LzEgNTgvNi8xIDU5LzcvMSA1Ny84LzEKZiA2MC81LzEgNjEvNi8xIDExLzcvMSAxMC84LzEKZiA2Mi81LzEgNjMvNi8xIDU4LzcvMSA1Ni84LzEKZiA2NC81LzEgNjUvNi8xIDYxLzcvMSA2MC84LzEKZiA2Ni81LzEgNjcvNi8xIDYzLzcvMSA2Mi84LzEKZiA2OC81LzEgNjkvNi8xIDY1LzcvMSA2NC84LzEKZiA3MC81LzEgNzEvNi8xIDY3LzcvMSA2Ni84LzEKZiA3Mi81LzEgNzMvNi8xIDY5LzcvMSA2OC84LzEKZiA3NC81LzEgNzUvNi8xIDcxLzcvMSA3MC84LzEKZiA3Ni81LzEgNzcvNi8xIDczLzcvMSA3Mi84LzEKZiA3OC81LzEgNzkvNi8xIDc1LzcvMSA3NC84LzEKZiAxLzUvMSA4MC82LzEgNzcvNy8xIDc2LzgvMQpmIDgxLzUvMSA1LzYvMSA3OS83LzEgNzgvOC8xCmYgODIvNS8xIDgzLzYvMSA4MC83LzEgMS84LzEKZiA4NC81LzEgODUvNi8xIDUvNy8xIDgxLzgvMQpmIDg2LzUvMSA4Ny82LzEgODMvNy8xIDgyLzgvMQpmIDg4LzUvMSA4OS82LzEgODUvNy8xIDg0LzgvMQpmIDkwLzUvMSA5MS82LzEgODcvNy8xIDg2LzgvMQpmIDkyLzUvMSA5My82LzEgODkvNy8xIDg4LzgvMQpmIDk0LzUvMSA5NS82LzEgOTEvNy8xIDkwLzgvMQpmIDk2LzUvMSA5Ny82LzEgOTUvNy8xIDk0LzgvMQpmIDk4LzUvMSA5OS82LzEgOTcvNy8xIDk2LzgvMQpmIDEwMC81LzEgMTAxLzYvMSA5OS83LzEgOTgvOC8xCmYgNy81LzEgMTAyLzYvMSAxMDEvNy8xIDEwMC84LzEKZiAxMDIvNS8xIDEwMy82LzEgMTA0LzcvMSAxMDEvOC8xCmYgMTAzLzUvMSAxMDUvNi8xIDEwNi83LzEgMTA0LzgvMQpmIDEwNS81LzEgMTA3LzYvMSAxMDgvNy8xIDEwNi84LzEKZiAxMDcvNS8xIDEwOS82LzEgMTEwLzcvMSAxMDgvOC8xCmYgMTA5LzUvMSAxMTEvNi8xIDExMi83LzEgMTEwLzgvMQpmIDExMS81LzEgMTEzLzYvMSAxMTQvNy8xIDExMi84LzEKZiAxMTMvNS8xIDExNS82LzEgMTE2LzcvMSAxMTQvOC8xCmYgMTE1LzUvMSAxMTcvNi8xIDExOC83LzEgMTE2LzgvMQpmIDExNy81LzEgMTE5LzYvMSAxMjAvNy8xIDExOC84LzEKZiAxMTkvNS8xIDEyMS82LzEgMTIyLzcvMSAxMjAvOC8xCmYgMTIxLzUvMSA4LzYvMSAxMjMvNy8xIDEyMi84LzEKZiA4LzUvMSAxMjQvNi8xIDEyNS83LzEgMTIzLzgvMQpmIDEyNC81LzEgMTI2LzYvMSAxMjcvNy8xIDEyNS84LzEKZiAxMjYvNS8xIDEyOC82LzEgMTI5LzcvMSAxMjcvOC8xCmYgMTI4LzUvMSAxMzAvNi8xIDEzMS83LzEgMTI5LzgvMQpmIDEzMC81LzEgMTMyLzYvMSAxMzMvNy8xIDEzMS84LzEKZiAxMzIvNS8xIDEzNC82LzEgMTM1LzcvMSAxMzMvOC8xCmYgMTM0LzUvMSAxMzYvNi8xIDEzNy83LzEgMTM1LzgvMQpmIDEzNi81LzEgMTM4LzYvMSAxMzkvNy8xIDEzNy84LzEKZiAxMzgvNS8xIDE0MC82LzEgMTQxLzcvMSAxMzkvOC8xCmYgMTQwLzUvMSAxNDIvNi8xIDE0My83LzEgMTQxLzgvMQpmIDE0Mi81LzEgMTQ0LzYvMSAxNDUvNy8xIDE0My84LzEKZiAxNDQvNS8xIDkvNi8xIDE0Ni83LzEgMTQ1LzgvMQoKZyBtZXNoX3RpbGVfMDE0OApmIDE0Ny85LzEgMTQ4LzEwLzEgMTQ5LzExLzEgMTUwLzEyLzEKCmcgbWVzaF90aWxlXzAwMDgKZiAxNTEvMTMvMSAxNTIvMTQvMSAxNDkvMTUvMSAxNTAvMTYvMQoNCg==</ImportMesh>
+  <InternalTexture assetPath="Assets/Prototype/Scenes/blocks_192x128.png" />
+  <InternalTexture assetPath="Assets/Prototype/Scenes/blocks_16x16.png" />
+  <InternalTexture assetPath="Assets/Prototype/Scenes/doors_tiled.png" />
+</Tiled2Unity>

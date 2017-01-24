@@ -33,4 +33,20 @@
   <property name="Color" type="string" default="Red"/>
   <property name="Tag" type="string" default="RealWorld"/>
  </objecttype>
+ <objecttype name="House Green Left Door" color="#55aa00">
+  <property name="Layer" type="string" default="House"/>
+  <property name="Prefab" type="string" default="House Green Left Door"/>
+  <property name="Transition To Portal" type="string"/>
+  <property name="Transition To Scene" type="string" default=""/>
+  <property name="Type" type="string" default="Transition"/>
+  <property name="Universe" type="string" default="RealWorld"/>
+ </objecttype>
+ <objecttype name="House Green Right Door" color="#00aa7f">
+  <property name="Layer" type="string" default="House"/>
+  <property name="Prefab" type="string" default="House Green Right Door"/>
+  <property name="Transition To Portal" type="string"/>
+  <property name="Transition To Scene" type="string"/>
+  <property name="Type" type="string" default="Transition"/>
+  <property name="Universe" type="string" default="Real World"/>
+ </objecttype>
 </objecttypes>
