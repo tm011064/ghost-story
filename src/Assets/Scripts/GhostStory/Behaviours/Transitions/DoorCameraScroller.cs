@@ -37,7 +37,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
           EasingType.Linear),
         new FreezePlayerControlHandler(
           GameManager.Instance.Player,
-          2.4f,
+          2.8f,
           Animator.StringToHash("Idle"),
           new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }
           ),
@@ -54,7 +54,10 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
           new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }
           ));
 
-      GhostStoryGameContext.Instance.RegisterCallback(.4f, FadeOut, "FadeOut");
+      GhostStoryGameContext.Instance.RegisterCallback(
+        .8f,
+        () => GameManager.Instance.SceneManager.FadeOut(() => OnFadeOutCompleted()),
+        "FadeOut");
 
       var leftDoor = gameObject.transform.parent.Find("Left Door");
       leftDoor.gameObject.SetActive(false);
@@ -66,11 +69,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         ? gameObject.transform.parent.Find("Left Transition Door")
         : gameObject.transform.parent.Find("Right Transition Door");
       transitionDoor.gameObject.SetActive(true);
-    }
-
-    void FadeOut()
-    {
-      GameManager.Instance.SceneManager.FadeOut(() => OnFadeOutCompleted());
     }
 
     void SwitchDoors()
@@ -93,7 +91,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     void StartCameraScroll()
     {
       var targetPosition = CameraController.CalculateTargetPosition(CameraMovementSettings);
-      var player = GameManager.Instance.Player;
       var cameraPosition = CameraController.Transform.position;
 
       var contexts = PlayerTranslationActionContextFactory.Create(

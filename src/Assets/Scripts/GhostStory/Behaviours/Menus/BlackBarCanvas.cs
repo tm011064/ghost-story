@@ -4,7 +4,9 @@ using UnityEngine.Assertions;
 
 public class BlackBarCanvas : MonoBehaviour
 {
-  public EasingType Easing = EasingType.Linear;
+  public EasingType FadeInEasing = EasingType.EaseOutQuad;
+
+  public EasingType FadeOutEasing = EasingType.EaseInQuad;
 
   private SpriteRenderer _spriteRenderer;
 
@@ -14,6 +16,8 @@ public class BlackBarCanvas : MonoBehaviour
 
   private Func<float, float> _alphaCalculator;
 
+  private Func<float> _percentageCalculator;
+
   private Action _onFadeCompleted;
 
   public bool IsFading()
@@ -21,7 +25,7 @@ public class BlackBarCanvas : MonoBehaviour
     return _fadeStartTime.HasValue;
   }
 
-  private void StartFade(float duration, Func<float, float> alphaCalculator)
+  private void StartFade(float duration, Func<float, float> alphaCalculator, Func<float> percentageCalculator)
   {
     var cameraController = Camera.main.GetComponent<CameraController>();
     var screenSize = cameraController.GetScreenSize();
@@ -38,6 +42,7 @@ public class BlackBarCanvas : MonoBehaviour
     _fadeStartTime = Time.time;
     _fadeDuration = duration;
     _alphaCalculator = alphaCalculator;
+    _percentageCalculator = percentageCalculator;
   }
 
   public void StartFadeIn(float duration, Action onFadeCompleted = null)
@@ -45,7 +50,10 @@ public class BlackBarCanvas : MonoBehaviour
     Assert.IsFalse(_fadeStartTime.HasValue, "Fade already in progress");
 
     _onFadeCompleted = onFadeCompleted;
-    StartFade(duration, (float progressPercentage) => 1f - progressPercentage);
+    StartFade(
+      duration,
+      (float progressPercentage) => 1f - progressPercentage,
+      () => GameManager.Instance.Easing.GetValue(FadeInEasing, Time.time - _fadeStartTime.Value, _fadeDuration));
   }
 
   public void StartFadeOut(float duration, Action onFadeCompleted = null)
@@ -53,7 +61,10 @@ public class BlackBarCanvas : MonoBehaviour
     Assert.IsFalse(_fadeStartTime.HasValue, "Fade already in progress");
 
     _onFadeCompleted = onFadeCompleted;
-    StartFade(duration, (float progressPercentage) => progressPercentage);
+    StartFade(
+      duration,
+      (float progressPercentage) => progressPercentage,
+      () => GameManager.Instance.Easing.GetValue(FadeOutEasing, Time.time - _fadeStartTime.Value, _fadeDuration));
   }
 
   void Awake()
@@ -79,9 +90,11 @@ public class BlackBarCanvas : MonoBehaviour
   {
     if (_fadeStartTime.HasValue)
     {
-      var progressPercentage = Mathf.Min(
-        1,
-        GameManager.Instance.Easing.GetValue(Easing, Time.time - _fadeStartTime.Value, _fadeDuration));
+      var progressPercentage = Mathf.Min(1, _percentageCalculator());
+      if (progressPercentage >= .9f)
+      {
+        progressPercentage = 1;
+      }
 
       _spriteRenderer.color = new Color(
         _spriteRenderer.color.r,
