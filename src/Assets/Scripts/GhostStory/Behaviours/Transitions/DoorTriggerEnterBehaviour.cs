@@ -36,6 +36,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     {
       if (_isInsideTriggerBounds
         && IsPlayerFacingDoor()
+        && GameManager.Instance.Player.IsGrounded()
         && GameManager.Instance.InputStateManager.IsUnhandledButtonDown("Attack")
         && DoorKeysNeededToEnter.All(x => GhostStoryGameContext.Instance.GameState.GetDoorKey(x).IsActive))
       {

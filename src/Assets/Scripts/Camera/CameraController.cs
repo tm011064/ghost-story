@@ -87,15 +87,20 @@ public partial class CameraController : MonoBehaviour
     _horizontalSmoothDampVelocity = _verticalSmoothDampVelocity = 0f;
   }
 
-  public bool IsPointVisible(Vector2 point)
+  public Vector2 GetScreenSize()
   {
     var defaultOrthographicSize = (TargetScreenSize.y * .5f);
 
     var zoomPercentage = Camera.main.orthographicSize / defaultOrthographicSize;
 
-    var screenSize = new Vector2(
+    return new Vector2(
       (float)TargetScreenSize.x * zoomPercentage,
       (float)TargetScreenSize.y * zoomPercentage);
+  }
+
+  public bool IsPointVisible(Vector2 point)
+  {
+    var screenSize = GetScreenSize();
 
     var rect = new Rect(
       Camera.main.transform.position.x - screenSize.x * .5f,

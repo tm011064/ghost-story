@@ -1,18 +1,20 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 public class BlackBarCanvas : MonoBehaviour
 {
   public EasingType Easing = EasingType.Linear;
 
-  private Image _image;
+  private SpriteRenderer _spriteRenderer;
 
   private float? _fadeStartTime;
 
   private float _fadeDuration;
 
   private Func<float, float> _alphaCalculator;
+
+  private Action _onFadeCompleted;
 
   public bool IsFading()
   {
@@ -21,28 +23,50 @@ public class BlackBarCanvas : MonoBehaviour
 
   private void StartFade(float duration, Func<float, float> alphaCalculator)
   {
+    var cameraController = Camera.main.GetComponent<CameraController>();
+    var screenSize = cameraController.GetScreenSize();
+
+    transform.position = new Vector3(
+      transform.position.x,
+      transform.position.y,
+      cameraController.CameraOffset.z);
+
+    transform.localScale = new Vector3(
+      screenSize.x,
+      screenSize.y);
+
     _fadeStartTime = Time.time;
     _fadeDuration = duration;
     _alphaCalculator = alphaCalculator;
   }
 
-  public void StartFadeIn(float duration)
+  public void StartFadeIn(float duration, Action onFadeCompleted = null)
   {
+    Assert.IsFalse(_fadeStartTime.HasValue, "Fade already in progress");
+
+    _onFadeCompleted = onFadeCompleted;
     StartFade(duration, (float progressPercentage) => 1f - progressPercentage);
   }
 
-  public void StartFadeOut(float duration)
+  public void StartFadeOut(float duration, Action onFadeCompleted = null)
   {
+    Assert.IsFalse(_fadeStartTime.HasValue, "Fade already in progress");
+
+    _onFadeCompleted = onFadeCompleted;
     StartFade(duration, (float progressPercentage) => progressPercentage);
   }
 
   void Awake()
   {
-    _image = GetComponentInChildren<Image>();
-    _image.color = new Color(
-      _image.color.r,
-      _image.color.g,
-      _image.color.b,
+    var cameraController = Camera.main.GetComponent<CameraController>();
+    transform.parent = cameraController.gameObject.transform;
+
+    _spriteRenderer = GetComponent<SpriteRenderer>();
+
+    _spriteRenderer.color = new Color(
+      _spriteRenderer.color.r,
+      _spriteRenderer.color.g,
+      _spriteRenderer.color.b,
       0);
   }
 
@@ -59,15 +83,21 @@ public class BlackBarCanvas : MonoBehaviour
         1,
         GameManager.Instance.Easing.GetValue(Easing, Time.time - _fadeStartTime.Value, _fadeDuration));
 
-      _image.color = new Color(
-        _image.color.r,
-        _image.color.g,
-        _image.color.b,
+      _spriteRenderer.color = new Color(
+        _spriteRenderer.color.r,
+        _spriteRenderer.color.g,
+        _spriteRenderer.color.b,
         _alphaCalculator(progressPercentage));
 
       if (progressPercentage == 1)
       {
         _fadeStartTime = null;
+
+        if (_onFadeCompleted != null)
+        {
+          _onFadeCompleted();
+          _onFadeCompleted = null;
+        }
       }
     }
   }
