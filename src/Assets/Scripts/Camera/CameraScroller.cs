@@ -24,6 +24,9 @@ public partial class CameraScroller : MonoBehaviour
   public FullScreenScrollerTransitionMode FullScreenScrollerTransitionMode
     = FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal;
 
+  [Tooltip("Defines the vertical speed when using FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal as a factor of the horizontal translation speed")]
+  public float VerticalFullScreenScrollerTransitionSpeedFactor = 4f;
+
   protected CameraMovementSettings CameraMovementSettings;
 
   protected CameraController CameraController;
@@ -53,6 +56,12 @@ public partial class CameraScroller : MonoBehaviour
     }
 
     _checkpoint = GetComponentInChildren<Checkpoint>();
+
+    OnAwake();
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   void OnDestroy()
@@ -96,7 +105,8 @@ public partial class CameraScroller : MonoBehaviour
       targetPosition,
       FullScreenScrollerTransitionMode,
       _animationShortNameHash,
-      FullScreenScrollSettings).ToArray();
+      FullScreenScrollSettings,
+      VerticalFullScreenScrollerTransitionSpeedFactor).ToArray();
 
     ScrollActions = new TranslateTransformActions(contexts.Select(c => c.TranslateTransformAction));
 

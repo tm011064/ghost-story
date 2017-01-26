@@ -112,8 +112,11 @@ namespace Assets.Editor.Tiled.GhostStory
 
           var transform = prefab.transform.FindChild(layerConfig.TiledLayer.Name);
 
-          transform.gameObject.AddLevelConfigComponent(layerConfig);
-          transform.gameObject.layer = LayerMask.NameToLayer("Background");
+          if (transform != null)
+          {
+            transform.gameObject.AddLevelConfigComponent(layerConfig);
+            transform.gameObject.layer = LayerMask.NameToLayer("Background");
+          }
         }
       }
     }
