@@ -77,7 +77,7 @@ public static class PlayerTranslationActionContextFactory
       playerAnimationShortHash,
       fullScreenScrollSettings.TransitionTime,
       fullScreenScrollSettings.PlayerTranslationDistance,
-      EasingType.Linear);
+      fullScreenScrollSettings.PlayerTranslationEasingType);
   }
 
   private static PlayerTranslationActionContext CreateStaticPlayerAction(
@@ -88,8 +88,7 @@ public static class PlayerTranslationActionContextFactory
   {
     var translateTransformAction = new TranslateTransformAction(
       targetPosition,
-      duration,
-      EasingType.Linear);
+      duration);
 
     var playerControlHandler = new FreezePlayerControlHandler(
         GameManager.Instance.Player,
@@ -110,12 +109,11 @@ public static class PlayerTranslationActionContextFactory
     int playerAnimationShortHash,
     float duration,
     float distance,
-    EasingType easingType)
+    EasingType playerTranslationEasingType)
   {
     var translateTransformAction = new TranslateTransformAction(
       targetPosition,
-      duration,
-      EasingType.Linear);
+      duration);
 
     var playerControlHandler = CreateMovingPlayerControlHandler(
       currentPosition,
@@ -123,7 +121,7 @@ public static class PlayerTranslationActionContextFactory
       playerAnimationShortHash,
       duration,
       distance,
-      easingType);
+      playerTranslationEasingType);
 
     return new PlayerTranslationActionContext
     {

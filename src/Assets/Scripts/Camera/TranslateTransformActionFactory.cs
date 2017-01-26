@@ -18,8 +18,7 @@ public static class TranslateTransformActionFactory
         {  
           new TranslateTransformAction(
             targetPosition,
-            horizontalScrollDuration,
-            EasingType.Linear)
+            horizontalScrollDuration)
         };
 
       case FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal:
@@ -44,8 +43,7 @@ public static class TranslateTransformActionFactory
     {
       yield return new TranslateTransformAction(
         targetPosition,
-        horizontalScrollDuration,
-        EasingType.Linear);
+        horizontalScrollDuration);
 
       yield break;
     }
@@ -58,12 +56,10 @@ public static class TranslateTransformActionFactory
 
     yield return new TranslateTransformAction(
       verticalTranslation.Location,
-      verticalTranslation.Duration,
-      EasingType.Linear);
+      verticalTranslation.Duration);
 
     yield return new TranslateTransformAction(
       targetPosition,
-      horizontalScrollDuration,
-      EasingType.Linear);
+      horizontalScrollDuration);
   }
 }

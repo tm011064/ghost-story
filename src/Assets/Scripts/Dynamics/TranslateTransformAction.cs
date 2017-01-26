@@ -21,7 +21,7 @@ public class TranslateTransformAction
     Vector3 startPosition,
     Vector3 targetPosition,
     float duration,
-    EasingType easingType)
+    EasingType easingType = EasingType.Linear)
   {
     var translateTransformAction = new TranslateTransformAction(
       targetPosition,
@@ -36,7 +36,7 @@ public class TranslateTransformAction
   public TranslateTransformAction(
     Vector3 targetPosition,
     float duration,
-    EasingType easingType)
+    EasingType easingType = EasingType.Linear)
   {
     _easingType = easingType;
     _targetPosition = targetPosition;
