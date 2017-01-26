@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,19 +22,24 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     _persistedComponents = gameObject.GetComponents<IDontDestroyOnLoad>();
   }
 
-  public void FadeIn()
+  public void FadeOut(Action onFadeCompleted = null)
   {
     var blackBarCanvas = GetBlackBarCanvas();
 
-    blackBarCanvas.gameObject.SetActive(true);
-    blackBarCanvas.StartFadeIn(FadeDuration);
+    blackBarCanvas.StartFadeOut(FadeDuration, onFadeCompleted);
+  }
+
+  public void FadeIn(Action onFadeCompleted = null)
+  {
+    var blackBarCanvas = GetBlackBarCanvas();
+
+    blackBarCanvas.StartFadeIn(FadeDuration, onFadeCompleted);
   }
 
   public void LoadScene(string sceneName, string portalName)
   {
     var blackBarCanvas = GetBlackBarCanvas();
 
-    blackBarCanvas.gameObject.SetActive(true);
     blackBarCanvas.StartFadeOut(FadeDuration);
 
     StartCoroutine(LoadSceneAsync(sceneName, blackBarCanvas));
@@ -71,10 +77,6 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
       _blackBarPrefabInstance = Instantiate(BlackBarPrefab);
     }
 
-    return _blackBarPrefabInstance
-      .transform
-      .FindChild("Canvas")
-      .gameObject
-      .GetComponent<BlackBarCanvas>();
+    return _blackBarPrefabInstance.GetComponent<BlackBarCanvas>();
   }
 }

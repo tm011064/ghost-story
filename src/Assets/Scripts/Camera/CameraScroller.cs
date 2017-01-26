@@ -24,6 +24,9 @@ public partial class CameraScroller : MonoBehaviour
   public FullScreenScrollerTransitionMode FullScreenScrollerTransitionMode
     = FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal;
 
+  [Tooltip("Defines the vertical speed when using FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal as a factor of the horizontal translation speed")]
+  public float VerticalFullScreenScrollerTransitionSpeedFactor = 4f;
+
   protected CameraMovementSettings CameraMovementSettings;
 
   protected CameraController CameraController;
@@ -34,9 +37,9 @@ public partial class CameraScroller : MonoBehaviour
 
   private Checkpoint _checkpoint;
 
-  private TranslateTransformActions _scrollActions;
+  protected TranslateTransformActions ScrollActions;
 
-  private ScrollStatus _status = ScrollStatus.Idle;
+  protected ScrollStatus Status = ScrollStatus.Idle;
 
   void Awake()
   {
@@ -53,6 +56,12 @@ public partial class CameraScroller : MonoBehaviour
     }
 
     _checkpoint = GetComponentInChildren<Checkpoint>();
+
+    OnAwake();
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   void OnDestroy()
@@ -96,11 +105,12 @@ public partial class CameraScroller : MonoBehaviour
       targetPosition,
       FullScreenScrollerTransitionMode,
       _animationShortNameHash,
-      FullScreenScrollSettings).ToArray();
+      FullScreenScrollSettings,
+      VerticalFullScreenScrollerTransitionSpeedFactor).ToArray();
 
-    _scrollActions = new TranslateTransformActions(contexts.Select(c => c.TranslateTransformAction));
+    ScrollActions = new TranslateTransformActions(contexts.Select(c => c.TranslateTransformAction));
 
-    CameraController.RegisterScrollActions(_scrollActions);
+    CameraController.RegisterScrollActions(ScrollActions);
 
     var playerControlHandlersStack = new Stack<PlayerControlHandler>(
       contexts.Select(c => c.PlayerControlHandler));
@@ -120,17 +130,17 @@ public partial class CameraScroller : MonoBehaviour
 
   void OnScrollActionCompleted(TranslateTransformActions translateTransformActions)
   {
-    if (_status != ScrollStatus.Scrolling
-      || _scrollActions != translateTransformActions)
+    if (Status != ScrollStatus.Scrolling
+      || ScrollActions != translateTransformActions)
     {
       return;
     }
 
-    _scrollActions = null;
+    ScrollActions = null;
 
     OnCameraScrollCompleted();
 
-    _status = ScrollStatus.Idle;
+    Status = ScrollStatus.Idle;
   }
 
   protected virtual void OnCameraScrollCompleted()
@@ -139,7 +149,7 @@ public partial class CameraScroller : MonoBehaviour
 
   protected void OnEnter(Collider2D collider)
   {
-    if (_status == ScrollStatus.Scrolling)
+    if (Status == ScrollStatus.Scrolling)
     {
       return;
     }
@@ -151,7 +161,7 @@ public partial class CameraScroller : MonoBehaviour
       return;
     }
 
-    _status = ScrollStatus.Scrolling;
+    Status = ScrollStatus.Scrolling;
 
     var currentAnimatorStateInfo = GameManager.Instance.Player.Animator.GetCurrentAnimatorStateInfo(0);
 
@@ -230,7 +240,7 @@ public partial class CameraScroller : MonoBehaviour
     return horizontalLockSettings;
   }
 
-  private enum ScrollStatus
+  protected enum ScrollStatus
   {
     Scrolling,
     Idle

@@ -1,25 +1,25 @@
 fileFormatVersion: 2
-guid: 80fb9422cfc704b42a4d9b9a592f8400
-timeCreated: 1481344451
+guid: 9774b30a32267ac42b364ddc4f7bbba1
+timeCreated: 1485334363
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: kino_sprite_sheet_0
-    21300002: kino_sprite_sheet_1
-    21300004: kino_sprite_sheet_2
-    21300006: kino_sprite_sheet_3
-    21300008: kino_sprite_sheet_4
-    21300010: kino_sprite_sheet_5
-    21300012: kino_sprite_sheet_6
-    21300014: kino_sprite_sheet_7
-    21300016: kino_sprite_sheet_8
-    21300018: kino_sprite_sheet_9
-    21300020: kino_sprite_sheet_10
-    21300022: kino_sprite_sheet_11
-    21300024: kino_sprite_sheet_12
-    21300026: kino_sprite_sheet_13
-    21300028: kino_sprite_sheet_14
-    21300030: kino_sprite_sheet_15
+    21300000: doors_0
+    21300002: doors_1
+    21300004: doors_2
+    21300006: doors_3
+    21300008: doors_4
+    21300010: doors_5
+    21300012: doors_6
+    21300014: doors_7
+    21300016: doors_8
+    21300018: doors_9
+    21300020: doors_10
+    21300022: doors_11
+    21300024: doors_12
+    21300026: doors_13
+    21300028: doors_14
+    21300030: doors_15
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -40,11 +40,11 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
-    aniso: 16
+    aniso: -1
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -86,210 +86,210 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: kino_sprite_sheet_0
+      name: doors_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 96
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 0
+        y: 192
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_1
+      name: doors_1
       rect:
         serializedVersion: 2
-        x: 39
-        y: 96
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 18
+        y: 192
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_2
+      name: doors_2
       rect:
         serializedVersion: 2
-        x: 71
-        y: 96
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 36
+        y: 192
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_3
+      name: doors_3
       rect:
         serializedVersion: 2
-        x: 103
-        y: 96
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 86
+        y: 192
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_4
+      name: doors_4
       rect:
         serializedVersion: 2
-        x: 7
-        y: 64
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 136
+        y: 192
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_5
+      name: doors_5
       rect:
         serializedVersion: 2
-        x: 39
-        y: 64
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 154
+        y: 192
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_6
+      name: doors_6
       rect:
         serializedVersion: 2
-        x: 71
-        y: 64
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 172
+        y: 192
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_7
+      name: doors_7
       rect:
         serializedVersion: 2
-        x: 103
-        y: 64
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 206
+        y: 192
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_8
+      name: doors_8
       rect:
         serializedVersion: 2
-        x: 7
-        y: 32
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 0
+        y: 126
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_9
+      name: doors_9
       rect:
         serializedVersion: 2
-        x: 39
-        y: 32
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 18
+        y: 126
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_10
+      name: doors_10
       rect:
         serializedVersion: 2
-        x: 71
-        y: 32
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 36
+        y: 126
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_11
+      name: doors_11
       rect:
         serializedVersion: 2
-        x: 103
-        y: 32
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 86
+        y: 126
+        width: 48
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_12
+      name: doors_12
       rect:
         serializedVersion: 2
-        x: 7
-        y: 0
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 136
+        y: 126
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_13
+      name: doors_13
       rect:
         serializedVersion: 2
-        x: 39
-        y: 0
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 154
+        y: 126
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_14
+      name: doors_14
       rect:
         serializedVersion: 2
-        x: 71
-        y: 0
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 172
+        y: 126
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: kino_sprite_sheet_15
+      name: doors_15
       rect:
         serializedVersion: 2
-        x: 103
-        y: 0
-        width: 18
-        height: 31
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 206
+        y: 126
+        width: 32
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

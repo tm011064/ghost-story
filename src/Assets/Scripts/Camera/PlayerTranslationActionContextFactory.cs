@@ -9,7 +9,8 @@ public static class PlayerTranslationActionContextFactory
     Vector3 targetPosition,
     FullScreenScrollerTransitionMode transitionMode,
     int playerAnimationShortHash,
-    FullScreenScrollSettings fullScreenScrollSettings)
+    FullScreenScrollSettings fullScreenScrollSettings,
+    float verticalScrollSpeedPercentage)
   {
     switch (transitionMode)
     {
@@ -30,7 +31,8 @@ public static class PlayerTranslationActionContextFactory
           currentPosition,
           targetPosition,
           playerAnimationShortHash,
-          fullScreenScrollSettings);
+          fullScreenScrollSettings,
+          verticalScrollSpeedPercentage);
     }
 
     throw new NotImplementedException();
@@ -40,7 +42,8 @@ public static class PlayerTranslationActionContextFactory
     Vector3 currentPosition,
     Vector3 targetPosition,
     int playerAnimationShortHash,
-    FullScreenScrollSettings fullScreenScrollSettings)
+    FullScreenScrollSettings fullScreenScrollSettings,
+    float verticalScrollSpeedPercentage)
   {
     if (Mathf.Approximately(currentPosition.y, targetPosition.y)
       || Mathf.Approximately(currentPosition.x, targetPosition.x))
@@ -56,23 +59,20 @@ public static class PlayerTranslationActionContextFactory
       yield break;
     }
 
-    var verticalLocation = new Vector3(currentPosition.x, targetPosition.y, targetPosition.z);
-
-    var distanceFromCurrentToVerticalLocation = Vector3.Distance(currentPosition, verticalLocation);
-    var distanceFromVerticalToTargetLocation = Vector3.Distance(verticalLocation, targetPosition);
-
-    var verticalDistancePercentage = distanceFromCurrentToVerticalLocation / distanceFromVerticalToTargetLocation;
-
-    var verticalTransitionDuration = verticalDistancePercentage * fullScreenScrollSettings.TransitionTime * 2f;
+    var verticalTranslation = VerticalScrollTranslationCalculator.CalculateVerticalTranslation(
+      currentPosition,
+      targetPosition,
+      fullScreenScrollSettings.TransitionTime,
+      verticalScrollSpeedPercentage);
 
     yield return CreateStaticPlayerAction(
       currentPosition,
-      verticalLocation,
+      verticalTranslation.Location,
       playerAnimationShortHash,
-      verticalTransitionDuration);
+      verticalTranslation.Duration);
 
     yield return CreateMovingPlayerAction(
-      verticalLocation,
+      verticalTranslation.Location,
       targetPosition,
       playerAnimationShortHash,
       fullScreenScrollSettings.TransitionTime,
