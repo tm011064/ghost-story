@@ -30,8 +30,7 @@ public class TranslateFrozenPlayerControlHandler : FreezePlayerControlHandler
       PlayerController.transform.position,
       PlayerController.transform.position + _playerTranslationVector,
       Duration,
-      _playerTranslationEasingType,
-      GameManager.Instance.Easing);
+      _playerTranslationEasingType);
 
     return base.TryActivate(previousControlHandler);
   }

@@ -343,20 +343,17 @@ public partial class CameraController : MonoBehaviour
 
     private EasingType _easingType;
 
-    private Easing _easing;
-
     public ZoomTimer(float duration, float startSize, float targetSize, EasingType easingType)
       : base(duration)
     {
       _startSize = startSize;
       _targetSize = targetSize;
       _easingType = easingType;
-      _easing = new Easing();
     }
 
     protected override void DoUpdate(float currentTime)
     {
-      var value = _easing.GetValue(_easingType, currentTime, _duration);
+      var value = Easing.GetValue(_easingType, currentTime, _duration);
 
       Camera.main.orthographicSize = _startSize + (_targetSize - _startSize) * value;
     }

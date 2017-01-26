@@ -25,8 +25,6 @@ public partial class HalfWheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
 
   private float _nextStartTime;
 
-  private Easing _easing = new Easing();
-
   private bool _isPlayerAttached;
 
   private BoxCollider2D _visibilityCollider;
@@ -44,11 +42,11 @@ public partial class HalfWheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
 
     if (_currentDirection == Direction.Left)
     {
-      _currentAngle = _easing.GetValue(EasingType, _currentMoveDuration, MoveDuration) * -Mathf.PI;
+      _currentAngle = Easing.GetValue(EasingType, _currentMoveDuration, MoveDuration) * -Mathf.PI;
     }
     else
     {
-      _currentAngle = -Mathf.PI + _easing.GetValue(EasingType, _currentMoveDuration, MoveDuration) * Mathf.PI;
+      _currentAngle = -Mathf.PI + Easing.GetValue(EasingType, _currentMoveDuration, MoveDuration) * Mathf.PI;
     }
 
     if (_currentMoveDuration >= MoveDuration)

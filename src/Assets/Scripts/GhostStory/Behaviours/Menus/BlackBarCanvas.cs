@@ -53,7 +53,7 @@ public class BlackBarCanvas : MonoBehaviour
     StartFade(
       duration,
       (float progressPercentage) => 1f - progressPercentage,
-      () => GameManager.Instance.Easing.GetValue(FadeInEasing, Time.time - _fadeStartTime.Value, _fadeDuration));
+      () => Easing.GetValue(FadeInEasing, Time.time - _fadeStartTime.Value, _fadeDuration));
   }
 
   public void StartFadeOut(float duration, Action onFadeCompleted = null)
@@ -64,7 +64,7 @@ public class BlackBarCanvas : MonoBehaviour
     StartFade(
       duration,
       (float progressPercentage) => progressPercentage,
-      () => GameManager.Instance.Easing.GetValue(FadeOutEasing, Time.time - _fadeStartTime.Value, _fadeDuration));
+      () => Easing.GetValue(FadeOutEasing, Time.time - _fadeStartTime.Value, _fadeDuration));
   }
 
   void Awake()

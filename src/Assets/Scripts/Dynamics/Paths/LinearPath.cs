@@ -309,7 +309,7 @@ public partial class LinearPath : SpawnBucketItemBehaviour, IObjectPoolBehaviour
             Vector3 segmentDirectionVector;
 
             _gameObjectTrackingInformation[i].GameObject.transform.position = GetLengthAdjustedPoint(
-              _gameManager.Easing.GetValue(EasingType, _gameObjectTrackingInformation[i].Percentage, 1f),
+              Easing.GetValue(EasingType, _gameObjectTrackingInformation[i].Percentage, 1f),
               out segmentDirectionVector);
 
             if (LookForward)

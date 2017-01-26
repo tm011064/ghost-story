@@ -84,7 +84,7 @@ public partial class DynamicPingPongPath : SpawnBucketItemBehaviour, IObjectPool
         _percentage = Mathf.Min(1f, _percentage + Time.deltaTime / ForwardMotionSettings.Time);
 
         _gameObject.transform.position = GetLengthAdjustedPoint(
-          _gameManager.Easing.GetValue(ForwardMotionSettings.EasingType, _percentage, 1f));
+          Easing.GetValue(ForwardMotionSettings.EasingType, _percentage, 1f));
 
         if (_percentage == 1f)
         {
@@ -97,7 +97,7 @@ public partial class DynamicPingPongPath : SpawnBucketItemBehaviour, IObjectPool
       _percentage = Mathf.Max(0f, _percentage - Time.deltaTime / BackwardMotionSettings.Time);
 
       _gameObject.transform.position = GetLengthAdjustedPoint(
-        _gameManager.Easing.GetValue(BackwardMotionSettings.EasingType, _percentage, 1f));
+        Easing.GetValue(BackwardMotionSettings.EasingType, _percentage, 1f));
 
       if (_percentage == 0f)
         OnBackwardMovementCompleted();

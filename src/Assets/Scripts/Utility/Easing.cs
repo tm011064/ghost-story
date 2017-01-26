@@ -3,11 +3,11 @@
 /// <summary>
 /// check http://easings.net/
 /// </summary>
-public class Easing
+public static class Easing
 {
   private const float PI_HALF = (float)((float)Math.PI / 2d);
 
-  public float GetValue(EasingType easingType, float currentTime, float duration)
+  public static float GetValue(EasingType easingType, float currentTime, float duration)
   {
     switch (easingType)
     {
@@ -71,39 +71,39 @@ public class Easing
     }
   }
 
-  public float Linear(float currentTime, float duration)
+  public static float Linear(float currentTime, float duration)
   {
     return currentTime / duration;
   }
 
-  public float EaseInQuad(float currentTime, float duration)
+  public static float EaseInQuad(float currentTime, float duration)
   {
     return 1f * (currentTime /= duration) * currentTime;
   }
 
-  public float EaseOutQuad(float currentTime, float duration)
+  public static float EaseOutQuad(float currentTime, float duration)
   {
     return -1f * (currentTime /= duration) * (currentTime - 2);
   }
 
-  public float EaseInOutQuad(float currentTime, float duration)
+  public static float EaseInOutQuad(float currentTime, float duration)
   {
     if ((currentTime /= duration / 2) < 1) return 1f / 2 * currentTime * currentTime;
 
     return -1f / 2 * ((--currentTime) * (currentTime - 2) - 1);
   }
 
-  public float EaseInCubic(float currentTime, float duration)
+  public static float EaseInCubic(float currentTime, float duration)
   {
     return 1f * (currentTime /= duration) * currentTime * currentTime;
   }
 
-  public float EaseOutCubic(float currentTime, float duration)
+  public static float EaseOutCubic(float currentTime, float duration)
   {
     return 1f * ((currentTime = currentTime / duration - 1) * currentTime * currentTime + 1);
   }
 
-  public float EaseInOutCubic(float currentTime, float duration)
+  public static float EaseInOutCubic(float currentTime, float duration)
   {
     if ((currentTime /= duration / 2) < 1)
     {
@@ -113,17 +113,17 @@ public class Easing
     return 1f / 2 * ((currentTime -= 2) * currentTime * currentTime + 2);
   }
 
-  public float EaseInQuart(float currentTime, float duration)
+  public static float EaseInQuart(float currentTime, float duration)
   {
     return 1f * (currentTime /= duration) * currentTime * currentTime * currentTime;
   }
 
-  public float EaseOutQuart(float currentTime, float duration)
+  public static float EaseOutQuart(float currentTime, float duration)
   {
     return -1f * ((currentTime = currentTime / duration - 1) * currentTime * currentTime * currentTime - 1);
   }
 
-  public float EaseInOutQuart(float currentTime, float duration)
+  public static float EaseInOutQuart(float currentTime, float duration)
   {
     if ((currentTime /= duration / 2) < 1)
     {
@@ -133,17 +133,17 @@ public class Easing
     return -1f / 2 * ((currentTime -= 2) * currentTime * currentTime * currentTime - 2);
   }
 
-  public float EaseInQuint(float currentTime, float duration)
+  public static float EaseInQuint(float currentTime, float duration)
   {
     return 1f * (currentTime /= duration) * currentTime * currentTime * currentTime * currentTime;
   }
 
-  public float EaseOutQuint(float currentTime, float duration)
+  public static float EaseOutQuint(float currentTime, float duration)
   {
     return 1f * ((currentTime = currentTime / duration - 1) * currentTime * currentTime * currentTime * currentTime + 1);
   }
 
-  public float EaseInOutQuint(float currentTime, float duration)
+  public static float EaseInOutQuint(float currentTime, float duration)
   {
     if ((currentTime /= duration / 2) < 1)
     {
@@ -153,32 +153,32 @@ public class Easing
     return 1f / 2 * ((currentTime -= 2) * currentTime * currentTime * currentTime * currentTime + 2);
   }
 
-  public float EaseInSine(float currentTime, float duration)
+  public static float EaseInSine(float currentTime, float duration)
   {
     return -1f * (float)Math.Cos(currentTime / duration * (PI_HALF)) + 1f;
   }
 
-  public float EaseOutSine(float currentTime, float duration)
+  public static float EaseOutSine(float currentTime, float duration)
   {
     return 1f * (float)Math.Sin(currentTime / duration * (PI_HALF));
   }
 
-  public float EaseInOutSine(float currentTime, float duration)
+  public static float EaseInOutSine(float currentTime, float duration)
   {
     return -1f / 2 * ((float)Math.Cos((float)Math.PI * currentTime / duration) - 1);
   }
 
-  public float EaseInExpo(float currentTime, float duration)
+  public static float EaseInExpo(float currentTime, float duration)
   {
     return (currentTime == 0) ? 0f : 1f * (float)Math.Pow(2, 10 * (currentTime / duration - 1));
   }
 
-  public float EaseOutExpo(float currentTime, float duration)
+  public static float EaseOutExpo(float currentTime, float duration)
   {
     return (currentTime == duration) ? 1f : 1f * (-(float)Math.Pow(2, -10 * currentTime / duration) + 1);
   }
 
-  public float EaseInOutExpo(float currentTime, float duration)
+  public static float EaseInOutExpo(float currentTime, float duration)
   {
     if (currentTime == 0)
     {
@@ -198,17 +198,17 @@ public class Easing
     return 1f / 2 * (-(float)Math.Pow(2, -10 * --currentTime) + 2);
   }
 
-  public float EaseInCirc(float currentTime, float duration)
+  public static float EaseInCirc(float currentTime, float duration)
   {
     return -1f * ((float)Math.Sqrt(1 - (currentTime /= duration) * currentTime) - 1);
   }
 
-  public float EaseOutCirc(float currentTime, float duration)
+  public static float EaseOutCirc(float currentTime, float duration)
   {
     return 1f * (float)Math.Sqrt(1 - (currentTime = currentTime / duration - 1) * currentTime);
   }
 
-  public float EaseInOutCirc(float currentTime, float duration)
+  public static float EaseInOutCirc(float currentTime, float duration)
   {
     if ((currentTime /= duration / 2) < 1)
     {
@@ -218,21 +218,21 @@ public class Easing
     return 1f / 2 * ((float)Math.Sqrt(1 - (currentTime -= 2) * currentTime) + 1);
   }
 
-  public float EaseInBack(float currentTime, float duration)
+  public static float EaseInBack(float currentTime, float duration)
   {
     var s = 1.70158f;
 
     return 1f * (currentTime /= duration) * currentTime * ((s + 1) * currentTime - s);
   }
 
-  public float EaseOutBack(float currentTime, float duration)
+  public static float EaseOutBack(float currentTime, float duration)
   {
     var s = 1.70158f;
 
     return 1f * ((currentTime = currentTime / duration - 1) * currentTime * ((s + 1) * currentTime + s) + 1);
   }
 
-  public float EaseInOutBack(float currentTime, float duration)
+  public static float EaseInOutBack(float currentTime, float duration)
   {
     var s = 1.70158f;
 
@@ -244,12 +244,12 @@ public class Easing
     return 1f / 2 * ((currentTime -= 2) * currentTime * (((s *= (1.525f)) + 1) * currentTime + s) + 2);
   }
 
-  public float EaseInBounce(float currentTime, float duration)
+  public static float EaseInBounce(float currentTime, float duration)
   {
     return 1f - EaseOutBounce(duration - currentTime, duration);
   }
 
-  public float EaseOutBounce(float currentTime, float duration)
+  public static float EaseOutBounce(float currentTime, float duration)
   {
     if ((currentTime /= duration) < (1 / 2.75))
     {
@@ -269,7 +269,7 @@ public class Easing
     }
   }
 
-  public float EaseInOutBounce(float currentTime, float duration)
+  public static float EaseInOutBounce(float currentTime, float duration)
   {
     if (currentTime < duration / 2f)
     {

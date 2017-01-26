@@ -35,8 +35,6 @@ public partial class Pendulum : SpawnBucketItemBehaviour, IObjectPoolBehaviour
 
   private float _nextStartTime;
 
-  private Easing _easing = new Easing();
-
   private bool _isPlayerAttached;
 
   private BoxCollider2D _visibilityCollider;
@@ -56,7 +54,7 @@ public partial class Pendulum : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     {
       _currentAngle =
         _startAngleRad
-        + _easing.GetValue(EasingType, _currentMoveDuration, MoveDuration)
+        + Easing.GetValue(EasingType, _currentMoveDuration, MoveDuration)
         * _totalAngleRad
         * _directionFactor;
     }
@@ -64,7 +62,7 @@ public partial class Pendulum : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     {
       _currentAngle =
         _endAngleRad
-        - _easing.GetValue(EasingType, _currentMoveDuration, MoveDuration)
+        - Easing.GetValue(EasingType, _currentMoveDuration, MoveDuration)
         * _totalAngleRad
         * _directionFactor;
     }

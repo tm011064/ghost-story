@@ -34,17 +34,14 @@ public class EasedSlopeBuildScript : MonoBehaviour
 
     var vectors = new List<Vector2>();
 
-    var easing = new Easing();
-
     var width = ToPosition.x - FromPosition.x;
-
     var height = ToPosition.y - FromPosition.y;
 
     for (var i = 0; i < TotalSteps; i++)
     {
       var yPosMultiplier = 1f;
 
-      yPosMultiplier = easing.GetValue(EasingType, i, TotalSteps);
+      yPosMultiplier = Easing.GetValue(EasingType, i, TotalSteps);
 
       var vector = new Vector2(width * i / (float)TotalSteps, height * yPosMultiplier);
 

@@ -19,8 +19,7 @@ public static class TranslateTransformActionFactory
           new TranslateTransformAction(
             targetPosition,
             horizontalScrollDuration,
-            EasingType.Linear,
-            GameManager.Instance.Easing)
+            EasingType.Linear)
         };
 
       case FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal:
@@ -46,8 +45,7 @@ public static class TranslateTransformActionFactory
       yield return new TranslateTransformAction(
         targetPosition,
         horizontalScrollDuration,
-        EasingType.Linear,
-        GameManager.Instance.Easing);
+        EasingType.Linear);
 
       yield break;
     }
@@ -61,13 +59,11 @@ public static class TranslateTransformActionFactory
     yield return new TranslateTransformAction(
       verticalTranslation.Location,
       verticalTranslation.Duration,
-      EasingType.Linear,
-      GameManager.Instance.Easing);
+      EasingType.Linear);
 
     yield return new TranslateTransformAction(
       targetPosition,
       horizontalScrollDuration,
-      EasingType.Linear,
-      GameManager.Instance.Easing);
+      EasingType.Linear);
   }
 }

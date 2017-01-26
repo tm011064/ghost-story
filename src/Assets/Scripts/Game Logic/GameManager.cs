@@ -22,10 +22,7 @@ public class GameManager : MonoBehaviour
   public InputStateManager InputStateManager;
 
   public InputSettings InputSettings = new InputSettings();
-
-  [HideInInspector]
-  public Easing Easing;
-
+  
   private CameraController _cameraController;
 
   private readonly Dictionary<string, PlayerController> _playerControllersByName
@@ -184,8 +181,6 @@ public class GameManager : MonoBehaviour
     SceneManager = gameObject.GetComponentOrThrow<ISceneManager>();
 
     InitializeInputStateManager();
-
-    Easing = new Easing();
 
     DontDestroyOnLoad(gameObject);
 

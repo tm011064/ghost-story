@@ -5,8 +5,6 @@ public class TranslateTransformAction
 {
   private readonly Vector3 _targetPosition;
 
-  private readonly Easing _easing;
-
   private readonly EasingType _easingType;
 
   private readonly float _duration;
@@ -23,14 +21,12 @@ public class TranslateTransformAction
     Vector3 startPosition,
     Vector3 targetPosition,
     float duration,
-    EasingType easingType,
-    Easing easing)
+    EasingType easingType)
   {
     var translateTransformAction = new TranslateTransformAction(
       targetPosition,
       duration,
-      easingType,
-      easing);
+      easingType);
 
     translateTransformAction.Start(startPosition);
 
@@ -40,10 +36,8 @@ public class TranslateTransformAction
   public TranslateTransformAction(
     Vector3 targetPosition,
     float duration,
-    EasingType easingType,
-    Easing easing)
+    EasingType easingType)
   {
-    _easing = easing;
     _easingType = easingType;
     _targetPosition = targetPosition;
     _duration = duration;
@@ -85,7 +79,7 @@ public class TranslateTransformAction
 
     float currentTime = Time.time - _startTime.Value;
 
-    var percentage = _easing.GetValue(_easingType, currentTime, _duration);
+    var percentage = Easing.GetValue(_easingType, currentTime, _duration);
 
     var translationVector = _startPosition + (_path.normalized * (_path.magnitude * percentage));
 

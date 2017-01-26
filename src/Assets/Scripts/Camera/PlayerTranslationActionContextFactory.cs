@@ -89,8 +89,7 @@ public static class PlayerTranslationActionContextFactory
     var translateTransformAction = new TranslateTransformAction(
       targetPosition,
       duration,
-      EasingType.Linear,
-      GameManager.Instance.Easing);
+      EasingType.Linear);
 
     var playerControlHandler = new FreezePlayerControlHandler(
         GameManager.Instance.Player,
@@ -116,8 +115,7 @@ public static class PlayerTranslationActionContextFactory
     var translateTransformAction = new TranslateTransformAction(
       targetPosition,
       duration,
-      EasingType.Linear, // TODO (Roman): get this from somewhere?
-      GameManager.Instance.Easing);
+      EasingType.Linear);
 
     var playerControlHandler = CreateMovingPlayerControlHandler(
       currentPosition,
