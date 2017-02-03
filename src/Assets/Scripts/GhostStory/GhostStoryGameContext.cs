@@ -14,6 +14,9 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   [HideInInspector]
   public GhostStoryGameState GameState;
 
+  [HideInInspector]
+  public GhostStoryDefaultGameSettings GameSettings;
+
   private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
 
   private ILookup<LayerUniverseKey, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
@@ -57,6 +60,8 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   public void Reset()
   {
+    GameSettings = gameObject.GetComponentOrThrow<GhostStoryDefaultGameSettings>();
+
     _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
 
     var items = GameObject

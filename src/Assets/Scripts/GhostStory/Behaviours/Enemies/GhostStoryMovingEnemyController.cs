@@ -20,7 +20,7 @@ public class GhostStoryMovingEnemyController : MovingEnemyController
 
   protected override void OnFreeze()
   {
-    // TODO (Roman): this is just a quick hack, do this properly eventually
+    // TODO (Important): this is just a quick hack, do this properly eventually
     var sprite = GetComponentInChildren<SpriteRenderer>();
     sprite.color = new Color(.3f, .3f, .3f, 1);
   }

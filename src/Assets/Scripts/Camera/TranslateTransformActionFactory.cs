@@ -7,26 +7,24 @@ public static class TranslateTransformActionFactory
   public static IEnumerable<TranslateTransformAction> Create(
     Vector3 currentPosition,
     Vector3 targetPosition,
-    FullScreenScrollerTransitionMode transitionMode,
-    float horizontalScrollDuration,
-    float verticalScrollSpeedPercentage)
+    FullScreenScrollSettings fullScreenScrollSettings)
   {
-    switch (transitionMode)
+    switch (fullScreenScrollSettings.FullScreenScrollerTransitionMode)
     {
       case FullScreenScrollerTransitionMode.Direct:
         return new TranslateTransformAction[]
         {  
           new TranslateTransformAction(
             targetPosition,
-            horizontalScrollDuration)
+            fullScreenScrollSettings.TransitionTime)
         };
 
       case FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal:
         return CreateFirstVerticalThenHorizontalTransitions(
           currentPosition,
           targetPosition,
-          horizontalScrollDuration,
-          verticalScrollSpeedPercentage);
+          fullScreenScrollSettings.TransitionTime,
+          fullScreenScrollSettings.VerticalFullScreenScrollerTransitionSpeedFactor);
     }
 
     throw new NotImplementedException();

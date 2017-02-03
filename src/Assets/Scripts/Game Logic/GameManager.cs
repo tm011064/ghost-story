@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
   public InputStateManager InputStateManager;
 
   public InputSettings InputSettings = new InputSettings();
-  
+
   private CameraController _cameraController;
 
   private readonly Dictionary<string, PlayerController> _playerControllersByName
@@ -53,11 +53,24 @@ public class GameManager : MonoBehaviour
 
     _playerControllersByName.Clear();
 
-    ActivatePlayer(
-      PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
-      GameObject.FindObjectsOfType<Checkpoint>().First().transform.position); // TODO (Roman): this needs sorting
+    if (!GameManager.Instance.SceneManager.IsLoadingSceneTransition())
+    {
+      // TODO (Roman): load save point from game context
 
-    SceneManager.FadeIn();
+      var checkpoint = GameObject.FindObjectsOfType<Checkpoint>().FirstOrDefault();
+
+      ActivatePlayer(
+        PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
+        checkpoint.transform.position);
+
+      SceneManager.FadeIn();
+    }
+    else
+    {
+      ActivatePlayer(
+        PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
+        Vector3.zero);
+    }
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
@@ -90,22 +103,6 @@ public class GameManager : MonoBehaviour
     }
 
     return playerController;
-  }
-
-  private IEnumerable<T> FindComponents<T>()
-    where T : class
-  {
-    var monoBehaviours = GameObject.FindObjectsOfType<MonoBehaviour>();
-
-    for (var i = 0; i < monoBehaviours.Length; i++)
-    {
-      var component = monoBehaviours[i] as T;
-
-      if (component != null)
-      {
-        yield return component;
-      }
-    }
   }
 
   private void BuildPooledObjects()
@@ -213,7 +210,7 @@ public class GameManager : MonoBehaviour
 
     InputStateManager = new InputStateManager();
 
-    InputStateManager.InitializeButtons(buttonNames); // TODO (Roman): move this somewhere else
+    InputStateManager.InitializeButtons(buttonNames); // TODO (old): move this somewhere else
 
     InputStateManager.InitializeAxes("Horizontal", "Vertical");
   }
@@ -235,15 +232,7 @@ public class GameManager : MonoBehaviour
   {
     InputStateManager.Update();
 
-    // TODO (Roman): this must not make it into release
-    if (Input.GetKeyUp("["))
-    {
-      SceneManager.LoadScene("three_rooms", null);
-    }
-    if (Input.GetKeyUp("]"))
-    {
-      SceneManager.LoadScene("cockroach", null);
-    }
+    // TODO (Important): this must not make it into release
     if (Input.GetKey("escape"))
     {
       Logger.Info("quit");

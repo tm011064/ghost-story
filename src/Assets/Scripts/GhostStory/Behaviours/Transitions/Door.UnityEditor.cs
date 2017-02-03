@@ -6,36 +6,36 @@ using UnityEngine;
 
 namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 {
-  public partial class Door : IInstantiable<CameraTransitionInstantiationArguments>
+  public partial class Door : IInstantiable<PrefabInstantiationArguments>
   {
-    public void Instantiate(CameraTransitionInstantiationArguments arguments)
+    public void Instantiate(PrefabInstantiationArguments arguments)
     {
-      var center = arguments.TransitionObjectBounds.center;
+      var center = arguments.TiledRectBounds.center;
       transform.position = center;
 
       var boxCollider = this.GetComponentOrThrow<BoxCollider2D>();
-      boxCollider.size = arguments.TransitionObjectBounds.size;
+      boxCollider.size = arguments.TiledRectBounds.size;
 
       foreach (var intersectingCameraBounds in arguments.IntersectingCameraBounds)
       {
         var assetPath = arguments.PrefabsAssetPathsByShortName["Door Scroller"];
         var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
         var scrollerGameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
-
+        
         scrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
         scrollerGameObject.transform.parent = gameObject.transform;
 
         var doorLocation = GetDoorLocation(
-          arguments.TransitionObjectBounds,
+          arguments.TiledRectBounds,
           intersectingCameraBounds);
 
         var triggerBounds = GetOuterCameraModifierBounds(
-          arguments.TransitionObjectBounds,
+          arguments.TiledRectBounds,
           doorLocation,
           CameraModifierPadding);
 
         var cameraModifierBounds = GetInnerCameraModifierBounds(
-          arguments.TransitionObjectBounds,
+          arguments.TiledRectBounds,
           intersectingCameraBounds,
           CameraModifierPadding);
 

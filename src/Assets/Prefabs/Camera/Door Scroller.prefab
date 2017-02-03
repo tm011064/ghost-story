@@ -74,3 +74,4 @@ MonoBehaviour:
   HorizontalOffsetDeltaMovementFactor: 40
   VerticalCameraFollowMode: 0
   FullScreenScrollerTransitionMode: 1
+  VerticalFullScreenScrollerTransitionSpeedFactor: 4

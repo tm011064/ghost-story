@@ -12,7 +12,7 @@ public partial class PlayerController : BaseCharacterController
 
   public RunSettings RunSettings = new RunSettings();
 
-  public ClimbSettings ClimbSettings = new ClimbSettings(); // TODO (Roman): make those behaviors that can be attached to the controller
+  public ClimbSettings ClimbSettings = new ClimbSettings(); // TODO (old): make those behaviors that can be attached to the controller
 
   public SlideSettings SlideSettings = new SlideSettings();
 
@@ -242,7 +242,7 @@ public partial class PlayerController : BaseCharacterController
       return;
     }
 
-    // TODO (Roman): these methods should be optimized and put into constant field...
+    // TODO (old): these methods should be optimized and put into constant field...
     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Platforms"))
     {
       if (WallJumpSettings.EnableWallJumps
@@ -296,5 +296,10 @@ public partial class PlayerController : BaseCharacterController
   protected virtual PlayerControlHandler CreateDefaultPlayerControlHandler()
   {
     return new DefaultPlayerControlHandler(this);
+  }
+
+  public void FlipHorizontalSpriteScale()
+  {
+    Sprite.transform.localScale = Sprite.transform.localScale.SetX(Sprite.transform.localScale.x * -1);
   }
 }

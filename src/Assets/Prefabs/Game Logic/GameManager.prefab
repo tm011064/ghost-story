@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114000010884742090}
   - component: {fileID: 114000012552585934}
   - component: {fileID: 114942422582685766}
+  - component: {fileID: 114849583512686296}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -59,6 +60,7 @@ MonoBehaviour:
     DoorKeys: []
     MisaHealthUnits: 0
     KinoHealthUnits: 0
+  GameSettings: {fileID: 0}
 --- !u!114 &114000010915316208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,6 +112,34 @@ MonoBehaviour:
   FreezeEndTime: 0
   FreezeDuration: 0
   IsFrozen: 0
+--- !u!114 &114849583512686296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 168078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2fb3c7ccb59da498e0547c85192174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SmoothDampMoveSettings:
+    HorizontalSmoothDampTime: 0.2
+    VerticalSmoothDampTime: 0.1
+    VerticalRapidDescentSmoothDampTime: 0.001
+    VerticalAboveRapidAcsentSmoothDampTime: 0.01
+  FullScreenScrollSettings:
+    TransitionTime: 1.2
+    CameraScrollEasingType: 0
+    PlayerTranslationDistance: 88
+    PlayerTranslationEasingType: 0
+    StartScrollFreezeTime: 0
+    EndScrollFreezeTime: 0
+    FullScreenScrollerTransitionMode: 1
+    VerticalFullScreenScrollerTransitionSpeedFactor: 4
+  CameraSettings:
+    HorizontalOffsetDeltaMovementFactor: 0
+    VerticalCameraFollowMode: 1
 --- !u!114 &114942422582685766
 MonoBehaviour:
   m_ObjectHideFlags: 1

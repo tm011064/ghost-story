@@ -18,6 +18,12 @@ public class FullScreenScrollSettings
 
   public float EndScrollFreezeTime = .3f;
 
+  public FullScreenScrollerTransitionMode FullScreenScrollerTransitionMode
+    = FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal;
+
+  [Tooltip("Defines the vertical speed when using FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal as a factor of the horizontal translation speed")]
+  public float VerticalFullScreenScrollerTransitionSpeedFactor = 4f;
+
   public override string ToString()
   {
     return string.Format("transitionTime: {0};",

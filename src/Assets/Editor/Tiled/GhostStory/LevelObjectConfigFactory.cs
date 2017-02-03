@@ -12,7 +12,6 @@ namespace Assets.Editor.Tiled.GhostStory
       var config = gameObject.AddComponent<LevelObjectConfig>();
 
       config.Universe = (Universe)Enum.Parse(typeof(Universe), layerConfig.Universe);
-      config.Layer = (LevelLayer)Enum.Parse(typeof(LevelLayer), layerConfig.Layer);
     }
   }
 }

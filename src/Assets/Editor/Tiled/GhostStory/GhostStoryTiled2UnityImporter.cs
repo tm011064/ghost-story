@@ -89,11 +89,9 @@ namespace Assets.Editor.Tiled.GhostStory
         new AbstractGameObjectFactory[]
         {
           new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryCamerBoundsTransitionObjectFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryCamerBoundsLayerTransitionObjectFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)
+          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);

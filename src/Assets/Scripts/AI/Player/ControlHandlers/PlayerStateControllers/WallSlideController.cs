@@ -19,7 +19,7 @@ public class WallSlideController : PlayerStateController
         || (PlayerController.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.CharacterWallState & CharacterWallState.OnLeftWall) != 0
       ))
     {
-      // TODO (Roman): this should be done via mecanim
+      // TODO (old): this should be done via mecanim
       PlayerController.CharacterPhysicsManager.BoxCollider.offset = PlayerController.BoxColliderOffsetWallAttached;
       PlayerController.CharacterPhysicsManager.BoxCollider.size = PlayerController.BoxColliderSizeWallAttached;
     }

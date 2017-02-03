@@ -9,6 +9,7 @@ public class GameLoader : MonoBehaviour
   void Awake()
   {
     Logger.Initialize(GameSettings.LogSettings);
+    Logger.UnityDebugLog("LOAD GAME");
 
     if (GameManager.Instance == null)
     {
@@ -17,7 +18,7 @@ public class GameLoader : MonoBehaviour
 
     GameManager.Instance.GameSettings = GameSettings;
 
-    // TODO (Roman): sound placeholder
+    // TODO (old): sound placeholder
     //if (SoundManager.instance == null)
     //  Instantiate(soundManager);
 

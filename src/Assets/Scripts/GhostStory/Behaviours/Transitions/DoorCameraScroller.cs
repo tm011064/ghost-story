@@ -14,12 +14,28 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     private BaseControlHandler _freezeControlHandler;
 
+    private DoorTriggerEnterBehaviour _doorTriggerEnterBehaviour;
+
     protected override void OnAwake()
     {
+      FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
+      CameraSettings = GhostStoryGameContext.Instance.GameSettings.CameraSettings;
+      SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;
+
+      _doorTriggerEnterBehaviour = GetComponentInChildren<DoorTriggerEnterBehaviour>();
+      _doorTriggerEnterBehaviour.Open += TriggerScroll;
+
       _leftDoor = gameObject.transform.parent.Find("Left Door").gameObject;
       _rightDoor = gameObject.transform.parent.Find("Right Door").gameObject;
       _leftTransitionDoor = gameObject.transform.parent.Find("Left Transition Door").gameObject;
       _rightTransitionDoor = gameObject.transform.parent.Find("Right Transition Door").gameObject;
+    }
+
+    protected override void OnDestroy()
+    {
+      _doorTriggerEnterBehaviour.Open -= TriggerScroll;
+
+      base.OnDestroy();
     }
 
     private void MovePlayerIntoDoor()
@@ -85,7 +101,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       CameraController.OnCameraModifierEnter(CameraMovementSettings);
     }
 
-    public void TriggerScroll(Collider2D collider)
+    public void TriggerScroll()
     {
       MovePlayerIntoDoor();
 
@@ -134,9 +150,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       var cameraTranslations = TranslateTransformActionFactory.Create(
         cameraPosition,
         targetPosition,
-        FullScreenScrollerTransitionMode,
-        FullScreenScrollSettings.TransitionTime,
-        VerticalFullScreenScrollerTransitionSpeedFactor);
+        FullScreenScrollSettings);
 
       ScrollActions = new TranslateTransformActions(cameraTranslations);
 

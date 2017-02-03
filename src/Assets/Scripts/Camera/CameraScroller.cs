@@ -11,21 +11,13 @@ public partial class CameraScroller : MonoBehaviour
 
   public FullScreenScrollSettings FullScreenScrollSettings;
 
+  public CameraSettings CameraSettings;
+
   [Tooltip("The (x, y) offset of the camera. This can be used when default vertical locking is disabled and you want the player to be below, above, right or left of the screen center.")]
   public Vector2 Offset;
 
   [Tooltip("The dimensions of the camera boundaries")]
   public Vector2 Size;
-
-  public float HorizontalOffsetDeltaMovementFactor = 40f;
-
-  public VerticalCameraFollowMode VerticalCameraFollowMode;
-
-  public FullScreenScrollerTransitionMode FullScreenScrollerTransitionMode
-    = FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal;
-
-  [Tooltip("Defines the vertical speed when using FullScreenScrollerTransitionMode.FirstVerticalThenHorizontal as a factor of the horizontal translation speed")]
-  public float VerticalFullScreenScrollerTransitionSpeedFactor = 4f;
 
   protected CameraMovementSettings CameraMovementSettings;
 
@@ -64,7 +56,7 @@ public partial class CameraScroller : MonoBehaviour
   {
   }
 
-  void OnDestroy()
+  protected virtual void OnDestroy()
   {
     CameraController.ScrollActionCompleted -= OnScrollActionCompleted;
 
@@ -88,8 +80,8 @@ public partial class CameraScroller : MonoBehaviour
       ZoomSettings,
       SmoothDampMoveSettings,
       Offset,
-      VerticalCameraFollowMode,
-      HorizontalOffsetDeltaMovementFactor);
+      CameraSettings.VerticalCameraFollowMode,
+      CameraSettings.HorizontalOffsetDeltaMovementFactor);
   }
 
   private void StartScroll(Collider2D collider)
@@ -103,10 +95,8 @@ public partial class CameraScroller : MonoBehaviour
     var contexts = PlayerTranslationActionContextFactory.Create(
       cameraPosition,
       targetPosition,
-      FullScreenScrollerTransitionMode,
       _animationShortNameHash,
-      FullScreenScrollSettings,
-      VerticalFullScreenScrollerTransitionSpeedFactor).ToArray();
+      FullScreenScrollSettings).ToArray();
 
     ScrollActions = new TranslateTransformActions(contexts.Select(c => c.TranslateTransformAction));
 

@@ -1,10 +1,10 @@
 ﻿#if UNITY_EDITOR
 
-public partial class Checkpoint : IInstantiable<InstantiationArguments>
+public partial class Checkpoint : IInstantiable<PrefabInstantiationArguments>
 {
-  public void Instantiate(InstantiationArguments arguments)
+  public void Instantiate(PrefabInstantiationArguments arguments)
   {
-    transform.position = arguments.Bounds.center;
+    transform.position = arguments.TiledRectBounds.center;
 
     if (arguments.Properties.GetBool("Is Level Start"))
     {

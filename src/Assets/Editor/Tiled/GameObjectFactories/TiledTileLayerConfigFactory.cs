@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
 {
@@ -11,7 +9,6 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       return new TiledTileLayerConfig
       {
         TiledLayer = layer,
-        Layer = layer.GetPropertyValue("Layer"),
         Type = layer.GetPropertyValue("Type"),
         Universe = layer.GetPropertyValue("Universe"),
         Commands = layer.GetCommands().ToArray()

@@ -2,21 +2,21 @@
 
 using UnityEngine;
 
-public partial class InventoryItemBehaviour : IInstantiable<InstantiationArguments>
+public partial class InventoryItemBehaviour : IInstantiable<PrefabInstantiationArguments>
 {
-  public void Instantiate(InstantiationArguments arguments)
+  public void Instantiate(PrefabInstantiationArguments arguments)
   {
-    transform.position = arguments.Bounds.center.AddY(arguments.Bounds.size.y / 2);
+    transform.position = arguments.TiledRectBounds.center.AddY(arguments.TiledRectBounds.size.y / 2);
 
     var boxCollider = gameObject.AddComponent<BoxCollider2D>();
 
     boxCollider.isTrigger = true;
-    boxCollider.size = arguments.Bounds.size;
+    boxCollider.size = arguments.TiledRectBounds.size;
 
     var meshRenderer = GetComponentInChildren<MeshRenderer>();
     meshRenderer.transform.position = transform.position
-      .AddX(-arguments.Bounds.size.x / 2)
-      .AddY(arguments.Bounds.size.y / 2);
+      .AddX(-arguments.TiledRectBounds.size.x / 2)
+      .AddY(arguments.TiledRectBounds.size.y / 2);
   }
 }
 

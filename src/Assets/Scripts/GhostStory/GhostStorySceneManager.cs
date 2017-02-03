@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +17,8 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
   private GameObject _blackBarPrefabInstance;
 
   private IDontDestroyOnLoad[] _persistedComponents;
+
+  private bool _isLoading;
 
   void Awake()
   {
@@ -36,17 +39,26 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     blackBarCanvas.StartFadeIn(FadeDuration, onFadeCompleted);
   }
 
-  public void LoadScene(string sceneName, string portalName)
+  public void ShowBlackScreen()
   {
     var blackBarCanvas = GetBlackBarCanvas();
-
-    blackBarCanvas.StartFadeOut(FadeDuration);
-
-    StartCoroutine(LoadSceneAsync(sceneName, blackBarCanvas));
+    blackBarCanvas.ShowBlackScreen();
   }
 
-  IEnumerator LoadSceneAsync(string sceneName, BlackBarCanvas blackBarCanvas)
+  public void LoadScene(string sceneName, string portalName, Vector3 fromPortalPosition)
   {
+    var blackBarCanvas = GetBlackBarCanvas();
+    StartCoroutine(LoadSceneAsync(sceneName, blackBarCanvas, portalName, fromPortalPosition));
+  }
+
+  IEnumerator LoadSceneAsync(
+    string sceneName,
+    BlackBarCanvas blackBarCanvas,
+    string portalName,
+    Vector3 fromPortalPosition)
+  {
+    _isLoading = true;
+
     var currentSceneName = SceneManager.GetActiveScene().name;
 
     var sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
@@ -64,10 +76,23 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
       yield return null;
     }
 
+    OnLoadCompleted(portalName, fromPortalPosition);
+  }
+
+  private void OnLoadCompleted(
+    string portalName,
+    Vector3 fromPortalPosition)
+  {
     foreach (var component in _persistedComponents)
     {
       component.OnSceneLoad();
     }
+
+    this.FindSceneComponents<IScenePortal>()
+      .Single(p => p.GetPortalName() == portalName)
+      .SpawnPlayerFromPortal(fromPortalPosition);
+
+    _isLoading = false;
   }
 
   private BlackBarCanvas GetBlackBarCanvas()
@@ -78,5 +103,11 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     }
 
     return _blackBarPrefabInstance.GetComponent<BlackBarCanvas>();
+  }
+
+
+  public bool IsLoadingSceneTransition()
+  {
+    return _isLoading;
   }
 }
