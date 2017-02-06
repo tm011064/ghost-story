@@ -49,11 +49,7 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   private void PushPlayerTransitionControlHandler(PlayerController player)
   {
-    _freezeControlHandler = new FreezePlayerControlHandler(
-        player,
-        -1,
-        Animator.StringToHash("Idle"),
-        new PlayerState[] { PlayerState.Invincible, PlayerState.Locked });
+    _freezeControlHandler = FreezePlayerControlHandler.CreateInvincible("Idle");
 
     player.PushControlHandler(_freezeControlHandler);
   }
@@ -81,14 +77,19 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   private void SetPlayerPosition(PlayerController player)
   {
+    MovePlayerToTargetPosition(HouseDoor, player);
+
+    player.transform.position = HouseDoor.transform.position.SetY(player.transform.position.y);
+  }
+
+  public void MovePlayerToTargetPosition(HouseDoor houseDoor, PlayerController player)
+  {
     AdjustPlayerSpriteScale(player);
 
     var playerTranslationVector = CalculatePlayerTranslationVector();
 
-    player.transform.position = HouseDoor.transform.position + playerTranslationVector;
+    player.transform.position = houseDoor.transform.position + playerTranslationVector;
     player.CharacterPhysicsManager.WarpToFloor();
-
-    player.transform.position = HouseDoor.transform.position.SetY(player.transform.position.y);
   }
 
   private void AdjustPlayerSpriteScale(PlayerController player)
@@ -102,22 +103,14 @@ public class HouseDoorFadeInBehaviour : CameraScroller
   private void MovePlayerIntoRoom()
   {
     GameManager.Instance.Player.PushControlHandlers(
-      new FreezePlayerControlHandler(
-        GameManager.Instance.Player,
-        .4f,
-        Animator.StringToHash("Idle"),
-        new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }),
+      FreezePlayerControlHandler.CreateInvincible("Idle", .4f),
       new TranslateFrozenPlayerControlHandler(
         GameManager.Instance.Player,
         .5f,
         Animator.StringToHash("Run Start"),
         CalculatePlayerTranslationVector(),
         EasingType.Linear),
-      new FreezePlayerControlHandler(
-        GameManager.Instance.Player,
-        .2f,
-        Animator.StringToHash("Idle"),
-        new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }));
+      FreezePlayerControlHandler.CreateInvincible("Idle", .2f));
 
     GameManager.Instance.Player.RemoveControlHandler(_freezeControlHandler);
     _freezeControlHandler = null;
@@ -160,7 +153,7 @@ public class HouseDoorFadeInBehaviour : CameraScroller
       () => GameManager.Instance.SceneManager.FadeIn(OnFadeInCompleted),
       "FadeIn");
 
-    CameraController.ClearCameraModifiers();
+    CameraController.Reset();
     CameraController.OnCameraModifierEnter(CameraMovementSettings);
   }
 

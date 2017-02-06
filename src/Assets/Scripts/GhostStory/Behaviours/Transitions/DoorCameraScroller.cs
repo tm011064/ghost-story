@@ -42,11 +42,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     {
       var directionMultiplier = GameManager.Instance.Player.IsFacingRight() ? 1 : -1;
 
-      _freezeControlHandler = new FreezePlayerControlHandler(
-          GameManager.Instance.Player,
-          -1,
-          Animator.StringToHash("Idle"),
-          new PlayerState[] { PlayerState.Invincible, PlayerState.Locked });
+      _freezeControlHandler = FreezePlayerControlHandler.CreateInvincible("Idle");
 
       GameManager.Instance.Player.PushControlHandlers(
         _freezeControlHandler,
@@ -56,11 +52,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
           Animator.StringToHash("Run Start"),
           new Vector3(FullScreenScrollSettings.PlayerTranslationDistance / 2 * directionMultiplier, 0, 0),
           EasingType.Linear),
-        new FreezePlayerControlHandler(
-          GameManager.Instance.Player,
-          .2f,
-          Animator.StringToHash("Idle"),
-          new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }));
+        FreezePlayerControlHandler.CreateInvincible("Idle", .2f));
     }
 
     private void MovePlayerIntoRoom()
@@ -68,22 +60,14 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       var directionMultiplier = GameManager.Instance.Player.IsFacingRight() ? 1 : -1;
 
       GameManager.Instance.Player.PushControlHandlers(
-        new FreezePlayerControlHandler(
-          GameManager.Instance.Player,
-          .4f,
-          Animator.StringToHash("Idle"),
-          new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }),
+        FreezePlayerControlHandler.CreateInvincible("Idle", .4f),
         new TranslateFrozenPlayerControlHandler(
           GameManager.Instance.Player,
           .5f,
           Animator.StringToHash("Run Start"),
           new Vector3(FullScreenScrollSettings.PlayerTranslationDistance / 2 * directionMultiplier, 0, 0),
           EasingType.Linear),
-        new FreezePlayerControlHandler(
-          GameManager.Instance.Player,
-          .2f,
-          Animator.StringToHash("Idle"),
-          new PlayerState[] { PlayerState.Invincible, PlayerState.Locked }));
+        FreezePlayerControlHandler.CreateInvincible("Idle", .2f));
 
       GameManager.Instance.Player.RemoveControlHandler(_freezeControlHandler);
     }
@@ -97,7 +81,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         () => GameManager.Instance.SceneManager.FadeIn(OnFadeInCompleted),
         "FadeIn");
 
-      CameraController.ClearCameraModifiers();
+      CameraController.Reset();
       CameraController.OnCameraModifierEnter(CameraMovementSettings);
     }
 

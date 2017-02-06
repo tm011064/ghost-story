@@ -4,7 +4,7 @@ using System.Linq;
 [Serializable]
 public class GhostStoryGameState
 {
-  public LayerUniverseKey ActiveUniverse;
+  public Universe ActiveUniverse;
 
   public InventoryItem[] Weapons;
 
@@ -13,6 +13,10 @@ public class GhostStoryGameState
   public int MisaHealthUnits;
 
   public int KinoHealthUnits;
+
+  public string SpawnPlayerName;
+
+  public string SpawnPlayerPortalName;
 
   public InventoryItem GetWeapon(string name)
   {

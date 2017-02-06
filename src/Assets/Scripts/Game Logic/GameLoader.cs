@@ -9,7 +9,6 @@ public class GameLoader : MonoBehaviour
   void Awake()
   {
     Logger.Initialize(GameSettings.LogSettings);
-    Logger.UnityDebugLog("LOAD GAME");
 
     if (GameManager.Instance == null)
     {

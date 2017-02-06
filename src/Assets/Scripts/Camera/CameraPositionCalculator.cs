@@ -65,7 +65,7 @@ public class CameraPositionCalculator
       return;
     }
 
-    switch (cameraMovementSettings.VerticalCameraFollowMode)
+    switch (cameraMovementSettings.CameraSettings.VerticalCameraFollowMode)
     {
       case VerticalCameraFollowMode.FollowWhenGrounded:
         AdjustFollowWhenGroundedParameters(cameraController, cameraMovementSettings, ref updateParameters);
@@ -267,7 +267,7 @@ public class CameraPositionCalculator
 
     updateParameters.XPos =
       cameraController.TargetedTransformPositionX
-      + horizontalTargetDistance * cameraMovementSettings.HorizontalOffsetDeltaMovementFactor;
+      + horizontalTargetDistance * cameraMovementSettings.CameraSettings.HorizontalOffsetDeltaMovementFactor;
 
     if (horizontalTargetDistance > 0f) // going right
     {

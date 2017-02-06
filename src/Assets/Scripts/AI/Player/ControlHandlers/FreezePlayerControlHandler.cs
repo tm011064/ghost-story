@@ -2,6 +2,17 @@
 
 public class FreezePlayerControlHandler : PlayerControlHandler
 {
+  public static FreezePlayerControlHandler CreateInvincible(
+    string animationName,
+    float suspendPhysicsTime = -1)
+  {
+    return new FreezePlayerControlHandler(
+      GameManager.Instance.Player,
+      suspendPhysicsTime,
+      Animator.StringToHash(animationName),
+      new PlayerState[] { PlayerState.Locked, PlayerState.Invincible });
+  }
+
   private readonly PlayerState[] _playerStates;
 
   public FreezePlayerControlHandler(

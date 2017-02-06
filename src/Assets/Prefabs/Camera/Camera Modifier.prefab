@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 452652}
-  - 114: {fileID: 11465204}
+  - component: {fileID: 452652}
+  - component: {fileID: 114176446282518584}
   m_Layer: 15
   m_Name: Camera Modifier
   m_TagString: Untagged
@@ -25,11 +25,22 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11465204
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 170568}
+  m_IsPrefabParent: 1
+--- !u!114 &114176446282518584
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -37,16 +48,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 170568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a6c09e11acf9440a68f9272e43935d, type: 3}
+  m_Script: {fileID: 11500000, guid: 25d67d63f46add64b9c6bfd7a3c97e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ImportCameraSettings:
     ImportSource: {fileID: 0}
     ImportCameraSettingsMode: 0
   VerticalLockSettings:
-    Enabled: 1
+    Enabled: 0
     EnableDefaultVerticalLockPosition: 0
-    DefaultVerticalLockPosition: 120
+    DefaultVerticalLockPosition: 540
     EnableTopVerticalLock: 0
     TopVerticalLockPosition: 1080
     EnableBottomVerticalLock: 0
@@ -54,7 +65,7 @@ MonoBehaviour:
     TopBoundary: 0
     BottomBoundary: 0
   HorizontalLockSettings:
-    Enabled: 1
+    Enabled: 0
     EnableRightHorizontalLock: 1
     RightHorizontalLockPosition: 1920
     EnableLeftHorizontalLock: 1
@@ -67,22 +78,12 @@ MonoBehaviour:
     ZoomEasingType: 0
   SmoothDampMoveSettings:
     HorizontalSmoothDampTime: 0.2
-    VerticalSmoothDampTime: 0.4
+    VerticalSmoothDampTime: 0.2
     VerticalRapidDescentSmoothDampTime: 0.01
     VerticalAboveRapidAcsentSmoothDampTime: 0.2
+  CameraSettings:
+    HorizontalOffsetDeltaMovementFactor: 0
+    VerticalCameraFollowMode: 0
   Offset: {x: 0, y: 0}
-  HorizontalOffsetDeltaMovementFactor: 40
-  VerticalCameraFollowMode: 0
-  GizmoColor: {r: 0.622, g: 1, b: 0.44852942, a: 1}
+  GizmoColor: {r: 1, g: 0, b: 1, a: 1}
   MustBeOnLadderToEnter: 0
---- !u!1001 &100100000
-Prefab:
-  m_ObjectHideFlags: 1
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications: []
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 170568}
-  m_IsPrefabParent: 1

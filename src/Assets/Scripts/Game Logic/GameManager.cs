@@ -23,8 +23,6 @@ public class GameManager : MonoBehaviour
 
   public InputSettings InputSettings = new InputSettings();
 
-  private CameraController _cameraController;
-
   private readonly Dictionary<string, PlayerController> _playerControllersByName
     = new Dictionary<string, PlayerController>(StringComparer.OrdinalIgnoreCase);
 
@@ -42,35 +40,13 @@ public class GameManager : MonoBehaviour
     return _playerControllersByName[name];
   }
 
-  private void ResetCameraPosition(Vector3 position)
-  {
-    _cameraController.MoveCameraToTargetPosition(position);
-  }
-
   public void LoadScene()
   {
     BuildPooledObjects();
 
     _playerControllersByName.Clear();
 
-    if (!GameManager.Instance.SceneManager.IsLoadingSceneTransition())
-    {
-      // TODO (Roman): load save point from game context
-
-      var checkpoint = GameObject.FindObjectsOfType<Checkpoint>().FirstOrDefault();
-
-      ActivatePlayer(
-        PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
-        checkpoint.transform.position);
-
-      SceneManager.FadeIn();
-    }
-    else
-    {
-      ActivatePlayer(
-        PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
-        Vector3.zero);
-    }
+    GameManager.Instance.SceneManager.OnSceneLoad();
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
@@ -83,7 +59,7 @@ public class GameManager : MonoBehaviour
     Player.transform.position = position;
     Player.gameObject.SetActive(true);
 
-    _cameraController.Target = Player.transform;
+    Camera.main.GetComponent<CameraController>().Target = Player.transform;
   }
 
   private PlayerController GetPlayerController(string name)
@@ -180,8 +156,6 @@ public class GameManager : MonoBehaviour
     InitializeInputStateManager();
 
     DontDestroyOnLoad(gameObject);
-
-    _cameraController = Camera.main.GetComponent<CameraController>();
 
     OnAwake();
   }

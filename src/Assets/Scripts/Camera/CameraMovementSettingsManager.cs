@@ -12,14 +12,15 @@ public class CameraMovementSettingsManager
 
   private void ChangeSettings(CameraMovementSettings cameraMovementSettings)
   {
-    Logger.UnityDebugLog("CameraMovementSettingsManager -> ChangeSettings");
-
     ActiveSettings = cameraMovementSettings;
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> ChangeSettings, count: " + _cameraMovementSettings.Count + ", " + ActiveSettings.ToString());
 
     var actionHandler = SettingsChanged;
 
     if (actionHandler != null)
     {
+      // TODO (Roman): this is weird on scene refreshes
+      Logger.UnityDebugLog("SettingsChanged Handler: " + _cameraMovementSettings.Count);
       var args = new CameraSettingsChangedArguments { SettingsWereRefreshed = _cameraMovementSettings.Count == 1 };
       actionHandler(args);
     }

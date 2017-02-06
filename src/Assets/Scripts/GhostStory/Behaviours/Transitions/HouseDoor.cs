@@ -8,28 +8,29 @@ public partial class HouseDoor : ScenePortal, IScenePortal
   [HideInInspector]
   public GameObject TransitionDoor;
 
-  private HouseDoorFadeInBehaviour _houseDoorFadeInBehaviour;
-
   void Awake()
   {
     Door = transform.Find("Door").gameObject;
     TransitionDoor = transform.Find("Transition Door").gameObject;
-
-    _houseDoorFadeInBehaviour = GetComponentInChildren<HouseDoorFadeInBehaviour>();
   }
 
   public void SpawnPlayer()
   {
-    _houseDoorFadeInBehaviour.FadeIn();
+    GetHouseDoorFadeInBehaviour().MovePlayerToTargetPosition(this, GameManager.Instance.Player);
   }
 
   public void SpawnPlayerFromPortal(Vector3 fromPortalPosition)
   {
-    _houseDoorFadeInBehaviour.StartCameraScroll(fromPortalPosition);
+    GetHouseDoorFadeInBehaviour().StartCameraScroll(fromPortalPosition);
   }
 
   public string GetPortalName()
   {
     return PortalName;
+  }
+
+  private HouseDoorFadeInBehaviour GetHouseDoorFadeInBehaviour()
+  {
+    return GetComponentInChildren<HouseDoorFadeInBehaviour>();
   }
 }

@@ -49,27 +49,16 @@ public partial class CameraController : MonoBehaviour
 
   private readonly TranslateTransformActionsManager _scrollActionManager = new TranslateTransformActionsManager();
 
-  //private TranslateTransformActions _scrollActions;
-
-  //private TranslateTransformAction _activeTranslateTransformAction;
-
   public event Action<TranslateTransformActions> ScrollActionCompleted;
 
   public void RegisterScrollActions(TranslateTransformActions scrollActions)
   {
     _scrollActionManager.EnqueueScrollActions(scrollActions);
-
-    //if (_scrollActions != null)
-    //{
-    //  throw new InvalidOperationException();
-    //}
-
-    //_scrollActions = scrollActions;
   }
 
-  public void MoveCameraToTargetPosition(Vector3 targetPosition)
+  public void MoveCameraToTargetPosition()
   {
-    SetPosition(targetPosition);
+    SetPosition(Target.position);
 
     var calculatedPosition = CalculateTargetPosition(_cameraMovementSettingsManager.ActiveSettings);
 
@@ -78,7 +67,7 @@ public partial class CameraController : MonoBehaviour
 
   public void SetPosition(Vector3 position)
   {
-    Transform.position = position;
+    transform.position = position;
 
     LastTargetPosition = position;
 
@@ -121,7 +110,7 @@ public partial class CameraController : MonoBehaviour
     _cameraMovementSettingsManager.AddSettings(cameraMovementSettings);
   }
 
-  public void ClearCameraModifiers()
+  public void Reset()
   {
     _cameraMovementSettingsManager.ClearSettings();
   }
@@ -161,7 +150,7 @@ public partial class CameraController : MonoBehaviour
 
     if (args.SettingsWereRefreshed)
     {
-      MoveCameraToTargetPosition(Target.position);
+      MoveCameraToTargetPosition();
     }
   }
 
@@ -173,8 +162,8 @@ public partial class CameraController : MonoBehaviour
 
   void OnDestroy()
   {
-    _cameraMovementSettingsManager.SettingsChanged += OnCameraMovementSettingsChanged;
-    _scrollActionManager.Completed += OnScrollActionManagerCompleted;
+    _cameraMovementSettingsManager.SettingsChanged -= OnCameraMovementSettingsChanged;
+    _scrollActionManager.Completed -= OnScrollActionManagerCompleted;
   }
 
   void OnScrollActionManagerCompleted(TranslateTransformActions translateTransformActions)
@@ -204,7 +193,6 @@ public partial class CameraController : MonoBehaviour
 
     GameManager = GameManager.Instance;
 
-    // we set the target of the camera to our player through code
     Target = GameManager.Player.transform;
 
     LastTargetPosition = Target.transform.position;
@@ -252,6 +240,12 @@ public partial class CameraController : MonoBehaviour
       return;
     }
 
+    if (_cameraMovementSettingsManager.ActiveSettings == null)
+    {
+      Logger.UnityDebugLog("NULL"); // TODO (Roman): remove this
+      return;
+    }
+
     CameraPositionCalculator.UpdateParameters updateParameters;
     var targetPositon = _cameraPositionCalculator.CalculateTargetPosition(
       this,
@@ -261,14 +255,14 @@ public partial class CameraController : MonoBehaviour
     IsAboveJumpHeightLocked = updateParameters.IsAboveJumpHeightLocked;
     TargetedTransformPositionX = updateParameters.XPos;
 
-    Transform.position = new Vector3(
+    transform.position = new Vector3(
       Mathf.SmoothDamp(
-        Transform.position.x,
+        transform.position.x,
         targetPositon.x,
         ref _horizontalSmoothDampVelocity,
         _cameraMovementSettingsManager.ActiveSettings.SmoothDampMoveSettings.HorizontalSmoothDampTime),
       Mathf.SmoothDamp(
-        Transform.position.y,
+        transform.position.y,
         targetPositon.y,
         ref _verticalSmoothDampVelocity,
         updateParameters.VerticalSmoothDampTime),

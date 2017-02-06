@@ -11,5 +11,9 @@ public interface ISceneManager
 
   void ShowBlackScreen();
 
-  bool IsLoadingSceneTransition();
+  void OnSceneLoad();
+
+  bool IsFading();
+
+  bool IsLoading();
 }

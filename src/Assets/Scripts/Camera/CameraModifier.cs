@@ -11,12 +11,10 @@ public partial class CameraModifier : MonoBehaviour
 
   public SmoothDampMoveSettings SmoothDampMoveSettings;
 
+  public CameraSettings CameraSettings;
+
   [Tooltip("The (x, y) offset of the camera. This can be used when default vertical locking is disabled and you want the player to be below, above, right or left of the screen center.")]
   public Vector2 Offset;
-
-  public float HorizontalOffsetDeltaMovementFactor = 40f;
-
-  public VerticalCameraFollowMode VerticalCameraFollowMode;
 
   public Color GizmoColor = Color.magenta;
 
@@ -28,26 +26,21 @@ public partial class CameraModifier : MonoBehaviour
 
   void Awake()
   {
-    var triggerEnterBehaviours = GetComponentsInChildren<ITriggerEnterExit>();
-
     _cameraController = Camera.main.GetComponent<CameraController>();
     _cameraMovementSettings = CreateCameraMovementSettings();
 
+    var triggerEnterBehaviours = GetComponentsInChildren<ITriggerEnterExit>();
     foreach (var triggerEnterBehaviour in triggerEnterBehaviours)
     {
       triggerEnterBehaviour.Entered += OnEnterTriggerInvoked;
       triggerEnterBehaviour.Exited += OnExitTriggerInvoked;
     }
+
+    OnAwake();
   }
 
-  void Start()
+  protected virtual void OnAwake()
   {
-    var playerPosition = GameManager.Instance.Player.transform.position;
-
-    if (_cameraMovementSettings.Contains(playerPosition))
-    {
-      _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
-    }
   }
 
   private void SetHorizontalBoundaries(HorizontalLockSettings horizontalLockSettings, CameraController cameraController)
@@ -88,8 +81,20 @@ public partial class CameraModifier : MonoBehaviour
       ZoomSettings,
       SmoothDampMoveSettings,
       Offset,
-      VerticalCameraFollowMode,
-      HorizontalOffsetDeltaMovementFactor);
+      CameraSettings);
+  }
+
+  public void TryForceTrigger()
+  {
+    _cameraController = Camera.main.GetComponent<CameraController>();
+    _cameraMovementSettings = CreateCameraMovementSettings();
+
+    var playerPosition = GameManager.Instance.Player.transform.position;
+    if (_cameraMovementSettings.Contains(playerPosition))
+    {
+      _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
+      _cameraController.MoveCameraToTargetPosition();
+    }
   }
 
   void OnEnterTriggerInvoked(object sender, TriggerEnterExitEventArgs e)

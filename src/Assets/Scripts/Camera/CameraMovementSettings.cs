@@ -12,9 +12,7 @@ public class CameraMovementSettings
 
   public Vector2 Offset;
 
-  public float HorizontalOffsetDeltaMovementFactor;
-
-  public VerticalCameraFollowMode VerticalCameraFollowMode;
+  public CameraSettings CameraSettings;
 
   public CameraMovementSettings(
     VerticalLockSettings verticalLockSettings,
@@ -22,16 +20,14 @@ public class CameraMovementSettings
     ZoomSettings zoomSettings,
     SmoothDampMoveSettings smoothDampMoveSettings,
     Vector2 offset,
-    VerticalCameraFollowMode verticalCameraFollowMode,
-    float horizontalOffsetDeltaMovementFactor)
+    CameraSettings cameraSettings)
   {
     HorizontalLockSettings = horizontalLockSettings;
     VerticalLockSettings = verticalLockSettings;
     Offset = offset;
     ZoomSettings = zoomSettings;
     SmoothDampMoveSettings = smoothDampMoveSettings;
-    VerticalCameraFollowMode = verticalCameraFollowMode;
-    HorizontalOffsetDeltaMovementFactor = horizontalOffsetDeltaMovementFactor;
+    CameraSettings = cameraSettings;
   }
 
   public override bool Equals(object obj)
@@ -51,8 +47,7 @@ public class CameraMovementSettings
       hash = hash * 23 + ZoomSettings.GetHashCode();
       hash = hash * 23 + SmoothDampMoveSettings.GetHashCode();
       hash = hash * 23 + Offset.GetHashCode();
-      hash = hash * 23 + HorizontalOffsetDeltaMovementFactor.GetHashCode();
-      hash = hash * 23 + VerticalCameraFollowMode.GetHashCode();
+      hash = hash * 23 + CameraSettings.GetHashCode();
 
       return hash;
     }

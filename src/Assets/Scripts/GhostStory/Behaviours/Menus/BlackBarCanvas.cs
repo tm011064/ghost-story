@@ -135,9 +135,10 @@ public class BlackBarCanvas : MonoBehaviour
       transform.position.y,
       cameraController.CameraOffset.z);
 
+    // TODO (Roman): this doesn't always work
     transform.localScale = new Vector3(
-      screenSize.x,
-      screenSize.y);
+      screenSize.x * 1000,
+      screenSize.y * 1000);
   }
 
   private void SetAlpha(float alpha)

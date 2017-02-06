@@ -2,7 +2,7 @@
 {
   protected override void OnCameraScrollCompleted()
   {
-    CameraController.ClearCameraModifiers();
+    CameraController.Reset();
     CameraController.OnCameraModifierEnter(CameraMovementSettings);
   }
 }

@@ -17,9 +17,9 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   [HideInInspector]
   public GhostStoryDefaultGameSettings GameSettings;
 
-  private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
+  private ILookup<Universe, GameObject> _gameObjectsByLayerUniverseKey;
 
-  private ILookup<LayerUniverseKey, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
+  private ILookup<Universe, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
 
   private FreezableTimer _freezableTimer;
 
@@ -45,7 +45,6 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
       LoadGameState());
 
     DisableAndHideAllObjects();
-    SwitchLayer(LevelLayer.House);
     SwitchToRealWorld();
   }
 
@@ -54,7 +53,6 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     Reset();
 
     DisableAndHideAllObjects();
-    SwitchLayer(LevelLayer.House);
     SwitchToRealWorld();
   }
 
@@ -91,17 +89,17 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     NotifyGameStateChanged();
   }
 
-  private IEnumerable<LayerUniverseKey> CreateKeys(LevelObjectConfig levelObjectConfig)
+  private IEnumerable<Universe> CreateKeys(LevelObjectConfig levelObjectConfig)
   {
     if (levelObjectConfig.Universe == Universe.Global)
     {
-      yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = Universe.AlternateWorld };
-      yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = Universe.RealWorld };
+      yield return Universe.AlternateWorld;
+      yield return Universe.RealWorld;
 
       yield break;
     }
 
-    yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = levelObjectConfig.Universe };
+    yield return levelObjectConfig.Universe;
   }
 
   public void OnInventoryItemAcquired(InventoryItem inventoryItem)
@@ -142,11 +140,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
     var gameState = new GhostStoryGameState
     {
-      ActiveUniverse = new LayerUniverseKey { Layer = LevelLayer.House, Universe = Universe.RealWorld },
+      ActiveUniverse = Universe.RealWorld,
       Weapons = weapons,
       DoorKeys = doorKeys,
       MisaHealthUnits = misaHealth,
-      KinoHealthUnits = kinoHealth
+      KinoHealthUnits = kinoHealth,
+      SpawnPlayerName = PlayableCharacterNames.Misa.ToString()
     };
 
     SaveGameState(gameState, fileName);
@@ -207,12 +206,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   public bool IsRealWorldActivated()
   {
-    return GameState.ActiveUniverse.Universe == Universe.RealWorld;
+    return GameState.ActiveUniverse == Universe.RealWorld;
   }
 
   public bool IsAlternateWorldActivated()
   {
-    return GameState.ActiveUniverse.Universe == Universe.AlternateWorld;
+    return GameState.ActiveUniverse == Universe.AlternateWorld;
   }
 
   private void DisableCurrentGameObjects()
@@ -245,7 +244,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   {
     DisableCurrentGameObjects();
 
-    GameState.ActiveUniverse = new LayerUniverseKey { Layer = GameState.ActiveUniverse.Layer, Universe = universe };
+    GameState.ActiveUniverse = universe;
 
     EnableCurrentGameObjects();
   }
@@ -262,17 +261,6 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     _freezableTimer.Freeze();
 
     SwitchUniverse(Universe.AlternateWorld);
-  }
-
-  public void SwitchLayer(LevelLayer layer)
-  {
-    Camera.main.GetComponent<CameraController>().ClearCameraModifiers();
-
-    DisableCurrentGameObjects();
-
-    GameState.ActiveUniverse = new LayerUniverseKey { Layer = layer, Universe = GameState.ActiveUniverse.Universe };
-
-    EnableCurrentGameObjects();
   }
 
   public void RegisterCallback(float delay, Action action, string name)

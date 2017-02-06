@@ -15,7 +15,7 @@ public class GhostStoryMovingEnemyController : MovingEnemyController
 
   protected bool CanCollide()
   {
-    return GhostStoryGameContext.Instance.GameState.ActiveUniverse.Universe == EnemyDamageBehaviour.Universe;
+    return GhostStoryGameContext.Instance.GameState.ActiveUniverse == EnemyDamageBehaviour.Universe;
   }
 
   protected override void OnFreeze()

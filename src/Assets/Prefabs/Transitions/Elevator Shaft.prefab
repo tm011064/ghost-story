@@ -16,11 +16,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013746679584}
-  - 114: {fileID: 114000012356708966}
-  - 61: {fileID: 61000010246332814}
+  - component: {fileID: 4000013746679584}
+  - component: {fileID: 61000010246332814}
+  - component: {fileID: 114542829112473628}
   m_Layer: 15
   m_Name: Elevator Shaft
   m_TagString: Untagged
@@ -37,10 +37,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &61000010246332814
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -55,7 +55,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 64, y: 64}
---- !u!114 &114000012356708966
+--- !u!114 &114542829112473628
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -63,6 +63,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000013380084920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08f9a8fa0b56aba48a2e19e937d2ed21, type: 3}
+  m_Script: {fileID: 11500000, guid: 99d3fbfe60c21c74fb87acd6f957f8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TransitionToScene: 
+  TransitionToPortalName: 
+  PortalName: 

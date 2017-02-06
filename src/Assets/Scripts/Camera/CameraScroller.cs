@@ -80,8 +80,7 @@ public partial class CameraScroller : MonoBehaviour
       ZoomSettings,
       SmoothDampMoveSettings,
       Offset,
-      CameraSettings.VerticalCameraFollowMode,
-      CameraSettings.HorizontalOffsetDeltaMovementFactor);
+      CameraSettings);
   }
 
   private void StartScroll(Collider2D collider)

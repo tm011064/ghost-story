@@ -77,8 +77,7 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
       ZoomSettings,
       SmoothDampMoveSettings,
       Offset,
-      VerticalCameraFollowMode,
-      HorizontalOffsetDeltaMovementFactor);
+      CameraSettings);
 
     return cameraMovementSettings.Contains(point);
   }
