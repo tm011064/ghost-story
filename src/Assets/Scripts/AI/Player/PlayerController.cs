@@ -164,6 +164,13 @@ public partial class PlayerController : BaseCharacterController
     return collider;
   }
 
+  public float CalculateMaxJumpHeight()
+  {
+    return RunSettings.EnableRunning
+      ? JumpSettings.RunJumpHeight
+      : Math.Max(JumpSettings.StandJumpHeight, JumpSettings.WalkJumpHeight);
+  }
+
   public bool IsFacingRight()
   {
     return Sprite.transform.localScale.x > 0f;

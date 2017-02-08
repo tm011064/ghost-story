@@ -39,6 +39,14 @@ public partial class CameraModifier : MonoBehaviour
     OnAwake();
   }
 
+  protected void OverrideSettings(SmoothDampMoveSettings smoothDampMoveSettings, CameraSettings cameraSettings)
+  {
+    CameraSettings = cameraSettings;
+    SmoothDampMoveSettings = smoothDampMoveSettings;
+
+    _cameraMovementSettings = CreateCameraMovementSettings();
+  }
+
   protected virtual void OnAwake()
   {
   }
@@ -65,7 +73,7 @@ public partial class CameraModifier : MonoBehaviour
       + cameraController.TargetScreenSize.y * .5f / ZoomSettings.ZoomPercentage;
   }
 
-  private CameraMovementSettings CreateCameraMovementSettings()
+  protected CameraMovementSettings CreateCameraMovementSettings()
   {
     if (ZoomSettings.ZoomPercentage == 0f)
     {

@@ -56,10 +56,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameState:
+    ActiveUniverse: 0
     Weapons: []
     DoorKeys: []
     MisaHealthUnits: 0
     KinoHealthUnits: 0
+    SpawnPlayerName: 
+    SpawnPlayerPortalName: 
   GameSettings: {fileID: 0}
 --- !u!114 &114000010915316208
 MonoBehaviour:
@@ -125,8 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SmoothDampMoveSettings:
     HorizontalSmoothDampTime: 0.2
-    VerticalSmoothDampTime: 0.1
-    VerticalRapidDescentSmoothDampTime: 0.001
+    VerticalSmoothDampTime: 0.2
+    VerticalRapidDescentSmoothDampTime: 0.01
     VerticalAboveRapidAcsentSmoothDampTime: 0.01
   FullScreenScrollSettings:
     TransitionTime: 1.2

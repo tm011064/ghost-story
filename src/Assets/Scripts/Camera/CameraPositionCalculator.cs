@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraPositionCalculator
 {
@@ -86,93 +82,112 @@ public class CameraPositionCalculator
           : cameraMovementSettings.SmoothDampMoveSettings.VerticalSmoothDampTime;
   }
 
+  private void UnlockAboveJumpHeightWhenPlayerMovesDownwards(ref UpdateParameters updateParameters)
+  {
+    if (updateParameters.IsAboveJumpHeightLocked && GameManager.Instance.Player.CharacterPhysicsManager.Velocity.y < 0f)
+    {
+      updateParameters.IsAboveJumpHeightLocked = false;
+    }
+  }
+
+  private bool IsPlayerAboveTopVerticalLock(
+    CameraController cameraController,
+    CameraMovementSettings cameraMovementSettings)
+  {
+    return cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock
+       && cameraController.Target.position.y > cameraMovementSettings.VerticalLockSettings.TopBoundary;
+  }
+
+  private bool CameraCanMoveUp(
+    CameraController cameraController,
+    CameraMovementSettings cameraMovementSettings)
+  {
+    return !cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock
+      || cameraController.Target.position.y <= cameraMovementSettings.VerticalLockSettings.TopBoundary;
+  }
+
+  private bool IsPlayerAboveMaxPossibleJumpHeight(CameraController cameraController)
+  {
+    return cameraController.Target.position.y >
+      cameraController.Transform.position.y
+      + cameraController.CameraOffset.y
+      + GameManager.Instance.Player.CalculateMaxJumpHeight();
+  }
+
   private void AdjustFollowWhenGroundedParameters(
     CameraController cameraController,
     CameraMovementSettings cameraMovementSettings,
     ref UpdateParameters updateParameters)
   {
-    if (updateParameters.IsAboveJumpHeightLocked && cameraController.CharacterPhysicsManager.Velocity.y < 0f)
-    {
-      // We set this value to true in order to make the camera follow the character upwards when catapulted above the maximum jump height. The
-      // character can not exceed the maximum jump heihgt without help (trampoline, powerup...).
-      updateParameters.IsAboveJumpHeightLocked = false; // if we reached the peak we unlock
-    }
+    UnlockAboveJumpHeightWhenPlayerMovesDownwards(ref updateParameters);
 
-    if (updateParameters.IsAboveJumpHeightLocked
-      && (cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock
-       && cameraController.Target.position.y > cameraMovementSettings.VerticalLockSettings.TopBoundary))
+    if (updateParameters.IsAboveJumpHeightLocked)
     {
-      // we were locked but character has exceeded the top boundary. In that case we set the y pos and smooth damp
-      updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.TopBoundary + cameraController.CameraOffset.y;
+      if (IsPlayerAboveTopVerticalLock(cameraController, cameraMovementSettings))
+      {
+        updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.TopBoundary + cameraController.CameraOffset.y;
+        updateParameters.DoSmoothDamp = true;
+        return;
+      }
 
-      updateParameters.DoSmoothDamp = true;
-    }
-    else
-    {
-      // we want to adjust the y position on upward movement if:
-      if (updateParameters.IsAboveJumpHeightLocked // either we are locked in above jump height lock
-          || (
-                (
-                  !cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock // OR (we either have no top boundary or we are beneath the top boundary in which case we can go up)
-                  || cameraController.Target.position.y <= cameraMovementSettings.VerticalLockSettings.TopBoundary)
-                &&
-                (
-                  cameraController.Target.position.y > 
-                    cameraController.Transform.position.y 
-                    + cameraController.CameraOffset.y 
-                    + cameraController.GameManager.Player.JumpSettings.RunJumpHeight // (the character has exceeded the jump height which means he has been artifically catapulted upwards)
-                  && cameraController.CharacterPhysicsManager.Velocity.y > 0f // AND we go up  
-                )
-             )
-        )
+      if (GameManager.Instance.Player.CharacterPhysicsManager.Velocity.y > 0f
+        && CameraCanMoveUp(cameraController, cameraMovementSettings)
+        && IsPlayerAboveMaxPossibleJumpHeight(cameraController))
       {
         updateParameters.YPos = cameraController.Target.position.y - cameraController.GameManager.Player.JumpSettings.RunJumpHeight;
-
-        updateParameters.IsAboveJumpHeightLocked = true; // make sure for second if condition
-      }
-      else
-      {
-        updateParameters.IsFallingDown = (cameraController.CharacterPhysicsManager.Velocity.y < 0f
-           && (cameraController.Target.position.y < cameraController.Transform.position.y + cameraController.CameraOffset.y));
-
-        if (cameraController.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below
-          || updateParameters.IsFallingDown)
-        {
-          if (cameraMovementSettings.VerticalLockSettings.Enabled)
-          {
-            updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.EnableDefaultVerticalLockPosition
-              ? cameraMovementSettings.VerticalLockSettings.DefaultVerticalLockPosition
-              : cameraController.Target.position.y;
-
-            if (cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock
-              && cameraController.Target.position.y > cameraMovementSettings.VerticalLockSettings.TopBoundary)
-            {
-              updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.TopBoundary + cameraController.CameraOffset.y;
-
-              // we might have been shot up, so use smooth damp override
-              updateParameters.DoSmoothDamp = true;
-            }
-            else if (cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock
-              && cameraController.Target.position.y < cameraMovementSettings.VerticalLockSettings.BottomBoundary)
-            {
-              updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.BottomBoundary + cameraController.CameraOffset.y;
-
-              // we might have been falling down, so use smooth damp override
-              updateParameters.DoSmoothDamp = true;
-            }
-          }
-          else
-          {
-            updateParameters.YPos = cameraController.Target.position.y;
-          }
-        }
-        else
-        {
-          // character is in air, so the camera stays same
-          updateParameters.YPos = cameraController.Transform.position.y + cameraController.CameraOffset.y; // we need to add offset bceause we will deduct it later on again
-        }
+        updateParameters.IsAboveJumpHeightLocked = true;
+        return;
       }
     }
+
+    updateParameters.IsFallingDown = (GameManager.Instance.Player.CharacterPhysicsManager.Velocity.y < 0f
+       && (cameraController.Target.position.y < cameraController.Transform.position.y + cameraController.CameraOffset.y));
+
+    if (GameManager.Instance.Player.IsAirborne() && !updateParameters.IsFallingDown)
+    {
+      if (cameraMovementSettings.VerticalLockSettings.Enabled
+        && cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock
+        && cameraController.Target.position.y + cameraController.CameraOffset.y > cameraMovementSettings.VerticalLockSettings.TopBoundary)
+      {
+        updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.TopBoundary + cameraController.CameraOffset.y;
+        updateParameters.DoSmoothDamp = true;
+        return;
+      }
+
+      updateParameters.YPos = cameraController.Transform.position.y + cameraController.CameraOffset.y;
+      return;
+    }
+
+    if (!cameraMovementSettings.VerticalLockSettings.Enabled)
+    {
+      updateParameters.YPos = cameraController.Target.position.y;
+      return;
+    }
+
+    if (cameraMovementSettings.VerticalLockSettings.EnableTopVerticalLock)
+    {
+      if (cameraController.Target.position.y > cameraMovementSettings.VerticalLockSettings.TopBoundary + cameraController.CameraOffset.y)
+      {
+        updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.TopBoundary + cameraController.CameraOffset.y;
+        updateParameters.DoSmoothDamp = true;
+        return;
+      }
+
+      if (cameraController.Target.position.y < cameraMovementSettings.VerticalLockSettings.BottomBoundary)
+      {
+        updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.BottomBoundary + cameraController.CameraOffset.y;
+        updateParameters.DoSmoothDamp = true;
+        return;
+      }
+    }
+
+    if (cameraMovementSettings.VerticalLockSettings.EnableDefaultVerticalLockPosition)
+    {
+      updateParameters.YPos = cameraMovementSettings.VerticalLockSettings.DefaultVerticalLockPosition;
+      return;
+    }
+
+    updateParameters.YPos = cameraController.Target.position.y;
   }
 
   private void AdjustFollowAlwaysParameters(

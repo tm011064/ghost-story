@@ -90,6 +90,7 @@ namespace Assets.Editor.Tiled.GhostStory
         {
           new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
         });

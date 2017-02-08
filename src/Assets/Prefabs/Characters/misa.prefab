@@ -197,7 +197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4000010017800916
 Transform:
   m_ObjectHideFlags: 1
@@ -424,9 +424,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: -1, y: 20}
+  m_Offset: {x: -1, y: 16}
   serializedVersion: 2
-  m_Size: {x: 8, y: 40}
+  m_Size: {x: 8, y: 32}
 --- !u!95 &95000014167661036
 Animator:
   serializedVersion: 3
@@ -482,8 +482,8 @@ MonoBehaviour:
     StandJumpHeight: 90
     WalkJumpHeight: 90
     WalkJumpHeightSpeedTrigger: 9999
-    RunJumpHeight: 9999
-    RunJumpHeightSpeedTrigger: 9999
+    RunJumpHeight: 0
+    RunJumpHeightSpeedTrigger: 0
     InAirDamping: 8
     AllowJumpAfterGroundLostThreashold: 0.1
     MaxDownwardSpeed: -220
@@ -684,7 +684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 937c1616b0c3ae845a770a7efd13b2a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Duration: 10
+  Duration: -1
 --- !u!114 &114000014249619662
 MonoBehaviour:
   m_ObjectHideFlags: 1

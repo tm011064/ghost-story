@@ -26,9 +26,6 @@ public partial class CameraController : MonoBehaviour
   public bool IsAboveJumpHeightLocked;
 
   [HideInInspector]
-  public CharacterPhysicsManager CharacterPhysicsManager;
-
-  [HideInInspector]
   public GameManager GameManager;
 
   [HideInInspector]
@@ -198,8 +195,6 @@ public partial class CameraController : MonoBehaviour
     LastTargetPosition = Target.transform.position;
 
     TargetedTransformPositionX = LastTargetPosition.x;
-
-    CharacterPhysicsManager = Target.GetComponent<CharacterPhysicsManager>();
 
     Logger.Info("Window size: " + Screen.width + " x " + Screen.height);
   }
