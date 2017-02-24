@@ -126,6 +126,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f2fb3c7ccb59da498e0547c85192174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  VerticalSnapWindowSettings:
+    OuterWindowTopBoundsPositionPercentage: 0.68
+    InnerWindowTopBoundsPositionPercentage: 0.535
+    OuterWindowBottomBoundsPositionPercentage: 0.3
+    InnerWindowBottomBoundsPositionPercentage: 0.32
+    UpwardMovementSnapPositionPercentage: 0.16
+    DownwardMovementSnapPositionPercentage: 0
   SmoothDampMoveSettings:
     HorizontalSmoothDampTime: 0.2
     VerticalSmoothDampTime: 0.2
@@ -141,8 +148,8 @@ MonoBehaviour:
     FullScreenScrollerTransitionMode: 1
     VerticalFullScreenScrollerTransitionSpeedFactor: 4
   CameraSettings:
-    HorizontalOffsetDeltaMovementFactor: 0
     VerticalCameraFollowMode: 1
+    HorizontalCameraFollowMode: 0
 --- !u!114 &114942422582685766
 MonoBehaviour:
   m_ObjectHideFlags: 1

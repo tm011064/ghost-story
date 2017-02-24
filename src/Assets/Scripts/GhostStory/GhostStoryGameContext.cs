@@ -17,9 +17,9 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   [HideInInspector]
   public GhostStoryDefaultGameSettings GameSettings;
 
-  private ILookup<Universe, GameObject> _gameObjectsByLayerUniverseKey;
+  private ILookup<Universe, GameObject> _gameObjectsByUniverse;
 
-  private ILookup<Universe, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
+  private ILookup<Universe, IFreezable> _freezeableGameObjectsByUniverse;
 
   private FreezableTimer _freezableTimer;
 
@@ -73,11 +73,11 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
       .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
       .ToArray();
 
-    _gameObjectsByLayerUniverseKey = items
+    _gameObjectsByUniverse = items
       .Where(i => i.FreezableComponent == null)
       .ToLookup(c => c.Key, c => c.GameObject);
 
-    _freezeableGameObjectsByLayerUniverseKey = items
+    _freezeableGameObjectsByUniverse = items
       .Where(i => i.FreezableComponent != null)
       .ToLookup(c => c.Key, c => c.FreezableComponent);
   }
@@ -195,7 +195,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   public void DisableAndHideAllObjects()
   {
-    foreach (var lookupGrouping in _gameObjectsByLayerUniverseKey)
+    foreach (var lookupGrouping in _gameObjectsByUniverse)
     {
       foreach (var gameObject in lookupGrouping)
       {
@@ -216,12 +216,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   private void DisableCurrentGameObjects()
   {
-    foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var gameObject in _gameObjectsByUniverse[GameState.ActiveUniverse])
     {
       gameObject.DisableAndHide();
     }
 
-    foreach (var freezable in _freezeableGameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var freezable in _freezeableGameObjectsByUniverse[GameState.ActiveUniverse])
     {
       freezable.Freeze();
     }
@@ -229,12 +229,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   private void EnableCurrentGameObjects()
   {
-    foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var gameObject in _gameObjectsByUniverse[GameState.ActiveUniverse])
     {
       gameObject.EnableAndShow();
     }
 
-    foreach (var freezable in _freezeableGameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var freezable in _freezeableGameObjectsByUniverse[GameState.ActiveUniverse])
     {
       freezable.Unfreeze();
     }
@@ -247,6 +247,8 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     GameState.ActiveUniverse = universe;
 
     EnableCurrentGameObjects();
+
+    Camera.main.GetComponent<CameraController>().Reset(); // TODO (Roman): is that correct? camera moves for some reason
   }
 
   public void SwitchToRealWorld()

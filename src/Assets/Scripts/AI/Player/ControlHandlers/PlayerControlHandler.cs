@@ -213,11 +213,13 @@ public class PlayerControlHandler : BaseControlHandler
 
       float jumpHeight;
 
-      if (absVelocity >= PlayerController.JumpSettings.RunJumpHeightSpeedTrigger)
+      if (PlayerController.JumpSettings.RunJumpHeightSpeedTrigger > 0
+        && absVelocity >= PlayerController.JumpSettings.RunJumpHeightSpeedTrigger)
       {
         jumpHeight = PlayerController.JumpSettings.RunJumpHeight;
       }
-      else if (absVelocity >= PlayerController.JumpSettings.WalkJumpHeightSpeedTrigger)
+      else if (PlayerController.JumpSettings.WalkJumpHeightSpeedTrigger > 0
+        && absVelocity >= PlayerController.JumpSettings.WalkJumpHeightSpeedTrigger)
       {
         jumpHeight = PlayerController.JumpSettings.WalkJumpHeight;
       }
@@ -252,7 +254,7 @@ public class PlayerControlHandler : BaseControlHandler
 
       value = 0f;
     }
-
+    
     if (canJump
       && (GameManager.InputStateManager.GetButtonState("Jump").ButtonPressState & allowedJumpButtonPressState) != 0)
     {

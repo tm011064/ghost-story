@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public partial class CameraModifier : MonoBehaviour
+public partial class CameraModifier : MonoBehaviour, ICameraModifier
 {
+  public VerticalSnapWindowSettings VerticalSnapWindowSettings;
+
   public VerticalLockSettings VerticalLockSettings;
 
   public HorizontalLockSettings HorizontalLockSettings;
@@ -39,10 +41,19 @@ public partial class CameraModifier : MonoBehaviour
     OnAwake();
   }
 
-  protected void OverrideSettings(SmoothDampMoveSettings smoothDampMoveSettings, CameraSettings cameraSettings)
+  public void Activate()
+  {
+    _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
+  }
+
+  protected void OverrideSettings(
+    SmoothDampMoveSettings smoothDampMoveSettings,
+    CameraSettings cameraSettings,
+    VerticalSnapWindowSettings verticalSnapWindowSettings)
   {
     CameraSettings = cameraSettings;
     SmoothDampMoveSettings = smoothDampMoveSettings;
+    VerticalSnapWindowSettings = verticalSnapWindowSettings;
 
     _cameraMovementSettings = CreateCameraMovementSettings();
   }
@@ -84,12 +95,28 @@ public partial class CameraModifier : MonoBehaviour
     SetHorizontalBoundaries(HorizontalLockSettings, _cameraController);
 
     return new CameraMovementSettings(
+      VerticalSnapWindowSettings,
       VerticalLockSettings,
       HorizontalLockSettings,
       ZoomSettings,
       SmoothDampMoveSettings,
       Offset,
       CameraSettings);
+  }
+
+  // TODO (Roman): this is not fast
+  public bool Contains(Vector2 point)
+  {
+    var cameraMovementSettings = new CameraMovementSettings(
+      VerticalSnapWindowSettings,
+      VerticalLockSettings,
+      HorizontalLockSettings,
+      ZoomSettings,
+      SmoothDampMoveSettings,
+      Offset,
+      CameraSettings);
+
+    return cameraMovementSettings.Contains(point);
   }
 
   public void TryForceTrigger()

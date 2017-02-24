@@ -481,9 +481,9 @@ MonoBehaviour:
     Gravity: -700
     StandJumpHeight: 90
     WalkJumpHeight: 90
-    WalkJumpHeightSpeedTrigger: 9999
-    RunJumpHeight: 0
-    RunJumpHeightSpeedTrigger: 0
+    WalkJumpHeightSpeedTrigger: -1
+    RunJumpHeight: 90
+    RunJumpHeightSpeedTrigger: -1
     InAirDamping: 8
     AllowJumpAfterGroundLostThreashold: 0.1
     MaxDownwardSpeed: -220

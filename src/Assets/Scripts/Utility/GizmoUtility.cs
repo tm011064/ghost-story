@@ -2,6 +2,22 @@
 
 public static class GizmoUtility
 {
+  public static void DrawHorizontalLine(float xPosFrom, float xPosTo, float yPos, Color color)
+  {
+    Gizmos.color = color;
+    Gizmos.DrawLine(
+      new Vector2(xPosFrom, yPos),
+      new Vector2(xPosTo, yPos));
+  }
+
+  public static void DrawVerticalLine(float yPosFrom, float yPosTo, float xPos, Color color)
+  {
+    Gizmos.color = color;
+    Gizmos.DrawLine(
+      new Vector2(xPos, yPosFrom),
+      new Vector2(xPos, yPosTo));
+  }
+
   public static void DrawBoundingBox(Transform transform, Vector3 extents, Color color)
   {
     var frontTopLeft = new Vector3(-extents.x, +extents.y, -extents.z);  // front top left corner

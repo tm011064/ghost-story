@@ -5,6 +5,8 @@ using UnityEngine;
 
 public partial class CameraScroller : MonoBehaviour
 {
+  public VerticalSnapWindowSettings VerticalSnapWindowSettings;
+
   public ZoomSettings ZoomSettings;
 
   public SmoothDampMoveSettings SmoothDampMoveSettings;
@@ -68,13 +70,14 @@ public partial class CameraScroller : MonoBehaviour
     }
   }
 
-  private CameraMovementSettings CreateCameraMovementSettings()
+  protected CameraMovementSettings CreateCameraMovementSettings()
   {
     var horizontalLockSettings = CreateHorizontalLockSettings();
 
     var verticalLockSettings = CreateVerticalLockSettings();
 
     return new CameraMovementSettings(
+      VerticalSnapWindowSettings,
       verticalLockSettings,
       horizontalLockSettings,
       ZoomSettings,

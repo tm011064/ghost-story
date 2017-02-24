@@ -4,6 +4,7 @@
   {
     OverrideSettings(
       GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings,
-      GhostStoryGameContext.Instance.GameSettings.CameraSettings);
+      GhostStoryGameContext.Instance.GameSettings.CameraSettings,
+      GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings);
   }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
+using UnityEngine;
 
 [Serializable]
 public class CameraSettings
 {
-  public float HorizontalOffsetDeltaMovementFactor = 0;
-
   public VerticalCameraFollowMode VerticalCameraFollowMode;
+
+  public HorizontalCameraFollowMode HorizontalCameraFollowMode;
 
   public override bool Equals(object obj)
   {
@@ -19,8 +20,8 @@ public class CameraSettings
     {
       int hash = 17;
 
-      hash = hash * 23 + HorizontalOffsetDeltaMovementFactor.GetHashCode();
       hash = hash * 23 + VerticalCameraFollowMode.GetHashCode();
+      hash = hash * 23 + HorizontalCameraFollowMode.GetHashCode();
 
       return hash;
     }

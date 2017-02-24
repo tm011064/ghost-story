@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class CameraMovementSettings
 {
+  public VerticalSnapWindowSettings VerticalSnapWindowSettings;
+
   public VerticalLockSettings VerticalLockSettings;
 
   public HorizontalLockSettings HorizontalLockSettings;
@@ -15,6 +18,7 @@ public class CameraMovementSettings
   public CameraSettings CameraSettings;
 
   public CameraMovementSettings(
+    VerticalSnapWindowSettings verticalSnapWindowSettings,
     VerticalLockSettings verticalLockSettings,
     HorizontalLockSettings horizontalLockSettings,
     ZoomSettings zoomSettings,
@@ -22,6 +26,7 @@ public class CameraMovementSettings
     Vector2 offset,
     CameraSettings cameraSettings)
   {
+    VerticalSnapWindowSettings = verticalSnapWindowSettings;
     HorizontalLockSettings = horizontalLockSettings;
     VerticalLockSettings = verticalLockSettings;
     Offset = offset;
@@ -42,6 +47,7 @@ public class CameraMovementSettings
     {
       int hash = 17;
 
+      hash = hash * 23 + VerticalSnapWindowSettings.GetHashCode();
       hash = hash * 23 + VerticalLockSettings.GetHashCode();
       hash = hash * 23 + HorizontalLockSettings.GetHashCode();
       hash = hash * 23 + ZoomSettings.GetHashCode();

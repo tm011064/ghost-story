@@ -176,6 +176,12 @@ public partial class PlayerController : BaseCharacterController
     return Sprite.transform.localScale.x > 0f;
   }
 
+  public bool GotGroundedThisFrame()
+  {
+    return !CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.WasGroundedLastFrame
+      && CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;
+  }
+
   public bool IsGrounded()
   {
     return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;
@@ -184,6 +190,16 @@ public partial class PlayerController : BaseCharacterController
   public bool IsAirborne()
   {
     return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == false;
+  }
+
+  public bool IsGoingUp()
+  {
+    return CharacterPhysicsManager.Velocity.y > 0;
+  }
+
+  public bool IsGoingDown()
+  {
+    return CharacterPhysicsManager.Velocity.y < 0;
   }
 
   public void OnFellFromClimb()

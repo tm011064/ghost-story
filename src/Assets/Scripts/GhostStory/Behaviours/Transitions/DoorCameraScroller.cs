@@ -21,6 +21,9 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
       CameraSettings = GhostStoryGameContext.Instance.GameSettings.CameraSettings;
       SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;
+      VerticalSnapWindowSettings = GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings;
+      
+      CameraMovementSettings = CreateCameraMovementSettings();
 
       _doorTriggerEnterBehaviour = GetComponentInChildren<DoorTriggerEnterBehaviour>();
       _doorTriggerEnterBehaviour.Open += TriggerScroll;

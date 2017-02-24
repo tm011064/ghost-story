@@ -72,6 +72,7 @@ public class CameraMovementSettingsManager
 
     _cameraMovementSettings.Remove(ActiveSettings);
 
+    // TODO (Roman): this throws after scene load
     ChangeSettings(_cameraMovementSettings.Last());
   }
 }
