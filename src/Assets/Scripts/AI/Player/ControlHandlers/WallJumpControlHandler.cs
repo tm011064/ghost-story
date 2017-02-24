@@ -83,7 +83,7 @@ public class WallJumpControlHandler : PlayerControlHandler
       return ControlHandlerAfterUpdateStatus.CanBeDisposed; // we only want this handler to be active while the player is in mid air
     }
 
-    // TODO (Roman): when wall jumping and floating, we should not be able to climb up a wall using wall jumps and floats
+    // TODO (old): when wall jumping and floating, we should not be able to climb up a wall using wall jumps and floats
     var velocity = PlayerController.CharacterPhysicsManager.Velocity;
 
     if (velocity.y < _wallJumpSettings.WallVelocityDownThreshold)

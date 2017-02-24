@@ -613,8 +613,6 @@ public class CharacterPhysicsManager : BasePhysicsManager
     LastMoveCalculationResult = moveCalculationResult;
 
     LastRaycastHits = new List<RaycastHit2D>(_raycastHitsThisFrame);
-
-    Logger.Trace(TRACE_TAG, "Collision state: {0}", LastMoveCalculationResult.CollisionState.ToString());
   }
 
   /// <summary>

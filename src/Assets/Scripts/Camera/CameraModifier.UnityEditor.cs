@@ -69,20 +69,6 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
     return horizontalLockSettings;
   }
 
-  public bool Contains(Vector2 point)
-  {
-    var cameraMovementSettings = new CameraMovementSettings(
-      VerticalLockSettings,
-      HorizontalLockSettings,
-      ZoomSettings,
-      SmoothDampMoveSettings,
-      Offset,
-      VerticalCameraFollowMode,
-      HorizontalOffsetDeltaMovementFactor);
-
-    return cameraMovementSettings.Contains(point);
-  }
-
   void OnDrawGizmos()
   {
     foreach (var collider in GetComponents<EdgeCollider2D>())

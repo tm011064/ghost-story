@@ -96,7 +96,7 @@ public partial class BreakablePlatform : SpawnBucketItemBehaviour, IObjectPoolBe
 
       if (BreakMode == PlatformBreakMode.FallDown)
       {
-        // TODO (Roman): do we need to unsubscribe?
+        // TODO (old): do we need to unsubscribe?
         _objectPoolingManager.BeforeDeactivated += OnBeforePoolingManagerDeactivated;
       }
     }

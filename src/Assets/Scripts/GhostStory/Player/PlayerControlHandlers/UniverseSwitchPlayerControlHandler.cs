@@ -1,5 +1,4 @@
-﻿
-public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
+﻿public class UniverseSwitchPlayerControlHandler : DefaultPlayerControlHandler
 {
   private readonly WorldSwitchSettings _worldSwitchSettings;
 

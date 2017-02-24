@@ -33,7 +33,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       yield return prefabsParent;
     }
 
-    private IEnumerable<GameObject> CreatePrefabFromGameObject(TiledObjectLayerConfig layerConfig)
+    protected virtual IEnumerable<GameObject> CreatePrefabFromGameObject(TiledObjectLayerConfig layerConfig)
     {
       foreach (var obj in layerConfig.TiledObjectgroup.Object)
       {
@@ -51,8 +51,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
          {
            Bounds = obj.GetBounds(),
            Properties = properties,
-           IsFlippedHorizontally = obj.Gid >= 2000000000,
-           IsFlippedVertically = (obj.Gid >= 1000000000 && obj.Gid < 2000000000) || obj.Gid >= 3000000000
+           IsFlippedHorizontally = IsFlippedHorizontally(obj),
+           IsFlippedVertically = IsFlippedVertically(obj)
          },
          obj.Name);
       }

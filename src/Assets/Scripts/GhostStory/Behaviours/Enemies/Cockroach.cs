@@ -11,7 +11,7 @@ public class Cockroach : GhostStoryMovingEnemyController
 
   public override void OnPlayerCollide(PlayerController playerController)
   {
-    if (GhostStoryGameContext.GameState.ActiveUniverse.Universe == EnemyDamageBehaviour.Universe)
+    if (GhostStoryGameContext.GameState.ActiveUniverse == EnemyDamageBehaviour.Universe)
     {
       playerController.Health.ApplyDamage(EnemyDamageBehaviour.DamageUnits, EnemyContactReaction.Knockback);
     }

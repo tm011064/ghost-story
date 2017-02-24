@@ -197,7 +197,7 @@ public partial class JumpControlledDisappearingPlatformGroup : MonoBehaviour, IO
 
         var platformToRemove = _currentPlatforms.Dequeue();
 
-        ObjectPoolingManager.Instance.Deactivate(platformToRemove); // TODO (Roman): notify and run fade animation
+        ObjectPoolingManager.Instance.Deactivate(platformToRemove); // TODO (old): notify and run fade animation
       }
     }
   }
@@ -206,7 +206,7 @@ public partial class JumpControlledDisappearingPlatformGroup : MonoBehaviour, IO
   {
     yield return new WaitForSeconds(delayTime);
 
-    ObjectPoolingManager.Instance.Deactivate(platform); // TODO (Roman): notify and run fade animation
+    ObjectPoolingManager.Instance.Deactivate(platform); // TODO (old): notify and run fade animation
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()

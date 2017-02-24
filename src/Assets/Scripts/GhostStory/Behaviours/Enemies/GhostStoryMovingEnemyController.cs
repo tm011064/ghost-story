@@ -15,12 +15,12 @@ public class GhostStoryMovingEnemyController : MovingEnemyController
 
   protected bool CanCollide()
   {
-    return GhostStoryGameContext.Instance.GameState.ActiveUniverse.Universe == EnemyDamageBehaviour.Universe;
+    return GhostStoryGameContext.Instance.GameState.ActiveUniverse == EnemyDamageBehaviour.Universe;
   }
 
   protected override void OnFreeze()
   {
-    // TODO (Roman): this is just a quick hack, do this properly eventually
+    // TODO (Important): this is just a quick hack, do this properly eventually
     var sprite = GetComponentInChildren<SpriteRenderer>();
     sprite.color = new Color(.3f, .3f, .3f, 1);
   }

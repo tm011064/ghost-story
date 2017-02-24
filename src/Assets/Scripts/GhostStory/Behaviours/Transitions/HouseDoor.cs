@@ -1,24 +1,36 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.GhostStory.Behaviours.Transitions
+public partial class HouseDoor : ScenePortal, IScenePortal
 {
-  public partial class HouseDoor : MonoBehaviour
+  [HideInInspector]
+  public GameObject Door;
+
+  [HideInInspector]
+  public GameObject TransitionDoor;
+
+  void Awake()
   {
-    public DoorKey DoorKey = DoorKey.GreenHouseDoorKey;
+    Door = transform.Find("Door").gameObject;
+    TransitionDoor = transform.Find("Transition Door").gameObject;
+  }
 
-    public HorizontalDirection WallLocation = HorizontalDirection.Left;
+  public void SpawnPlayer()
+  {
+    GetHouseDoorFadeInBehaviour().MovePlayerToTargetPosition(this, GameManager.Instance.Player);
+  }
 
-    public float PlayerSpawnDistance = 32;
+  public void SpawnPlayerFromPortal(Vector3 fromPortalPosition)
+  {
+    GetHouseDoorFadeInBehaviour().StartCameraScroll(fromPortalPosition);
+  }
 
-    public string TransitionToScene;
+  public string GetPortalName()
+  {
+    return PortalName;
+  }
 
-    public string TransitionToSceneObject;
-
-    public Vector2 CameraModifierPadding = new Vector2(6, 6);
-
-    public void SpawnPlayer(PlayerController playerController, Vector3? cameraPosition)
-    {
-
-    }
+  private HouseDoorFadeInBehaviour GetHouseDoorFadeInBehaviour()
+  {
+    return GetComponentInChildren<HouseDoorFadeInBehaviour>();
   }
 }

@@ -30,7 +30,7 @@ public partial class SpawnBucket : BaseMonoBehaviour
 
   void Awake()
   {
-    // TODO (Roman): this only works for editor, should be done on building the app as well
+    // TODO (old): this only works for editor, should be done on building the app as well
     // if in editor, auto register to facilitate    
     RegisterChildObjects();
   }

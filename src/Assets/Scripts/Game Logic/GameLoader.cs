@@ -17,7 +17,7 @@ public class GameLoader : MonoBehaviour
 
     GameManager.Instance.GameSettings = GameSettings;
 
-    // TODO (Roman): sound placeholder
+    // TODO (old): sound placeholder
     //if (SoundManager.instance == null)
     //  Instantiate(soundManager);
 

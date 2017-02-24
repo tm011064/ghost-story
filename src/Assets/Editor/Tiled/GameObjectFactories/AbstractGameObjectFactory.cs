@@ -42,7 +42,6 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         .Select(og => new TiledObjectLayerConfig
         {
           TiledObjectgroup = og,
-          Layer = og.GetPropertyValue("Layer"),
           Type = og.GetPropertyValue("Type"),
           Universe = og.GetPropertyValue("Universe"),
           Commands = og.GetCommands().ToArray()
@@ -167,6 +166,16 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       meshTransform.parent = gameObject.transform;
       meshTransform.gameObject.name = "Tiled Mesh";
       meshTransform.gameObject.layer = LayerMask.NameToLayer("Background");
+    }
+
+    protected bool IsFlippedHorizontally(Object obj)
+    {
+      return obj.Gid >= 2000000000;
+    }
+
+    protected bool IsFlippedVertically(Object obj)
+    {
+      return (obj.Gid >= 1000000000 && obj.Gid < 2000000000) || obj.Gid >= 3000000000;
     }
   }
 }

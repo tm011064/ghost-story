@@ -53,6 +53,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
           new Vector2(extents.x, extents.y)
         };
 
+        edgeColliderObject.AddComponent<OneWayPlatform>();
+
         edgeColliderObject.transform.parent = collidersGameObject.transform;
       }
 

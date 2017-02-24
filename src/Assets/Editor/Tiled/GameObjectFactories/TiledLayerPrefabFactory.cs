@@ -8,7 +8,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
   public class TiledLayerPrefabFactory : AbstractGameObjectFactory
   {
     public TiledLayerPrefabFactory(
-      GameObject root, 
+      GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
       Dictionary<string, Objecttype> objecttypesByName)
@@ -19,7 +19,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     public override IEnumerable<GameObject> Create()
     {
       var prefabsParent = new GameObject("Prefab Group");
-      // TODO (Roman): get commands and copy assign prefab mesh
+
       prefabsParent.transform.position = Vector3.zero;
 
       var createdGameObjects = TileLayerConfigs

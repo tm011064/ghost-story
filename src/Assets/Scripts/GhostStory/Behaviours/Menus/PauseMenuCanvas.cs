@@ -143,7 +143,7 @@ public class PauseMenuCanvas : MonoBehaviour
   {
     if (GameManager.Instance.InputStateManager.IsButtonDown("Menu Exit"))
     {
-#if DEBUG // TODO (Roman): remove eventually, we should not safe here
+#if DEBUG // TODO (Important): remove eventually, we should not safe here
       GhostStoryGameContext.Instance.SaveGameState(
         GhostStoryGameContext.Instance.GameState);
 #endif
@@ -153,7 +153,7 @@ public class PauseMenuCanvas : MonoBehaviour
       return;
     }
 
-#if DEBUG // TODO (Roman): remove eventually
+#if DEBUG // TODO (Important): remove eventually
     if (GameManager.Instance.InputStateManager.IsButtonDown("Menu Debug Toggle Available"))
     {
       _focusedMenuItemGroup.OnSelectedItemToggleAvailable();
@@ -211,7 +211,7 @@ public class PauseMenuCanvas : MonoBehaviour
 
     public bool IsMultiSelect { get; set; }
 
-#if DEBUG // TODO (Roman): remove eventually
+#if DEBUG // TODO (Important): remove eventually
     public void OnSelectedItemToggleAvailable()
     {
       SelectedItem.InventoryItem.IsAvailable = !SelectedItem.InventoryItem.IsAvailable;

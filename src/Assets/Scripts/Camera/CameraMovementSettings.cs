@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class CameraMovementSettings
 {
+  public VerticalSnapWindowSettings VerticalSnapWindowSettings;
+
   public VerticalLockSettings VerticalLockSettings;
 
   public HorizontalLockSettings HorizontalLockSettings;
@@ -10,28 +13,22 @@ public class CameraMovementSettings
 
   public SmoothDampMoveSettings SmoothDampMoveSettings;
 
-  public Vector2 Offset;
-
-  public float HorizontalOffsetDeltaMovementFactor;
-
-  public VerticalCameraFollowMode VerticalCameraFollowMode;
+  public CameraSettings CameraSettings;
 
   public CameraMovementSettings(
+    VerticalSnapWindowSettings verticalSnapWindowSettings,
     VerticalLockSettings verticalLockSettings,
     HorizontalLockSettings horizontalLockSettings,
     ZoomSettings zoomSettings,
     SmoothDampMoveSettings smoothDampMoveSettings,
-    Vector2 offset,
-    VerticalCameraFollowMode verticalCameraFollowMode,
-    float horizontalOffsetDeltaMovementFactor)
+    CameraSettings cameraSettings)
   {
+    VerticalSnapWindowSettings = verticalSnapWindowSettings;
     HorizontalLockSettings = horizontalLockSettings;
     VerticalLockSettings = verticalLockSettings;
-    Offset = offset;
     ZoomSettings = zoomSettings;
     SmoothDampMoveSettings = smoothDampMoveSettings;
-    VerticalCameraFollowMode = verticalCameraFollowMode;
-    HorizontalOffsetDeltaMovementFactor = horizontalOffsetDeltaMovementFactor;
+    CameraSettings = cameraSettings;
   }
 
   public override bool Equals(object obj)
@@ -46,13 +43,12 @@ public class CameraMovementSettings
     {
       int hash = 17;
 
+      hash = hash * 23 + VerticalSnapWindowSettings.GetHashCode();
       hash = hash * 23 + VerticalLockSettings.GetHashCode();
       hash = hash * 23 + HorizontalLockSettings.GetHashCode();
       hash = hash * 23 + ZoomSettings.GetHashCode();
       hash = hash * 23 + SmoothDampMoveSettings.GetHashCode();
-      hash = hash * 23 + Offset.GetHashCode();
-      hash = hash * 23 + HorizontalOffsetDeltaMovementFactor.GetHashCode();
-      hash = hash * 23 + VerticalCameraFollowMode.GetHashCode();
+      hash = hash * 23 + CameraSettings.GetHashCode();
 
       return hash;
     }

@@ -22,8 +22,6 @@ public class GameManager : MonoBehaviour
   public InputStateManager InputStateManager;
 
   public InputSettings InputSettings = new InputSettings();
-  
-  private CameraController _cameraController;
 
   private readonly Dictionary<string, PlayerController> _playerControllersByName
     = new Dictionary<string, PlayerController>(StringComparer.OrdinalIgnoreCase);
@@ -42,22 +40,13 @@ public class GameManager : MonoBehaviour
     return _playerControllersByName[name];
   }
 
-  private void ResetCameraPosition(Vector3 position)
-  {
-    _cameraController.MoveCameraToTargetPosition(position);
-  }
-
   public void LoadScene()
   {
     BuildPooledObjects();
 
     _playerControllersByName.Clear();
 
-    ActivatePlayer(
-      PlayableCharacters.Single(p => p.IsDefault).PlayerController.name,
-      GameObject.FindObjectsOfType<Checkpoint>().First().transform.position); // TODO (Roman): this needs sorting
-
-    SceneManager.FadeIn();
+    GameManager.Instance.SceneManager.OnSceneLoad();
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
@@ -70,7 +59,7 @@ public class GameManager : MonoBehaviour
     Player.transform.position = position;
     Player.gameObject.SetActive(true);
 
-    _cameraController.Target = Player.transform;
+    Camera.main.GetComponent<CameraController>().Target = Player.transform;
   }
 
   private PlayerController GetPlayerController(string name)
@@ -90,22 +79,6 @@ public class GameManager : MonoBehaviour
     }
 
     return playerController;
-  }
-
-  private IEnumerable<T> FindComponents<T>()
-    where T : class
-  {
-    var monoBehaviours = GameObject.FindObjectsOfType<MonoBehaviour>();
-
-    for (var i = 0; i < monoBehaviours.Length; i++)
-    {
-      var component = monoBehaviours[i] as T;
-
-      if (component != null)
-      {
-        yield return component;
-      }
-    }
   }
 
   private void BuildPooledObjects()
@@ -184,8 +157,6 @@ public class GameManager : MonoBehaviour
 
     DontDestroyOnLoad(gameObject);
 
-    _cameraController = Camera.main.GetComponent<CameraController>();
-
     OnAwake();
   }
 
@@ -213,7 +184,7 @@ public class GameManager : MonoBehaviour
 
     InputStateManager = new InputStateManager();
 
-    InputStateManager.InitializeButtons(buttonNames); // TODO (Roman): move this somewhere else
+    InputStateManager.InitializeButtons(buttonNames); // TODO (old): move this somewhere else
 
     InputStateManager.InitializeAxes("Horizontal", "Vertical");
   }
@@ -235,15 +206,7 @@ public class GameManager : MonoBehaviour
   {
     InputStateManager.Update();
 
-    // TODO (Roman): this must not make it into release
-    if (Input.GetKeyUp("["))
-    {
-      SceneManager.LoadScene("three_rooms", null);
-    }
-    if (Input.GetKeyUp("]"))
-    {
-      SceneManager.LoadScene("cockroach", null);
-    }
+    // TODO (Important): this must not make it into release
     if (Input.GetKey("escape"))
     {
       Logger.Info("quit");

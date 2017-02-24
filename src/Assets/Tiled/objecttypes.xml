@@ -49,4 +49,12 @@
   <property name="Type" type="string" default="Transition"/>
   <property name="Universe" type="string" default="Real World"/>
  </objecttype>
+ <objecttype name="Scene Door Portal" color="#a0a0a4">
+  <property name="Door Key" type="string"/>
+  <property name="Prefab" type="string"/>
+  <property name="Transition To Portal" type="string"/>
+  <property name="Transition To Scene" type="string"/>
+  <property name="Type" type="string" default="SceneTransition"/>
+  <property name="Universe" type="string"/>
+ </objecttype>
 </objecttypes>

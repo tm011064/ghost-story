@@ -14,9 +14,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   [HideInInspector]
   public GhostStoryGameState GameState;
 
-  private ILookup<LayerUniverseKey, GameObject> _gameObjectsByLayerUniverseKey;
+  [HideInInspector]
+  public GhostStoryDefaultGameSettings GameSettings;
 
-  private ILookup<LayerUniverseKey, IFreezable> _freezeableGameObjectsByLayerUniverseKey;
+  private ILookup<Universe, GameObject> _gameObjectsByUniverse;
+
+  private ILookup<Universe, IFreezable> _freezeableGameObjectsByUniverse;
 
   private FreezableTimer _freezableTimer;
 
@@ -42,7 +45,6 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
       LoadGameState());
 
     DisableAndHideAllObjects();
-    SwitchLayer(LevelLayer.House);
     SwitchToRealWorld();
   }
 
@@ -51,12 +53,13 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     Reset();
 
     DisableAndHideAllObjects();
-    SwitchLayer(LevelLayer.House);
     SwitchToRealWorld();
   }
 
   public void Reset()
   {
+    GameSettings = gameObject.GetComponentOrThrow<GhostStoryDefaultGameSettings>();
+
     _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
 
     var items = GameObject
@@ -70,11 +73,11 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
       .SelectMany(c => c.Keys.Select(k => new { Key = k, GameObject = c.GameObject, FreezableComponent = c.FreezableComponent }))
       .ToArray();
 
-    _gameObjectsByLayerUniverseKey = items
+    _gameObjectsByUniverse = items
       .Where(i => i.FreezableComponent == null)
       .ToLookup(c => c.Key, c => c.GameObject);
 
-    _freezeableGameObjectsByLayerUniverseKey = items
+    _freezeableGameObjectsByUniverse = items
       .Where(i => i.FreezableComponent != null)
       .ToLookup(c => c.Key, c => c.FreezableComponent);
   }
@@ -86,17 +89,17 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     NotifyGameStateChanged();
   }
 
-  private IEnumerable<LayerUniverseKey> CreateKeys(LevelObjectConfig levelObjectConfig)
+  private IEnumerable<Universe> CreateKeys(LevelObjectConfig levelObjectConfig)
   {
     if (levelObjectConfig.Universe == Universe.Global)
     {
-      yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = Universe.AlternateWorld };
-      yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = Universe.RealWorld };
+      yield return Universe.AlternateWorld;
+      yield return Universe.RealWorld;
 
       yield break;
     }
 
-    yield return new LayerUniverseKey { Layer = levelObjectConfig.Layer, Universe = levelObjectConfig.Universe };
+    yield return levelObjectConfig.Universe;
   }
 
   public void OnInventoryItemAcquired(InventoryItem inventoryItem)
@@ -137,11 +140,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
     var gameState = new GhostStoryGameState
     {
-      ActiveUniverse = new LayerUniverseKey { Layer = LevelLayer.House, Universe = Universe.RealWorld },
+      ActiveUniverse = Universe.RealWorld,
       Weapons = weapons,
       DoorKeys = doorKeys,
       MisaHealthUnits = misaHealth,
-      KinoHealthUnits = kinoHealth
+      KinoHealthUnits = kinoHealth,
+      SpawnPlayerName = PlayableCharacterNames.Misa.ToString()
     };
 
     SaveGameState(gameState, fileName);
@@ -191,7 +195,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   public void DisableAndHideAllObjects()
   {
-    foreach (var lookupGrouping in _gameObjectsByLayerUniverseKey)
+    foreach (var lookupGrouping in _gameObjectsByUniverse)
     {
       foreach (var gameObject in lookupGrouping)
       {
@@ -202,22 +206,22 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   public bool IsRealWorldActivated()
   {
-    return GameState.ActiveUniverse.Universe == Universe.RealWorld;
+    return GameState.ActiveUniverse == Universe.RealWorld;
   }
 
   public bool IsAlternateWorldActivated()
   {
-    return GameState.ActiveUniverse.Universe == Universe.AlternateWorld;
+    return GameState.ActiveUniverse == Universe.AlternateWorld;
   }
 
   private void DisableCurrentGameObjects()
   {
-    foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var gameObject in _gameObjectsByUniverse[GameState.ActiveUniverse])
     {
       gameObject.DisableAndHide();
     }
 
-    foreach (var freezable in _freezeableGameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var freezable in _freezeableGameObjectsByUniverse[GameState.ActiveUniverse])
     {
       freezable.Freeze();
     }
@@ -225,12 +229,12 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   private void EnableCurrentGameObjects()
   {
-    foreach (var gameObject in _gameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var gameObject in _gameObjectsByUniverse[GameState.ActiveUniverse])
     {
       gameObject.EnableAndShow();
     }
 
-    foreach (var freezable in _freezeableGameObjectsByLayerUniverseKey[GameState.ActiveUniverse])
+    foreach (var freezable in _freezeableGameObjectsByUniverse[GameState.ActiveUniverse])
     {
       freezable.Unfreeze();
     }
@@ -240,9 +244,11 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   {
     DisableCurrentGameObjects();
 
-    GameState.ActiveUniverse = new LayerUniverseKey { Layer = GameState.ActiveUniverse.Layer, Universe = universe };
+    GameState.ActiveUniverse = universe;
 
     EnableCurrentGameObjects();
+
+    Camera.main.GetComponent<CameraController>().Reset(); // TODO (Roman): is that correct? camera moves for some reason
   }
 
   public void SwitchToRealWorld()
@@ -257,17 +263,6 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     _freezableTimer.Freeze();
 
     SwitchUniverse(Universe.AlternateWorld);
-  }
-
-  public void SwitchLayer(LevelLayer layer)
-  {
-    Camera.main.GetComponent<CameraController>().ClearCameraModifiers();
-
-    DisableCurrentGameObjects();
-
-    GameState.ActiveUniverse = new LayerUniverseKey { Layer = layer, Universe = GameState.ActiveUniverse.Universe };
-
-    EnableCurrentGameObjects();
   }
 
   public void RegisterCallback(float delay, Action action, string name)

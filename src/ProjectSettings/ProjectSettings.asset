@@ -435,10 +435,10 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    1: PROFILE
+    1: DEBUG
     2: DEBUG
-    7: PROFILE
-    13: PROFILE
+    7: DEBUG
+    13: DEBUG
   platformArchitecture:
     iOS: 2
   scriptingBackend:

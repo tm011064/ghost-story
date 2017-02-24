@@ -10,17 +10,9 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     public Direction DoorLocation;
 
-    private BoxCollider2D _collider;
-
-    private DoorCameraScroller _doorCameraScroller;
-
     private bool _isInsideTriggerBounds;
 
-    void Awake()
-    {
-      _collider = this.GetComponentOrThrow<BoxCollider2D>();
-      _doorCameraScroller = GetComponentInParent<DoorCameraScroller>();
-    }
+    public event Action Open;
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -41,7 +33,12 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         && DoorKeysNeededToEnter.All(x => GhostStoryGameContext.Instance.GameState.GetDoorKey(x).IsActive))
       {
         GameManager.Instance.InputStateManager.SetButtonHandled("Attack");
-        _doorCameraScroller.TriggerScroll(_collider);
+
+        var handler = Open;
+        if (handler != null)
+        {
+          handler();
+        }
       }
     }
 

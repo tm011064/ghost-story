@@ -9,6 +9,6 @@ public class HudBehaviour : MonoBehaviour
     transform.position = new Vector3(
       transform.position.x,
       transform.position.y,
-      cameraController.CameraOffset.z);
+      cameraController.ZAxisOffset);
   }
 }

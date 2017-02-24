@@ -7,12 +7,10 @@ public static class PlayerTranslationActionContextFactory
   public static IEnumerable<PlayerTranslationActionContext> Create(
     Vector3 currentPosition,
     Vector3 targetPosition,
-    FullScreenScrollerTransitionMode transitionMode,
     int playerAnimationShortHash,
-    FullScreenScrollSettings fullScreenScrollSettings,
-    float verticalScrollSpeedPercentage)
+    FullScreenScrollSettings fullScreenScrollSettings)
   {
-    switch (transitionMode)
+    switch (fullScreenScrollSettings.FullScreenScrollerTransitionMode)
     {
       case FullScreenScrollerTransitionMode.Direct:
         return new PlayerTranslationActionContext[]
@@ -31,8 +29,7 @@ public static class PlayerTranslationActionContextFactory
           currentPosition,
           targetPosition,
           playerAnimationShortHash,
-          fullScreenScrollSettings,
-          verticalScrollSpeedPercentage);
+          fullScreenScrollSettings);
     }
 
     throw new NotImplementedException();
@@ -42,8 +39,7 @@ public static class PlayerTranslationActionContextFactory
     Vector3 currentPosition,
     Vector3 targetPosition,
     int playerAnimationShortHash,
-    FullScreenScrollSettings fullScreenScrollSettings,
-    float verticalScrollSpeedPercentage)
+    FullScreenScrollSettings fullScreenScrollSettings)
   {
     if (Mathf.Approximately(currentPosition.y, targetPosition.y)
       || Mathf.Approximately(currentPosition.x, targetPosition.x))
@@ -63,7 +59,7 @@ public static class PlayerTranslationActionContextFactory
       currentPosition,
       targetPosition,
       fullScreenScrollSettings.TransitionTime,
-      verticalScrollSpeedPercentage);
+      fullScreenScrollSettings.VerticalFullScreenScrollerTransitionSpeedFactor);
 
     yield return CreateStaticPlayerAction(
       currentPosition,

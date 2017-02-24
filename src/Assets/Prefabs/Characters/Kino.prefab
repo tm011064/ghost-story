@@ -16,11 +16,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013424351330}
-  - 61: {fileID: 61000013592942526}
-  - 114: {fileID: 114000011051842462}
+  - component: {fileID: 4000013424351330}
+  - component: {fileID: 61000013592942526}
+  - component: {fileID: 114000011051842462}
   m_Layer: 19
   m_Name: Enemy Collider
   m_TagString: Untagged
@@ -33,11 +33,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012749200298}
-  - 212: {fileID: 212000013109681084}
-  - 95: {fileID: 95000014167661036}
+  - component: {fileID: 4000012749200298}
+  - component: {fileID: 212000013109681084}
+  - component: {fileID: 95000014167661036}
   m_Layer: 8
   m_Name: SpriteAndAnimator
   m_TagString: Untagged
@@ -50,10 +50,10 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010270791750}
-  - 61: {fileID: 61000013801911080}
+  - component: {fileID: 4000010270791750}
+  - component: {fileID: 61000013801911080}
   m_Layer: 8
   m_Name: Environment Collider
   m_TagString: Untagged
@@ -66,16 +66,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012664598406}
-  - 114: {fileID: 114000012203644590}
-  - 50: {fileID: 50000014072373306}
-  - 114: {fileID: 114000013497037138}
-  - 114: {fileID: 114000013790307878}
-  - 114: {fileID: 114000011099568694}
-  - 114: {fileID: 114000012254581500}
-  - 114: {fileID: 114000014111143568}
+  - component: {fileID: 4000012664598406}
+  - component: {fileID: 114000012203644590}
+  - component: {fileID: 50000014072373306}
+  - component: {fileID: 114000013497037138}
+  - component: {fileID: 114000013790307878}
+  - component: {fileID: 114000011099568694}
+  - component: {fileID: 114000012254581500}
+  - component: {fileID: 114000014111143568}
   m_Layer: 8
   m_Name: Kino
   m_TagString: Untagged
@@ -92,10 +92,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000012749200298}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000012664598406
 Transform:
   m_ObjectHideFlags: 1
@@ -105,11 +105,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 166.8027, y: -272.72, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000012749200298}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000012749200298
 Transform:
   m_ObjectHideFlags: 1
@@ -119,12 +119,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000010270791750}
   - {fileID: 4000013424351330}
   m_Father: {fileID: 4000012664598406}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000013424351330
 Transform:
   m_ObjectHideFlags: 1
@@ -134,23 +134,26 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000012749200298}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50000014072373306
 Rigidbody2D:
-  serializedVersion: 2
+  serializedVersion: 4
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012640441032}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_IsKinematic: 1
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -244,17 +247,20 @@ MonoBehaviour:
   SlopeSpeedMultiplier:
     serializedVersion: 2
     m_Curve:
-    - time: -90
+    - serializedVersion: 2
+      time: -90
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 0
+    - serializedVersion: 2
+      time: 0
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 90
+    - serializedVersion: 2
+      time: 90
       value: 1
       inSlope: 0
       outSlope: 0
@@ -321,18 +327,18 @@ MonoBehaviour:
     MaxWallDownwardSpeed: -1000
     MinDistanceFromFloor: 128
   JumpSettings:
-    Gravity: -900
+    Gravity: -700
     StandJumpHeight: 90
     WalkJumpHeight: 90
-    WalkJumpHeightSpeedTrigger: 9999
-    RunJumpHeight: 9999
-    RunJumpHeightSpeedTrigger: 9999
+    WalkJumpHeightSpeedTrigger: -1
+    RunJumpHeight: 90
+    RunJumpHeightSpeedTrigger: -1
     InAirDamping: 8
     AllowJumpAfterGroundLostThreashold: 0.1
-    MaxDownwardSpeed: -400
+    MaxDownwardSpeed: -220
     EnableBackflipOnDirectionChange: 1
     BackflipOnDirectionChangeSpeed: 200
-    MaxHorizontalSpeed: 110
+    MaxHorizontalSpeed: 9999
   RunSettings:
     WalkSpeed: 120
     EnableRunning: 0
@@ -393,7 +399,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -401,7 +409,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

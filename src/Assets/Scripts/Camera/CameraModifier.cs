@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public partial class CameraModifier : MonoBehaviour
+public partial class CameraModifier : MonoBehaviour, ICameraModifier
 {
+  public VerticalSnapWindowSettings VerticalSnapWindowSettings;
+
   public VerticalLockSettings VerticalLockSettings;
 
   public HorizontalLockSettings HorizontalLockSettings;
@@ -11,12 +13,7 @@ public partial class CameraModifier : MonoBehaviour
 
   public SmoothDampMoveSettings SmoothDampMoveSettings;
 
-  [Tooltip("The (x, y) offset of the camera. This can be used when default vertical locking is disabled and you want the player to be below, above, right or left of the screen center.")]
-  public Vector2 Offset;
-
-  public float HorizontalOffsetDeltaMovementFactor = 40f;
-
-  public VerticalCameraFollowMode VerticalCameraFollowMode;
+  public CameraSettings CameraSettings;
 
   public Color GizmoColor = Color.magenta;
 
@@ -28,26 +25,38 @@ public partial class CameraModifier : MonoBehaviour
 
   void Awake()
   {
-    var triggerEnterBehaviours = GetComponentsInChildren<ITriggerEnterExit>();
-
     _cameraController = Camera.main.GetComponent<CameraController>();
     _cameraMovementSettings = CreateCameraMovementSettings();
 
+    var triggerEnterBehaviours = GetComponentsInChildren<ITriggerEnterExit>();
     foreach (var triggerEnterBehaviour in triggerEnterBehaviours)
     {
       triggerEnterBehaviour.Entered += OnEnterTriggerInvoked;
       triggerEnterBehaviour.Exited += OnExitTriggerInvoked;
     }
+
+    OnAwake();
   }
 
-  void Start()
+  public void Activate()
   {
-    var playerPosition = GameManager.Instance.Player.transform.position;
+    _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
+  }
 
-    if (_cameraMovementSettings.Contains(playerPosition))
-    {
-      _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
-    }
+  protected void OverrideSettings(
+    SmoothDampMoveSettings smoothDampMoveSettings,
+    CameraSettings cameraSettings,
+    VerticalSnapWindowSettings verticalSnapWindowSettings)
+  {
+    CameraSettings = cameraSettings;
+    SmoothDampMoveSettings = smoothDampMoveSettings;
+    VerticalSnapWindowSettings = verticalSnapWindowSettings;
+
+    _cameraMovementSettings = CreateCameraMovementSettings();
+  }
+
+  protected virtual void OnAwake()
+  {
   }
 
   private void SetHorizontalBoundaries(HorizontalLockSettings horizontalLockSettings, CameraController cameraController)
@@ -72,7 +81,7 @@ public partial class CameraModifier : MonoBehaviour
       + cameraController.TargetScreenSize.y * .5f / ZoomSettings.ZoomPercentage;
   }
 
-  private CameraMovementSettings CreateCameraMovementSettings()
+  protected CameraMovementSettings CreateCameraMovementSettings()
   {
     if (ZoomSettings.ZoomPercentage == 0f)
     {
@@ -83,13 +92,38 @@ public partial class CameraModifier : MonoBehaviour
     SetHorizontalBoundaries(HorizontalLockSettings, _cameraController);
 
     return new CameraMovementSettings(
+      VerticalSnapWindowSettings,
       VerticalLockSettings,
       HorizontalLockSettings,
       ZoomSettings,
       SmoothDampMoveSettings,
-      Offset,
-      VerticalCameraFollowMode,
-      HorizontalOffsetDeltaMovementFactor);
+      CameraSettings);
+  }
+
+  public bool Contains(Vector2 point)
+  {
+    var cameraMovementSettings = new CameraMovementSettings(
+      VerticalSnapWindowSettings,
+      VerticalLockSettings,
+      HorizontalLockSettings,
+      ZoomSettings,
+      SmoothDampMoveSettings,
+      CameraSettings);
+
+    return cameraMovementSettings.Contains(point);
+  }
+
+  public void TryForceTrigger()
+  {
+    _cameraController = Camera.main.GetComponent<CameraController>();
+    _cameraMovementSettings = CreateCameraMovementSettings();
+
+    var playerPosition = GameManager.Instance.Player.transform.position;
+    if (_cameraMovementSettings.Contains(playerPosition))
+    {
+      _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
+      _cameraController.MoveCameraToTargetPosition();
+    }
   }
 
   void OnEnterTriggerInvoked(object sender, TriggerEnterExitEventArgs e)

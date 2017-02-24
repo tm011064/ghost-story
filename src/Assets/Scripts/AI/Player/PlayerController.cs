@@ -12,7 +12,7 @@ public partial class PlayerController : BaseCharacterController
 
   public RunSettings RunSettings = new RunSettings();
 
-  public ClimbSettings ClimbSettings = new ClimbSettings(); // TODO (Roman): make those behaviors that can be attached to the controller
+  public ClimbSettings ClimbSettings = new ClimbSettings(); // TODO (old): make those behaviors that can be attached to the controller
 
   public SlideSettings SlideSettings = new SlideSettings();
 
@@ -164,9 +164,22 @@ public partial class PlayerController : BaseCharacterController
     return collider;
   }
 
+  public float CalculateMaxJumpHeight()
+  {
+    return RunSettings.EnableRunning
+      ? JumpSettings.RunJumpHeight
+      : Math.Max(JumpSettings.StandJumpHeight, JumpSettings.WalkJumpHeight);
+  }
+
   public bool IsFacingRight()
   {
     return Sprite.transform.localScale.x > 0f;
+  }
+
+  public bool GotGroundedThisFrame()
+  {
+    return !CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.WasGroundedLastFrame
+      && CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;
   }
 
   public bool IsGrounded()
@@ -177,6 +190,16 @@ public partial class PlayerController : BaseCharacterController
   public bool IsAirborne()
   {
     return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == false;
+  }
+
+  public bool IsGoingUp()
+  {
+    return CharacterPhysicsManager.Velocity.y > 0;
+  }
+
+  public bool IsGoingDown()
+  {
+    return CharacterPhysicsManager.Velocity.y < 0;
   }
 
   public void OnFellFromClimb()
@@ -242,7 +265,7 @@ public partial class PlayerController : BaseCharacterController
       return;
     }
 
-    // TODO (Roman): these methods should be optimized and put into constant field...
+    // TODO (old): these methods should be optimized and put into constant field...
     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Platforms"))
     {
       if (WallJumpSettings.EnableWallJumps
@@ -296,5 +319,10 @@ public partial class PlayerController : BaseCharacterController
   protected virtual PlayerControlHandler CreateDefaultPlayerControlHandler()
   {
     return new DefaultPlayerControlHandler(this);
+  }
+
+  public void FlipHorizontalSpriteScale()
+  {
+    Sprite.transform.localScale = Sprite.transform.localScale.SetX(Sprite.transform.localScale.x * -1);
   }
 }

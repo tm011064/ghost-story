@@ -26,7 +26,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
       var vertices = CreateMatrixVertices(layerConfig.TiledLayer);
 
-      var name = layerConfig.Universe + " " + layerConfig.Layer + " Platform Colliders";
+      var name = layerConfig.Universe + " Platform Colliders";
 
       var collidersGameObject = new GameObject(name);
       collidersGameObject.transform.position = Vector3.zero;

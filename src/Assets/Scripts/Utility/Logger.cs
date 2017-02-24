@@ -133,17 +133,17 @@ public class Logger : IDisposable
     {
       try
       {
-        List<string> messages;
+        string[] messages;
 
         lock (_messagesToWrite)
         {
           // make a local copy so we don't lock the main thread while writing
-          messages = new List<string>(_messagesToWrite);
+          messages = _messagesToWrite.ToArray();
 
           _messagesToWrite = new List<string>();
         }
 
-        for (var i = 0; i < messages.Count; i++)
+        for (var i = 0; i < messages.Length; i++)
         {
           _outputStream.WriteLine(messages[i]);
           _outputStream.Flush();
