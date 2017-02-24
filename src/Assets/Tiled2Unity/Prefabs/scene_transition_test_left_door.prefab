@@ -27,6 +27,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1075864731931748
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4364501533355378}
+  m_Layer: 0
+  m_Name: Prefab Group
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1192684256128128
 GameObject:
   m_ObjectHideFlags: 1
@@ -146,7 +161,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4282194867516842}
-  - component: {fileID: 114582505579683096}
+  - component: {fileID: 114598459215650308}
   - component: {fileID: 114543610822593620}
   m_Layer: 15
   m_Name: Camera Modifier
@@ -236,21 +251,6 @@ GameObject:
   - component: {fileID: 114018030495476664}
   m_Layer: 0
   m_Name: blocks_192x128
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1765731751961388
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4847616699044344}
-  m_Layer: 0
-  m_Name: Prefab Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,9 +371,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4742414141855068}
   m_Father: {fileID: 4573163676401068}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4282194867516842
 Transform:
@@ -430,6 +431,19 @@ Transform:
   m_Father: {fileID: 4944836388804130}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4364501533355378
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1075864731931748}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4573163676401068}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4470950900350012
 Transform:
   m_ObjectHideFlags: 1
@@ -455,8 +469,8 @@ Transform:
   m_Children:
   - {fileID: 4944836388804130}
   - {fileID: 4282194867516842}
+  - {fileID: 4364501533355378}
   - {fileID: 4194691667217232}
-  - {fileID: 4847616699044344}
   m_Father: {fileID: 4676205280531486}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -503,7 +517,7 @@ Transform:
   - {fileID: 4820561641939176}
   - {fileID: 4941644850505616}
   - {fileID: 4175982186829162}
-  m_Father: {fileID: 4847616699044344}
+  m_Father: {fileID: 4194691667217232}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4746496030096756
@@ -544,20 +558,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4742414141855068}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4847616699044344
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1765731751961388}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4742414141855068}
-  m_Father: {fileID: 4573163676401068}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4880440104952272
 Transform:
@@ -910,7 +910,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Universe: 0
-  Layer: 0
 --- !u!114 &114018030495476664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -985,7 +984,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Universe: 0
-  Layer: 0
 --- !u!114 &114543610822593620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -998,8 +996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Universe: 2
-  Layer: 0
---- !u!114 &114582505579683096
+--- !u!114 &114598459215650308
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1007,12 +1004,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1544654222675098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a6c09e11acf9440a68f9272e43935d, type: 3}
+  m_Script: {fileID: 11500000, guid: 25d67d63f46add64b9c6bfd7a3c97e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ImportCameraSettings:
     ImportSource: {fileID: 0}
     ImportCameraSettingsMode: 0
+  VerticalSnapWindowSettings:
+    OuterWindowTopBoundsPositionPercentage: 0
+    InnerWindowTopBoundsPositionPercentage: 0
+    OuterWindowBottomBoundsPositionPercentage: 0
+    InnerWindowBottomBoundsPositionPercentage: 0
+    UpwardMovementSnapPositionPercentage: 0
+    DownwardMovementSnapPositionPercentage: 0
   VerticalLockSettings:
     Enabled: 1
     EnableDefaultVerticalLockPosition: 0
@@ -1037,13 +1041,12 @@ MonoBehaviour:
     ZoomEasingType: 0
   SmoothDampMoveSettings:
     HorizontalSmoothDampTime: 0.2
-    VerticalSmoothDampTime: 0.4
-    VerticalRapidDescentSmoothDampTime: 0.01
-    VerticalAboveRapidAcsentSmoothDampTime: 0.2
-  Offset: {x: 0, y: 0}
-  HorizontalOffsetDeltaMovementFactor: 40
-  VerticalCameraFollowMode: 0
-  GizmoColor: {r: 0.622, g: 1, b: 0.44852942, a: 1}
+    VerticalSlowSmoothDampTime: 0.2
+    VerticalFastSmoothDampTime: 0.01
+  CameraSettings:
+    VerticalCameraFollowMode: 0
+    HorizontalCameraFollowMode: 0
+  GizmoColor: {r: 1, g: 0, b: 1, a: 1}
   MustBeOnLadderToEnter: 0
 --- !u!114 &114666052647357350
 MonoBehaviour:
@@ -1068,7 +1071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab7426fb5e729cb4fb71ef189b07332b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerTranslationDistance: 88
+  PlayerTranslationDistance: 0
 --- !u!114 &114683078925677650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1080,7 +1083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4454e9c6253ab47a2348e06e1ebacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: 1
+  PortalName: 
 --- !u!114 &114704607647258674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1094,28 +1097,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OutlineGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   ShowGizmoOutline: 1
+  VerticalSnapWindowSettings:
+    OuterWindowTopBoundsPositionPercentage: 0
+    InnerWindowTopBoundsPositionPercentage: 0
+    OuterWindowBottomBoundsPositionPercentage: 0
+    InnerWindowBottomBoundsPositionPercentage: 0
+    UpwardMovementSnapPositionPercentage: 0
+    DownwardMovementSnapPositionPercentage: 0
   ZoomSettings:
     ZoomPercentage: 1
     ZoomTime: 0
     ZoomEasingType: 0
   SmoothDampMoveSettings:
     HorizontalSmoothDampTime: 0.2
-    VerticalSmoothDampTime: 0.4
-    VerticalRapidDescentSmoothDampTime: 0.01
-    VerticalAboveRapidAcsentSmoothDampTime: 0.2
+    VerticalSlowSmoothDampTime: 0.2
+    VerticalFastSmoothDampTime: 0.01
   FullScreenScrollSettings:
-    TransitionTime: 1.2
+    TransitionTime: 1
     CameraScrollEasingType: 0
-    PlayerTranslationDistance: 88
+    PlayerTranslationDistance: 128
     PlayerTranslationEasingType: 0
-    StartScrollFreezeTime: 0
-    EndScrollFreezeTime: 0
-  Offset: {x: 0, y: 0}
+    StartScrollFreezeTime: 0.3
+    EndScrollFreezeTime: 0.3
+    FullScreenScrollerTransitionMode: 1
+    VerticalFullScreenScrollerTransitionSpeedFactor: 4
+  CameraSettings:
+    VerticalCameraFollowMode: 0
+    HorizontalCameraFollowMode: 0
   Size: {x: 384, y: 240}
-  HorizontalOffsetDeltaMovementFactor: 40
-  VerticalCameraFollowMode: 0
-  FullScreenScrollerTransitionMode: 1
-  VerticalFullScreenScrollerTransitionSpeedFactor: 4
   DoorLocation: 1
 --- !u!114 &114708306064878952
 MonoBehaviour:
@@ -1142,7 +1151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Universe: 0
-  Layer: 0
 --- !u!114 &114762652772268136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1178,7 +1186,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Universe: 0
-  Layer: 0
 --- !u!114 &114949633801300720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1191,7 +1198,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Universe: 0
-  Layer: 0
 --- !u!212 &212057286465220076
 SpriteRenderer:
   m_ObjectHideFlags: 1
