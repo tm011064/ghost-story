@@ -6,23 +6,21 @@ public class CameraMovementSettingsManager
 {
   private readonly List<CameraMovementSettings> _cameraMovementSettings = new List<CameraMovementSettings>();
 
-  public event Action<CameraSettingsChangedArguments> SettingsChanged;
+  public event Action SettingsChanged;
 
   public CameraMovementSettings ActiveSettings;
+
+  public int SettingsCount { get { return _cameraMovementSettings.Count(); } }
 
   private void ChangeSettings(CameraMovementSettings cameraMovementSettings)
   {
     ActiveSettings = cameraMovementSettings;
     Logger.UnityDebugLog("CameraMovementSettingsManager -> ChangeSettings, count: " + _cameraMovementSettings.Count + ", " + ActiveSettings.ToString());
 
-    var actionHandler = SettingsChanged;
-
-    if (actionHandler != null)
+    var handler = SettingsChanged;
+    if (handler != null)
     {
-      // TODO (Roman): this is weird on scene refreshes
-      Logger.UnityDebugLog("SettingsChanged Handler: " + _cameraMovementSettings.Count);
-      var args = new CameraSettingsChangedArguments { SettingsWereRefreshed = _cameraMovementSettings.Count == 1 };
-      actionHandler(args);
+      handler();
     }
   }
 
@@ -44,13 +42,14 @@ public class CameraMovementSettingsManager
 
   public void ClearSettings()
   {
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> Clearing all settings");
+
+    ActiveSettings = null;
     _cameraMovementSettings.Clear();
   }
 
   public void RemoveSettings(CameraMovementSettings cameraMovementSettings)
   {
-    Logger.UnityDebugLog("CameraMovementSettingsManager -> RemoveSettings");
-
     if (!ActiveSettings.Equals(cameraMovementSettings))
     {
       Logger.UnityDebugLog("CameraMovementSettingsManager -> Active settings do not equal removed settings");
@@ -63,7 +62,7 @@ public class CameraMovementSettingsManager
 
     if (_cameraMovementSettings.Count() == 1)
     {
-      Logger.UnityDebugLog("CameraMovementSettingsManager -> Only one setting remains");
+      Logger.UnityDebugLog("CameraMovementSettingsManager -> Active setting is last");
 
       return;
     }
@@ -72,7 +71,6 @@ public class CameraMovementSettingsManager
 
     _cameraMovementSettings.Remove(ActiveSettings);
 
-    // TODO (Roman): this throws after scene load
     ChangeSettings(_cameraMovementSettings.Last());
   }
 }

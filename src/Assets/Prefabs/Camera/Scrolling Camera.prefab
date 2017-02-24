@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 448668}
-  - 114: {fileID: 11455698}
+  - component: {fileID: 448668}
+  - component: {fileID: 11455698}
   m_Layer: 0
   m_Name: HUD
   m_TagString: Untagged
@@ -21,16 +21,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 440896}
-  - 20: {fileID: 2046632}
-  - 92: {fileID: 9215898}
-  - 124: {fileID: 12498726}
-  - 81: {fileID: 8192236}
-  - 114: {fileID: 11433236}
-  - 114: {fileID: 11492740}
-  - 114: {fileID: 11425610}
+  - component: {fileID: 440896}
+  - component: {fileID: 2046632}
+  - component: {fileID: 9215898}
+  - component: {fileID: 12498726}
+  - component: {fileID: 8192236}
+  - component: {fileID: 11433236}
+  - component: {fileID: 11492740}
+  - component: {fileID: 11425610}
   m_Layer: 0
   m_Name: Scrolling Camera
   m_TagString: MainCamera
@@ -47,11 +47,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 448668}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &448668
 Transform:
   m_ObjectHideFlags: 1
@@ -61,10 +61,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 440896}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &2046632
 Camera:
   m_ObjectHideFlags: 1
@@ -178,12 +178,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraOffset: {x: 0, y: 0, z: 10}
+  ZAxisOffset: 10
   UseFixedUpdate: 0
   TargetScreenSize: {x: 384, y: 240}
   UseFixedAspectRatio: 1
   FixedAspectRatio: {x: 384, y: 240}
   Target: {fileID: 0}
   Transform: {fileID: 0}
+  CameraTrolleys: []
+  GameManager: {fileID: 0}
+  LastTargetPosition: {x: 0, y: 0, z: 0}
 --- !u!124 &12498726
 Behaviour:
   m_ObjectHideFlags: 1

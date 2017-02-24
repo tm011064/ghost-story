@@ -3,7 +3,7 @@ using UnityEngine;
 
 public partial class CameraController : MonoBehaviour
 {
-  public Vector3 CameraOffset; // TODO (Roman): only z is used, so this could be a float
+  public float ZAxisOffset;
 
   public bool UseFixedUpdate = false;
 
@@ -29,7 +29,7 @@ public partial class CameraController : MonoBehaviour
   public Vector3 LastTargetPosition;
 
   private readonly CameraMovementSettingsManager _cameraMovementSettingsManager = new CameraMovementSettingsManager();
-  
+
   private UpdateTimer _zoomTimer;
 
   private ICameraPositionCalculator _verticalCameraPositionCalculator;
@@ -105,41 +105,50 @@ public partial class CameraController : MonoBehaviour
     _cameraMovementSettingsManager.RemoveSettings(cameraMovementSettings);
   }
 
-  void OnCameraMovementSettingsChanged(CameraSettingsChangedArguments args)
+  void OnCameraMovementSettingsChanged()
   {
-    _verticalCameraPositionCalculator = CreateVerticalPositionCalculator(_cameraMovementSettingsManager.ActiveSettings);
-    _horizontalCameraPositionCalculator = CreateHorizontalPositionCalculator(_cameraMovementSettingsManager.ActiveSettings);
+    _verticalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateVertical(this, _cameraMovementSettingsManager.ActiveSettings);
+    _horizontalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateHorizontal(this, _cameraMovementSettingsManager.ActiveSettings);
 
-    CameraOffset = new Vector3(
-      _cameraMovementSettingsManager.ActiveSettings.Offset.x,
-      _cameraMovementSettingsManager.ActiveSettings.Offset.y,
-      CameraOffset.z);
+    SetCameraSize();
 
-    var targetOrthographicSize = (TargetScreenSize.y * .5f) / _cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomPercentage;
-
-    if (!Mathf.Approximately(Camera.main.orthographicSize, targetOrthographicSize))
-    {
-      Logger.Info("Start zoom to target size: " + targetOrthographicSize + ", current size: " + Camera.main.orthographicSize);
-
-      if (_cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomTime == 0f)
-      {
-        Camera.main.orthographicSize = targetOrthographicSize;
-      }
-      else
-      {
-        _zoomTimer = new ZoomTimer(_cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomTime, Camera.main.orthographicSize, targetOrthographicSize, _cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomEasingType);
-
-        _zoomTimer.Start();
-      }
-    }
-
-    Logger.Info("Camera movement set to: " + _cameraMovementSettingsManager.ActiveSettings.ToString());
-    Logger.Info("Camera size; current: " + Camera.main.orthographicSize + ", target: " + targetOrthographicSize);
-
-    if (args.SettingsWereRefreshed)
+    if (_cameraMovementSettingsManager.SettingsCount == 1)
     {
       MoveCameraToTargetPosition();
     }
+
+    Logger.Info("Camera movement set to: " + _cameraMovementSettingsManager.ActiveSettings.ToString());
+  }
+
+  private void SetCameraSize()
+  {
+    var targetOrthographicSize = (TargetScreenSize.y * .5f) / _cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomPercentage;
+
+    if (Mathf.Approximately(Camera.main.orthographicSize, targetOrthographicSize))
+    {
+      Logger.Info("Camera size remains at: " + Camera.main.orthographicSize);
+
+      return;
+    }
+
+    if (_cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomTime == 0f)
+    {
+      Logger.Info("Camera size set to: " + targetOrthographicSize);
+
+      Camera.main.orthographicSize = targetOrthographicSize;
+
+      return;
+    }
+
+    Logger.Info("Start camera zoom from " + Camera.main.orthographicSize + " to " + targetOrthographicSize);
+
+    _zoomTimer = new ZoomTimer(
+      _cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomTime,
+      Camera.main.orthographicSize,
+      targetOrthographicSize,
+      _cameraMovementSettingsManager.ActiveSettings.ZoomSettings.ZoomEasingType);
+
+    _zoomTimer.Start();
   }
 
   void Awake()
@@ -232,93 +241,71 @@ public partial class CameraController : MonoBehaviour
     _verticalCameraPositionCalculator.Update();
     _horizontalCameraPositionCalculator.Update();
 
-    //TargetedTransformPositionX = _horizontalCameraPositionCalculator.CalculateTargetPosition(); // TODO (Roman): this can be removed
-
     transform.position = new Vector3(
       _horizontalCameraPositionCalculator.GetCameraPosition(),
       _verticalCameraPositionCalculator.GetCameraPosition(),
-      Target.position.z - CameraOffset.z);
+      Target.position.z - ZAxisOffset);
 
     LastTargetPosition = Target.transform.position;
   }
 
-  // TODO (Roman): move 
-  private ICameraPositionCalculator CreateVerticalPositionCalculator(CameraMovementSettings cameraMovementSettings)
-  {
-    switch (cameraMovementSettings.CameraSettings.VerticalCameraFollowMode)
-    {
-      case VerticalCameraFollowMode.FollowWhenGrounded:
-        return new VerticalGroundSnappingCalculator(
-          cameraMovementSettings,
-          this,
-          GameManager.Instance.Player);
-
-      case VerticalCameraFollowMode.FollowAlways:
-        return new VerticalFollowPlayerCameraPositionCalculator(
-          cameraMovementSettings,
-          this,
-          GameManager.Instance.Player);
-    }
-
-    throw new NotSupportedException();
-  }
-  private ICameraPositionCalculator CreateHorizontalPositionCalculator(CameraMovementSettings cameraMovementSettings)
-  {
-    switch (cameraMovementSettings.CameraSettings.HorizontalCameraFollowMode)
-    {
-      case HorizontalCameraFollowMode.FollowAlways:
-        return new HorizontalFollowPlayerCameraPositionCalculator(
-          cameraMovementSettings,
-          this,
-          GameManager.Instance.Player);
-    }
-
-    throw new NotSupportedException();
-  }
-
   private void AssignFixedAspectRatio(float targetAspectRatio)
   {
-    var windowaspect = (float)Screen.width / (float)Screen.height;
+    var screenAspectRatio = (float)Screen.width / (float)Screen.height;
 
-    var scaleheight = windowaspect / targetAspectRatio;
+    var scaleHeight = screenAspectRatio / targetAspectRatio;
 
+    if (NeedsLetterBox(scaleHeight))
+    {
+      SetCameraLetterBoxRect(scaleHeight);
+      return;
+    }
+
+    SetCameraPillarBoxRect(scaleHeight);
+  }
+
+  private void SetCameraPillarBoxRect(float scaleHeight)
+  {
     var camera = GetComponent<Camera>();
+    var scaleWidth = 1f / scaleHeight;
 
-    if (scaleheight < 1.0f) // add letterbox
-    {
-      var rect = camera.rect;
+    var rect = camera.rect;
 
-      rect.width = 1.0f;
-      rect.height = scaleheight;
-      rect.x = 0;
-      rect.y = (1.0f - scaleheight) / 2.0f;
+    rect.width = scaleWidth;
+    rect.height = 1f;
+    rect.x = (1f - scaleWidth) / 2f;
+    rect.y = 0;
 
-      camera.rect = rect;
-    }
-    else // add pillarbox
-    {
-      var scalewidth = 1.0f / scaleheight;
+    camera.rect = rect;
+  }
 
-      var rect = camera.rect;
+  private void SetCameraLetterBoxRect(float scaleHeight)
+  {
+    var camera = GetComponent<Camera>();
+    var rect = camera.rect;
 
-      rect.width = scalewidth;
-      rect.height = 1.0f;
-      rect.x = (1.0f - scalewidth) / 2.0f;
-      rect.y = 0;
+    rect.width = 1f;
+    rect.height = scaleHeight;
+    rect.x = 0;
+    rect.y = (1f - scaleHeight) / 2f;
 
-      camera.rect = rect;
-    }
+    camera.rect = rect;
+  }
+
+  private bool NeedsLetterBox(float scaleHeight)
+  {
+    return scaleHeight < 1;
   }
 
   public Vector3 CalculateTargetPosition(CameraMovementSettings cameraMovementSettings)
   {
-    var verticalCalculator = CreateVerticalPositionCalculator(cameraMovementSettings);
-    var horizontalCalculator = CreateHorizontalPositionCalculator(cameraMovementSettings);
+    var verticalCalculator = CamerPositionCalculatorFactory.CreateVertical(this, cameraMovementSettings);
+    var horizontalCalculator = CamerPositionCalculatorFactory.CreateHorizontal(this, cameraMovementSettings);
 
     return new Vector3(
       horizontalCalculator.CalculateTargetPosition(),
       verticalCalculator.CalculateTargetPosition(),
-      Target.position.z - CameraOffset.z);
+      Target.position.z - ZAxisOffset);
   }
 
   private bool IsCameraControlledByScrollAction()

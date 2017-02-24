@@ -22,8 +22,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         && GameManager.Instance.InputStateManager.IsUpAxisButtonDown(GameManager.Instance.InputSettings)
         && !GameManager.Instance.SceneManager.IsFading())
       {
-        // TODO (Roman): check that we are not already fading...
-
         GameManager.Instance.Player.PushControlHandler(
           FreezePlayerControlHandler.CreateInvincible("Idle"));
 

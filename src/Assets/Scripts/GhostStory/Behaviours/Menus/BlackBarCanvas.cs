@@ -133,9 +133,9 @@ public class BlackBarCanvas : MonoBehaviour
     transform.position = new Vector3(
       transform.position.x,
       transform.position.y,
-      cameraController.CameraOffset.z);
+      cameraController.ZAxisOffset);
 
-    // TODO (Roman): this doesn't always work
+    // TODO (old): this doesn't always work
     transform.localScale = new Vector3(
       screenSize.x * 1000,
       screenSize.y * 1000);

@@ -13,8 +13,6 @@ public class CameraMovementSettings
 
   public SmoothDampMoveSettings SmoothDampMoveSettings;
 
-  public Vector2 Offset;
-
   public CameraSettings CameraSettings;
 
   public CameraMovementSettings(
@@ -23,13 +21,11 @@ public class CameraMovementSettings
     HorizontalLockSettings horizontalLockSettings,
     ZoomSettings zoomSettings,
     SmoothDampMoveSettings smoothDampMoveSettings,
-    Vector2 offset,
     CameraSettings cameraSettings)
   {
     VerticalSnapWindowSettings = verticalSnapWindowSettings;
     HorizontalLockSettings = horizontalLockSettings;
     VerticalLockSettings = verticalLockSettings;
-    Offset = offset;
     ZoomSettings = zoomSettings;
     SmoothDampMoveSettings = smoothDampMoveSettings;
     CameraSettings = cameraSettings;
@@ -52,7 +48,6 @@ public class CameraMovementSettings
       hash = hash * 23 + HorizontalLockSettings.GetHashCode();
       hash = hash * 23 + ZoomSettings.GetHashCode();
       hash = hash * 23 + SmoothDampMoveSettings.GetHashCode();
-      hash = hash * 23 + Offset.GetHashCode();
       hash = hash * 23 + CameraSettings.GetHashCode();
 
       return hash;

@@ -15,9 +15,6 @@ public partial class CameraScroller : MonoBehaviour
 
   public CameraSettings CameraSettings;
 
-  [Tooltip("The (x, y) offset of the camera. This can be used when default vertical locking is disabled and you want the player to be below, above, right or left of the screen center.")]
-  public Vector2 Offset;
-
   [Tooltip("The dimensions of the camera boundaries")]
   public Vector2 Size;
 
@@ -82,7 +79,6 @@ public partial class CameraScroller : MonoBehaviour
       horizontalLockSettings,
       ZoomSettings,
       SmoothDampMoveSettings,
-      Offset,
       CameraSettings);
   }
 

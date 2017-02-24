@@ -15,9 +15,6 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
 
   public CameraSettings CameraSettings;
 
-  [Tooltip("The (x, y) offset of the camera. This can be used when default vertical locking is disabled and you want the player to be below, above, right or left of the screen center.")]
-  public Vector2 Offset;
-
   public Color GizmoColor = Color.magenta;
 
   public bool MustBeOnLadderToEnter;
@@ -100,11 +97,9 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
       HorizontalLockSettings,
       ZoomSettings,
       SmoothDampMoveSettings,
-      Offset,
       CameraSettings);
   }
 
-  // TODO (Roman): this is not fast
   public bool Contains(Vector2 point)
   {
     var cameraMovementSettings = new CameraMovementSettings(
@@ -113,7 +108,6 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
       HorizontalLockSettings,
       ZoomSettings,
       SmoothDampMoveSettings,
-      Offset,
       CameraSettings);
 
     return cameraMovementSettings.Contains(point);
