@@ -1,4 +1,5 @@
 ﻿public enum HorizontalCameraFollowMode
 {
-  FollowAlways
+  FollowAlways,
+  FollowWithWindow
 }

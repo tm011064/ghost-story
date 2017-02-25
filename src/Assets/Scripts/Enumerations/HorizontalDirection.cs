@@ -1,9 +1,5 @@
-﻿using System;
-
-[Flags]
-public enum HorizontalDirection
+﻿public enum HorizontalDirection
 {
-  Left = 1,
-
-  Right = 4
+  Left = -1,
+  Right = 1
 }

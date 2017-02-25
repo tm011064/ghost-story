@@ -2,6 +2,8 @@
 
 public class GhostStoryDefaultGameSettings : MonoBehaviour
 {
+  public HorizontalCamereaWindowSettings HorizontalCamereaWindowSettings;
+
   public VerticalSnapWindowSettings VerticalSnapWindowSettings;
 
   public SmoothDampMoveSettings SmoothDampMoveSettings;

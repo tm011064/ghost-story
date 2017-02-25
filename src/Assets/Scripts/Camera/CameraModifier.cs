@@ -3,6 +3,8 @@ using UnityEngine;
 
 public partial class CameraModifier : MonoBehaviour, ICameraModifier
 {
+  public HorizontalCamereaWindowSettings HorizontalCamereaWindowSettings;
+
   public VerticalSnapWindowSettings VerticalSnapWindowSettings;
 
   public VerticalLockSettings VerticalLockSettings;
@@ -46,11 +48,13 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
   protected void OverrideSettings(
     SmoothDampMoveSettings smoothDampMoveSettings,
     CameraSettings cameraSettings,
+    HorizontalCamereaWindowSettings horizontalCamereaWindowSettings,
     VerticalSnapWindowSettings verticalSnapWindowSettings)
   {
     CameraSettings = cameraSettings;
     SmoothDampMoveSettings = smoothDampMoveSettings;
     VerticalSnapWindowSettings = verticalSnapWindowSettings;
+    HorizontalCamereaWindowSettings = horizontalCamereaWindowSettings;
 
     _cameraMovementSettings = CreateCameraMovementSettings();
   }
@@ -92,6 +96,7 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
     SetHorizontalBoundaries(HorizontalLockSettings, _cameraController);
 
     return new CameraMovementSettings(
+      HorizontalCamereaWindowSettings,
       VerticalSnapWindowSettings,
       VerticalLockSettings,
       HorizontalLockSettings,
@@ -103,6 +108,7 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
   public bool Contains(Vector2 point)
   {
     var cameraMovementSettings = new CameraMovementSettings(
+      HorizontalCamereaWindowSettings,
       VerticalSnapWindowSettings,
       VerticalLockSettings,
       HorizontalLockSettings,
