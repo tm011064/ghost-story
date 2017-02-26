@@ -12,6 +12,8 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
 
   private readonly float _rightVerticalLockPosition;
 
+  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator();
+
   private float _smoothDampVelocity;
 
   private float _cameraPosition;
@@ -41,12 +43,14 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
   {
     var targetPosition = Mathf.Clamp(CalculateUpdatePosition(), _leftVerticalLockPosition, _rightVerticalLockPosition);
 
-    _cameraPosition = CalculateCameraPosition(targetPosition);
+    _cameraPosition = _smoothDampedPositionCalculator.CalculatePosition(
+      _cameraController.transform.position.x,
+      targetPosition,
+      _cameraMovementSettings.SmoothDampMoveSettings.HorizontalSmoothDampTime);
   }
 
   private float CalculateCameraPosition(float targetPosition)
   {
-    //if (_smoothDampVelocity > 0)
     if (_lastDirection == HorizontalDirection.Right)
     {
       return Mathf.SmoothDamp(
@@ -100,7 +104,7 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
     if (currentDirection != _lastDirection)
     {
       _windowPosition = 0;
-      _smoothDampVelocity = 0;
+      _smoothDampVelocity *= -1f;
     }
 
     _lastDirection = currentDirection;

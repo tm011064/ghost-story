@@ -16,6 +16,8 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
   private readonly float _bottomVerticalLockPosition;
 
+  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator();
+
   private CameraPositionCalculationResult _lastResult;
 
   private float _smoothDampVelocity;
@@ -56,13 +58,12 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
   {
     _lastResult = CalculateVerticalPosition();
 
-    _cameraPosition = Mathf.SmoothDamp(
-        _cameraController.transform.position.y,
-        _lastResult.CameraPosition,
-        ref _smoothDampVelocity,
-        _lastResult.CameraSmoothDampSpeed == CameraSmoothDampSpeed.Fast
-          ? _cameraMovementSettings.SmoothDampMoveSettings.VerticalFastSmoothDampTime
-          : _cameraMovementSettings.SmoothDampMoveSettings.VerticalSlowSmoothDampTime);
+    _cameraPosition = _smoothDampedPositionCalculator.CalculatePosition(
+      _cameraController.transform.position.y,
+      _lastResult.CameraPosition,
+      _lastResult.CameraSmoothDampSpeed == CameraSmoothDampSpeed.Fast
+        ? _cameraMovementSettings.SmoothDampMoveSettings.VerticalFastSmoothDampTime
+        : _cameraMovementSettings.SmoothDampMoveSettings.VerticalSlowSmoothDampTime);
   }
 
   public float CalculateTargetPosition()

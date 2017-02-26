@@ -8,6 +8,8 @@ public partial class HorizontalFollowPlayerCameraPositionCalculator : ICameraPos
 
   private readonly CameraMovementSettings _cameraMovementSettings;
 
+  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator();
+
   private readonly float _leftVerticalLockPosition;
 
   private readonly float _rightVerticalLockPosition;
@@ -37,10 +39,9 @@ public partial class HorizontalFollowPlayerCameraPositionCalculator : ICameraPos
   {
     var position = Mathf.Clamp(_player.transform.position.x, _leftVerticalLockPosition, _rightVerticalLockPosition);
 
-    _cameraPosition = Mathf.SmoothDamp(
+    _cameraPosition = _smoothDampedPositionCalculator.CalculatePosition(
       _cameraController.transform.position.x,
       position,
-      ref _smoothDampVelocity,
       _cameraMovementSettings.SmoothDampMoveSettings.HorizontalSmoothDampTime);
   }
 
