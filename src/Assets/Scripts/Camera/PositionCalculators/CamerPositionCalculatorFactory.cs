@@ -35,6 +35,12 @@ public static class CamerPositionCalculatorFactory
           cameraMovementSettings,
           cameraController,
           GameManager.Instance.Player);
+
+      case HorizontalCameraFollowMode.FollowWithWindow:
+        return new HorizontalWindowCameraPositionCalculator(
+          cameraMovementSettings,
+          cameraController,
+          GameManager.Instance.Player);
     }
 
     throw new NotSupportedException();

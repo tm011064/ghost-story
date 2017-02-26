@@ -21,7 +21,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     private void CreateCameraModifier(PrefabInstantiationArguments arguments)
     {
-      var assetPath = arguments.PrefabsAssetPathsByShortName["Camera Modifier"]; // TODO (Roman): get from object
+      var assetPath = arguments.PrefabsAssetPathsByShortName["Camera Modifier"];
       var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
       var cameraModifier = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
       cameraModifier.transform.parent = transform;

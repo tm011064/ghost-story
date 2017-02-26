@@ -1,8 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraMovementSettings
 {
+  public HorizontalCamereaWindowSettings HorizontalCamereaWindowSettings;
+
   public VerticalSnapWindowSettings VerticalSnapWindowSettings;
 
   public VerticalLockSettings VerticalLockSettings;
@@ -16,6 +17,7 @@ public class CameraMovementSettings
   public CameraSettings CameraSettings;
 
   public CameraMovementSettings(
+    HorizontalCamereaWindowSettings horizontalCamereaWindowSettings,
     VerticalSnapWindowSettings verticalSnapWindowSettings,
     VerticalLockSettings verticalLockSettings,
     HorizontalLockSettings horizontalLockSettings,
@@ -23,6 +25,7 @@ public class CameraMovementSettings
     SmoothDampMoveSettings smoothDampMoveSettings,
     CameraSettings cameraSettings)
   {
+    HorizontalCamereaWindowSettings = horizontalCamereaWindowSettings;
     VerticalSnapWindowSettings = verticalSnapWindowSettings;
     HorizontalLockSettings = horizontalLockSettings;
     VerticalLockSettings = verticalLockSettings;
@@ -43,6 +46,7 @@ public class CameraMovementSettings
     {
       int hash = 17;
 
+      hash = hash * 23 + HorizontalCamereaWindowSettings.GetHashCode();
       hash = hash * 23 + VerticalSnapWindowSettings.GetHashCode();
       hash = hash * 23 + VerticalLockSettings.GetHashCode();
       hash = hash * 23 + HorizontalLockSettings.GetHashCode();

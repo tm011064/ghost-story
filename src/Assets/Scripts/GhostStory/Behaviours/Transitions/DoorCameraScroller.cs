@@ -22,6 +22,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       CameraSettings = GhostStoryGameContext.Instance.GameSettings.CameraSettings;
       SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;
       VerticalSnapWindowSettings = GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings;
+      HorizontalCamereaWindowSettings = GhostStoryGameContext.Instance.GameSettings.HorizontalCamereaWindowSettings;
       
       CameraMovementSettings = CreateCameraMovementSettings();
 

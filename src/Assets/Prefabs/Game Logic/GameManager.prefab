@@ -126,6 +126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f2fb3c7ccb59da498e0547c85192174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HorizontalCamereaWindowSettings:
+    WindowWitdh: 64
+    DirectionChangeDamping: 0.8
   VerticalSnapWindowSettings:
     OuterWindowTopBoundsPositionPercentage: 0.68
     InnerWindowTopBoundsPositionPercentage: 0.535
@@ -134,10 +137,9 @@ MonoBehaviour:
     UpwardMovementSnapPositionPercentage: 0.16
     DownwardMovementSnapPositionPercentage: 0
   SmoothDampMoveSettings:
-    HorizontalSmoothDampTime: 0.2
-    VerticalSmoothDampTime: 0.2
-    VerticalRapidDescentSmoothDampTime: 0.01
-    VerticalAboveRapidAcsentSmoothDampTime: 0.01
+    HorizontalSmoothDampTime: 0.4
+    VerticalSlowSmoothDampTime: 0.2
+    VerticalFastSmoothDampTime: 0.01
   FullScreenScrollSettings:
     TransitionTime: 1.2
     CameraScrollEasingType: 0
@@ -149,7 +151,7 @@ MonoBehaviour:
     VerticalFullScreenScrollerTransitionSpeedFactor: 4
   CameraSettings:
     VerticalCameraFollowMode: 1
-    HorizontalCameraFollowMode: 0
+    HorizontalCameraFollowMode: 1
 --- !u!114 &114942422582685766
 MonoBehaviour:
   m_ObjectHideFlags: 1
