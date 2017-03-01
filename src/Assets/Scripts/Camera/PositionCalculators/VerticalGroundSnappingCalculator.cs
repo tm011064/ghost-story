@@ -16,11 +16,9 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
   private readonly float _bottomVerticalLockPosition;
 
-  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator();
+  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator;
 
   private CameraPositionCalculationResult _lastResult;
-
-  private float _smoothDampVelocity;
 
   private float _cameraPosition;
 
@@ -38,15 +36,46 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
     _cameraController = cameraController;
     _player = player;
 
-    var adjustedCameraPosition = Mathf.Clamp(player.transform.position.y, _bottomVerticalLockPosition, _topVerticalLockPosition);
-    _lastResult = new CameraPositionCalculationResult
+    _smoothDampedPositionCalculator = cameraController.VerticalCameraPositionCalculator != null
+      ? cameraController.VerticalCameraPositionCalculator.SmoothDampedPositionCalculator.Clone()
+      : new SmoothDampedPositionCalculator(player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.y);
+
+    _lastResult = CreateLastResultFromCameraController();
+
+    _cameraPosition = _cameraController.transform.position.y;
+  }
+
+  public float WindowPosition { get { return _lastResult.WindowPosition; } }
+
+  public SmoothDampedPositionCalculator SmoothDampedPositionCalculator { get { return _smoothDampedPositionCalculator; } }
+
+  private CameraPositionCalculationResult CreateLastResultFromCameraController()
+  {
+    if (_cameraController.VerticalCameraPositionCalculator == null)
     {
-      LastCameraPosition = adjustedCameraPosition,
-      CameraPosition = adjustedCameraPosition,
-      LastWindowPosition = cameraController.transform.position.y,
-      WindowPosition = cameraController.transform.position.y
+      var adjustedCameraPosition = Mathf.Clamp(_player.transform.position.y, _bottomVerticalLockPosition, _topVerticalLockPosition);
+      return new CameraPositionCalculationResult
+      {
+        LastCameraPosition = adjustedCameraPosition,
+        CameraPosition = adjustedCameraPosition,
+        LastWindowPosition = adjustedCameraPosition,
+        WindowPosition = adjustedCameraPosition
+      };
+    }
+
+    var verticalGroundSnappingCalculator = _cameraController.VerticalCameraPositionCalculator as VerticalGroundSnappingCalculator;
+    if (verticalGroundSnappingCalculator != null)
+    {
+      return verticalGroundSnappingCalculator._lastResult;
+    }
+
+    return new CameraPositionCalculationResult
+    {
+      LastCameraPosition = _cameraController.transform.position.y,
+      CameraPosition = _cameraController.transform.position.y,
+      LastWindowPosition = _cameraController.VerticalCameraPositionCalculator.WindowPosition,
+      WindowPosition = _cameraController.VerticalCameraPositionCalculator.WindowPosition
     };
-    _cameraPosition = _lastResult.CameraPosition;
   }
 
   public float GetCameraPosition()
@@ -154,7 +183,6 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
     if (outerWindowBottomDelta < 0)
     {
       var cameraPosition = _cameraController.transform.position.y + outerWindowBottomDelta;
-
       return CreateNextResult(
         cameraPosition,
         _lastResult.WindowPosition,
@@ -251,6 +279,11 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
     public CameraSmoothDampSpeed CameraSmoothDampSpeed;
 
     public float LastCameraPosition;
+
+    public override string ToString()
+    {
+      return this.GetFieldValuesFormatted();
+    }
   }
 
   private enum CameraSmoothDampSpeed

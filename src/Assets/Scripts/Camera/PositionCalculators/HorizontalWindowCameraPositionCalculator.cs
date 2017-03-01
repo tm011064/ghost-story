@@ -10,17 +10,17 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
 
   private readonly float _leftVerticalLockPosition;
 
+  private readonly float _leftVerticalLockPositionWithFudgeFactor;
+
   private readonly float _rightVerticalLockPosition;
 
-  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator();
+  private readonly float _rightVerticalLockPositionWithFudgeFactor;
 
-  private float _smoothDampVelocity;
+  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator;
 
   private float _cameraPosition;
 
   private float _windowPosition;
-
-  private HorizontalDirection _lastDirection;
 
   public HorizontalWindowCameraPositionCalculator(
     CameraMovementSettings cameraMovementSettings,
@@ -29,19 +29,38 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
   {
     var screenCenter = cameraController.TargetScreenSize.x * .5f / cameraMovementSettings.ZoomSettings.ZoomPercentage;
 
+    var fudgeFactor = 1f;
     _leftVerticalLockPosition = cameraMovementSettings.HorizontalLockSettings.LeftHorizontalLockPosition + screenCenter;
+    _leftVerticalLockPositionWithFudgeFactor = _leftVerticalLockPosition - fudgeFactor;
     _rightVerticalLockPosition = cameraMovementSettings.HorizontalLockSettings.RightHorizontalLockPosition - screenCenter;
+    _rightVerticalLockPositionWithFudgeFactor = _rightVerticalLockPosition + fudgeFactor;
 
     _cameraMovementSettings = cameraMovementSettings;
     _cameraController = cameraController;
     _player = player;
 
-    _cameraPosition = Mathf.Clamp(player.transform.position.x, _leftVerticalLockPosition, _rightVerticalLockPosition);
+    if (cameraController.HorizontalCameraPositionCalculator != null)
+    {
+      _windowPosition = cameraController.HorizontalCameraPositionCalculator.WindowPosition;
+      _smoothDampedPositionCalculator = cameraController.HorizontalCameraPositionCalculator.SmoothDampedPositionCalculator.Clone();
+    }
+    else
+    {
+      _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator(player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x);
+    }
+
+    _cameraPosition = _cameraController.transform.position.x;
   }
+
+  public float WindowPosition { get { return _windowPosition; } }
+
+  public SmoothDampedPositionCalculator SmoothDampedPositionCalculator { get { return _smoothDampedPositionCalculator; } }
 
   public void Update()
   {
-    var targetPosition = Mathf.Clamp(CalculateUpdatePosition(), _leftVerticalLockPosition, _rightVerticalLockPosition);
+    var updatedPosition = CalculateUpdatePosition();
+
+    var targetPosition = AdjustLocks(updatedPosition);
 
     _cameraPosition = _smoothDampedPositionCalculator.CalculatePosition(
       _cameraController.transform.position.x,
@@ -49,24 +68,26 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
       _cameraMovementSettings.SmoothDampMoveSettings.HorizontalSmoothDampTime);
   }
 
-  private float CalculateCameraPosition(float targetPosition)
+  private float AdjustLocks(float position)
   {
-    if (_lastDirection == HorizontalDirection.Right)
+    if (!IsPlayerMoving())
     {
-      return Mathf.SmoothDamp(
-        _cameraController.transform.position.x,
-        targetPosition,
-        ref _smoothDampVelocity,
-        _cameraMovementSettings.SmoothDampMoveSettings.HorizontalSmoothDampTime);
+      return position;
     }
 
-    var smoothDampValue = Mathf.SmoothDamp(
-      0,
-      _cameraController.transform.position.x - targetPosition,
-      ref _smoothDampVelocity,
-      _cameraMovementSettings.SmoothDampMoveSettings.HorizontalSmoothDampTime);
+    if (position < _leftVerticalLockPosition
+      && _cameraPosition >= _leftVerticalLockPositionWithFudgeFactor)
+    {
+      return _leftVerticalLockPosition;
+    }
 
-    return _cameraPosition - smoothDampValue;
+    if (position > _rightVerticalLockPosition
+      && _cameraPosition <= _rightVerticalLockPositionWithFudgeFactor)
+    {
+      return _rightVerticalLockPosition;
+    }
+
+    return position;
   }
 
   private float CalculateUpdatePosition()
@@ -76,7 +97,10 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
       return _cameraController.transform.position.x;
     }
 
-    UpdateDirection();
+    if (!_smoothDampedPositionCalculator.IsSameDirection(_player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x))
+    {
+      _windowPosition = 0;
+    }
 
     UpdateWindowPosition();
 
@@ -93,21 +117,6 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
       targetWindowPosition,
       -_cameraMovementSettings.HorizontalCamereaWindowSettings.WindowWitdh,
       _cameraMovementSettings.HorizontalCamereaWindowSettings.WindowWitdh);
-  }
-
-  private void UpdateDirection()
-  {
-    var currentDirection = _player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x > 0
-      ? HorizontalDirection.Right
-      : HorizontalDirection.Left;
-
-    if (currentDirection != _lastDirection)
-    {
-      _windowPosition = 0;
-      _smoothDampVelocity *= -1f;
-    }
-
-    _lastDirection = currentDirection;
   }
 
   private bool IsPlayerMoving()

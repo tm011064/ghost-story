@@ -12,9 +12,7 @@ public partial class VerticalFollowPlayerCameraPositionCalculator : ICameraPosit
 
   private readonly float _bottomVerticalLockPosition;
 
-  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator();
-
-  private float _smoothDampVelocity;
+  private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator;
 
   private float _cameraPosition;
 
@@ -32,8 +30,15 @@ public partial class VerticalFollowPlayerCameraPositionCalculator : ICameraPosit
     _cameraController = cameraController;
     _player = player;
 
+    _smoothDampedPositionCalculator = new SmoothDampedPositionCalculator(
+      player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.y);
+
     _cameraPosition = Mathf.Clamp(player.transform.position.y, _bottomVerticalLockPosition, _topVerticalLockPosition);
   }
+
+  public float WindowPosition { get { return 0f; } }
+
+  public SmoothDampedPositionCalculator SmoothDampedPositionCalculator { get { return _smoothDampedPositionCalculator; } }
 
   public void Update()
   {

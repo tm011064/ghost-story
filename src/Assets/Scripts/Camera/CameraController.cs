@@ -40,6 +40,10 @@ public partial class CameraController : MonoBehaviour
 
   public event Action<TranslateTransformActions> ScrollActionCompleted;
 
+  public ICameraPositionCalculator VerticalCameraPositionCalculator { get { return _verticalCameraPositionCalculator; } }
+
+  public ICameraPositionCalculator HorizontalCameraPositionCalculator { get { return _horizontalCameraPositionCalculator; } }
+
   public void RegisterScrollActions(TranslateTransformActions scrollActions)
   {
     _scrollActionManager.EnqueueScrollActions(scrollActions);
@@ -107,8 +111,12 @@ public partial class CameraController : MonoBehaviour
 
   void OnCameraMovementSettingsChanged()
   {
-    _verticalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateVertical(this, _cameraMovementSettingsManager.ActiveSettings);
-    _horizontalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateHorizontal(this, _cameraMovementSettingsManager.ActiveSettings);
+    _verticalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateVertical(
+      this,
+      _cameraMovementSettingsManager.ActiveSettings);
+    _horizontalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateHorizontal(
+      this,
+      _cameraMovementSettingsManager.ActiveSettings);
 
     SetCameraSize();
 
