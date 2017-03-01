@@ -295,6 +295,30 @@ public class Logger : IDisposable
     UnityEngine.Debug.Log(Time.time + ": " + message);
   }
 
+  [Conditional("DEBUG")]
+  public static void UnityDebugLog(string description, object value)
+  {
+    UnityEngine.Debug.Log(Time.time + ": " + description + ": " + value);
+  }
+
+  [Conditional("DEBUG")]
+  public static void UnityDebugLog(string description1, object value1, string description2, object value2)
+  {
+    UnityEngine.Debug.Log(Time.time + ": " + description1 + ": " + value1 + ", " + description2 + ": " + value2);
+  }
+
+  [Conditional("DEBUG")]
+  public static void UnityDebugLog(string description1, object value1, string description2, object value2, string description3, object value3)
+  {
+    UnityEngine.Debug.Log(Time.time + ": " + description1 + ": " + value1 + ", " + description2 + ": " + value2 + ", " + description3 + ": " + value3);
+  }
+
+  [Conditional("DEBUG")]
+  public static void UnityDebugLog(string description1, object value1, string description2, object value2, string description3, object value3, string description4, object value4)
+  {
+    UnityEngine.Debug.Log(Time.time + ": " + description1 + ": " + value1 + ", " + description2 + ": " + value2 + ", " + description3 + ": " + value3 + ", " + description4 + ": " + value4);
+  }
+
   [Conditional("DEBUG"), Conditional("PROFILE")]
   public static void DebugMember<T1>(Expression<Func<T1>> memberExpression1)
   {
