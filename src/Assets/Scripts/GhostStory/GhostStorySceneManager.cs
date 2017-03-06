@@ -93,8 +93,6 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     _loadContext.IsLoading = false;
   }
 
-  private string _portalName;
-
   private BlackBarCanvas GetBlackBarCanvas()
   {
     if (_blackBarPrefabInstance == null)
@@ -104,7 +102,7 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
 
     return _blackBarPrefabInstance.GetComponent<BlackBarCanvas>();
   }
-  
+
   public bool IsFading()
   {
     var blackBarCanvas = GetBlackBarCanvas();
@@ -124,6 +122,10 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     if (!_loadContext.IsLoading)
     {
       SpawnPlayer();
+
+      // TODO (Roman): is this the right place?
+      Camera.main.GetComponent<CameraController>().Reset();
+      ForceTriggerCameraModifier();
 
       FadeIn();
     }

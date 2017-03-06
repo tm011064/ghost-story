@@ -179,10 +179,6 @@ namespace Tiled2Unity
       int layerId = LayerMask.NameToLayer(layerName);
       if (layerId == -1)
       {
-        string msg = String.Format("Layer '{0}' is not defined for '{1}'. Check project settings in Edit->Project Settings->Tags & Layers",
-            layerName,
-            GetFullGameObjectName(gameObject.transform));
-        Debug.LogWarning(msg);
         return;
       }
 

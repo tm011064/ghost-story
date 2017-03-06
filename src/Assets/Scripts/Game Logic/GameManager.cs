@@ -202,17 +202,68 @@ public class GameManager : MonoBehaviour
   {
   }
 
+#if !FINAL
+  private DebugUpdateActionManager _debugUpdateActionManager = new DebugUpdateActionManager();
+
+  class DebugUpdateActionManager
+  {
+    //
+    private int _portalIndex;
+
+    public void Update()
+    {
+      // TODO (Important): this must not make it into release
+      if (Input.GetKey("escape"))
+      {
+        Logger.Info("quit");
+
+        Application.Quit();
+      }
+
+      if (Input.GetKeyUp("]"))
+      {
+        LoadNextPortal();
+      }
+      if (Input.GetKeyUp("["))
+      {
+        LoadPreviousPortal();
+      }
+    }
+
+    private void LoadPortal(int indexIncrement)
+    {
+      var portals = GameManager.Instance.FindSceneComponents<IScenePortal>().ToArray();
+
+      _portalIndex += indexIncrement;
+      if (_portalIndex >= portals.Length || _portalIndex < 0)
+      {
+        _portalIndex = 0;
+      }
+
+      GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName = portals[_portalIndex].GetPortalName();
+
+      GameManager.Instance.SceneManager.OnSceneLoad();
+    }
+
+    private void LoadPreviousPortal()
+    {
+      LoadPortal(-1);
+    }
+
+    private void LoadNextPortal()
+    {
+      LoadPortal(1);
+    }
+  }
+#endif
+
   void Update()
   {
     InputStateManager.Update();
 
-    // TODO (Important): this must not make it into release
-    if (Input.GetKey("escape"))
-    {
-      Logger.Info("quit");
-
-      Application.Quit();
-    }
+#if !FINAL
+    _debugUpdateActionManager.Update();
+#endif
 
 #if !FINAL
     _fpsRenderer.UpdateFPS();

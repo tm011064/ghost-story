@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 
-using System;
 using UnityEngine;
 
 public partial class CameraScroller
@@ -45,6 +44,6 @@ public partial class CameraScroller
     boxCollider.size = bounds.size;
 
     return boxColliderGameObject;
-  }  
+  }
 }
 #endif

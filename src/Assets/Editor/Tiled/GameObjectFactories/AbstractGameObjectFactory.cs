@@ -134,9 +134,16 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
       gameObject.name = gameObjectName;
 
-      var instantiable = gameObject.GetComponentOrThrow<IInstantiable<TInstantiationArguments>>();
-
-      instantiable.Instantiate(arguments);
+      var instantiable = gameObject.GetComponent<IInstantiable<TInstantiationArguments>>();
+      if (instantiable != null)
+      {
+        instantiable.Instantiate(arguments);
+      }
+      else
+      {
+        gameObject.transform.ForEachChildComponent<IInstantiable<TInstantiationArguments>>(
+          component => component.Instantiate(arguments));
+      }
 
       return gameObject;
     }

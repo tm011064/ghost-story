@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9774b30a32267ac42b364ddc4f7bbba1
-timeCreated: 1485334363
+timeCreated: 1488373773
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -90,7 +90,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 192
+        y: 448
         width: 16
         height: 64
       alignment: 0
@@ -103,7 +103,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 18
-        y: 192
+        y: 448
         width: 16
         height: 64
       alignment: 0
@@ -116,7 +116,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 36
-        y: 192
+        y: 448
         width: 48
         height: 64
       alignment: 0
@@ -129,7 +129,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 86
-        y: 192
+        y: 448
         width: 48
         height: 64
       alignment: 0
@@ -142,7 +142,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 136
-        y: 192
+        y: 448
         width: 16
         height: 64
       alignment: 0
@@ -155,7 +155,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 154
-        y: 192
+        y: 448
         width: 16
         height: 64
       alignment: 0
@@ -168,8 +168,8 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 172
-        y: 192
-        width: 32
+        y: 448
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -180,9 +180,9 @@ TextureImporter:
       name: doors_7
       rect:
         serializedVersion: 2
-        x: 206
-        y: 192
-        width: 32
+        x: 222
+        y: 448
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -194,7 +194,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 126
+        y: 382
         width: 16
         height: 64
       alignment: 0
@@ -207,7 +207,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 18
-        y: 126
+        y: 382
         width: 16
         height: 64
       alignment: 0
@@ -220,7 +220,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 36
-        y: 126
+        y: 382
         width: 48
         height: 64
       alignment: 0
@@ -233,7 +233,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 86
-        y: 126
+        y: 382
         width: 48
         height: 64
       alignment: 0
@@ -246,7 +246,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 136
-        y: 126
+        y: 382
         width: 16
         height: 64
       alignment: 0
@@ -259,7 +259,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 154
-        y: 126
+        y: 382
         width: 16
         height: 64
       alignment: 0
@@ -272,8 +272,8 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 172
-        y: 126
-        width: 32
+        y: 382
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -284,9 +284,9 @@ TextureImporter:
       name: doors_15
       rect:
         serializedVersion: 2
-        x: 206
-        y: 126
-        width: 32
+        x: 222
+        y: 382
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
