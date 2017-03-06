@@ -27,6 +27,15 @@ namespace Assets.Editor.Tiled.GhostStory
             Bounds = config.TiledObjectgroup.Object.Select(o => o.GetBounds())
           })
         .SelectMany(c => c.Bounds.Select(b => new { Universe = c.Universe, Bounds = b }))
+        .Union(ObjectLayerConfigs
+          .Where(config => config.Type == "CameraModifier")
+          .Select(config =>
+            new
+            {
+              Universe = config.Universe,
+              Bounds = config.TiledObjectgroup.Object.Where(o => o.Type == "Camera Bounds").Select(o => o.GetBounds())
+            })
+          .SelectMany(c => c.Bounds.Select(b => new { Universe = c.Universe, Bounds = b })))
         .ToLookup(c => c.Universe, c => c.Bounds);
     }
 

@@ -125,10 +125,12 @@ public partial class CameraModifier : MonoBehaviour, ICameraModifier
     _cameraMovementSettings = CreateCameraMovementSettings();
 
     var playerPosition = GameManager.Instance.Player.transform.position;
+    Logger.UnityDebugLog("pp", playerPosition);
     if (_cameraMovementSettings.Contains(playerPosition))
     {
       _cameraController.OnCameraModifierEnter(_cameraMovementSettings);
       _cameraController.MoveCameraToTargetPosition();
+      Logger.UnityDebugLog("enter", _cameraController.transform.position);
     }
   }
 

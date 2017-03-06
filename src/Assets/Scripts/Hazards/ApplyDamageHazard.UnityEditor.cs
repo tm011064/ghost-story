@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-public partial class DeactivatePooledObjectTrigger : IInstantiable<PrefabInstantiationArguments>
+public partial class ApplyDamageHazard : IInstantiable<PrefabInstantiationArguments>
 {
   public void Instantiate(PrefabInstantiationArguments arguments)
   {

@@ -16,10 +16,10 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012209477142}
-  - 212: {fileID: 212000010865515464}
+  - component: {fileID: 4000012209477142}
+  - component: {fileID: 212000010865515464}
   m_Layer: 11
   m_Name: Sprite
   m_TagString: Untagged
@@ -32,10 +32,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010247828576}
-  - 114: {fileID: 114000011730624048}
+  - component: {fileID: 4000010247828576}
+  - component: {fileID: 114000011730624048}
   m_Layer: 0
   m_Name: Cockroach Spawn Location
   m_TagString: Untagged
@@ -48,16 +48,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011207011336}
-  - 95: {fileID: 95000011421316384}
-  - 61: {fileID: 61000012497482016}
-  - 114: {fileID: 114000013327593978}
-  - 114: {fileID: 114000011243495214}
-  - 114: {fileID: 114000011647721714}
-  - 50: {fileID: 50000014234175438}
-  - 114: {fileID: 114000010200674820}
+  - component: {fileID: 4000011207011336}
+  - component: {fileID: 95000011421316384}
+  - component: {fileID: 61000012497482016}
+  - component: {fileID: 114000013327593978}
+  - component: {fileID: 114000011243495214}
+  - component: {fileID: 114000011647721714}
+  - component: {fileID: 50000014234175438}
+  - component: {fileID: 114000010200674820}
   m_Layer: 10
   m_Name: Cockroach
   m_TagString: Untagged
@@ -74,11 +74,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011207011336}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000011207011336
 Transform:
   m_ObjectHideFlags: 1
@@ -88,11 +88,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000012209477142}
   m_Father: {fileID: 4000010247828576}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000012209477142
 Transform:
   m_ObjectHideFlags: 1
@@ -102,23 +102,26 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000011207011336}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50000014234175438
 Rigidbody2D:
-  serializedVersion: 2
+  serializedVersion: 4
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000014081318236}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_IsKinematic: 1
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -176,17 +179,20 @@ MonoBehaviour:
   SlopeSpeedMultiplier:
     serializedVersion: 2
     m_Curve:
-    - time: -90
+    - serializedVersion: 2
+      time: -90
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 0
+    - serializedVersion: 2
+      time: 0
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 90
+    - serializedVersion: 2
+      time: 90
       value: 1
       inSlope: 0
       outSlope: 0
@@ -244,8 +250,8 @@ MonoBehaviour:
   ShowGizmoOutline: 1
   RespawnMode: 2
   DestroySpawnedEnemiesWhenGettingDisabled: 1
-  ContinuousSpawnInterval: 1
-  RespawnOnDestroyDelay: 4
+  ContinuousSpawnInterval: 2
+  RespawnOnDestroyDelay: 1
   SpawnArguments: []
 --- !u!114 &114000013327593978
 MonoBehaviour:
@@ -281,7 +287,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -289,7 +297,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

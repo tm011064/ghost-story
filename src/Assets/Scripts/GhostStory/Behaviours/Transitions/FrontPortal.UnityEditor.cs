@@ -21,6 +21,13 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     private void CreateCameraModifier(PrefabInstantiationArguments arguments)
     {
+      return;
+      var wrappingCameraBounds = arguments.WrappingCameraBounds.SingleOrDefault();
+      if (wrappingCameraBounds == null)
+      {
+        return;
+      }
+
       var assetPath = arguments.PrefabsAssetPathsByShortName["Camera Modifier"];
       var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
       var cameraModifier = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
@@ -36,7 +43,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
             Properties = arguments.Properties
           }
         },
-        Bounds = arguments.WrappingCameraBounds.Single()
+        Bounds = wrappingCameraBounds
       };
 
       var instantiable = cameraModifier.GetComponentOrThrow<IInstantiable<CameraModifierInstantiationArguments>>();

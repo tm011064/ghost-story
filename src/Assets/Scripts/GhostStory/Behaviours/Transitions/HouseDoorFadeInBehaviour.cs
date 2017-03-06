@@ -10,6 +10,8 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   protected override void OnAwake()
   {
+    Logger.UnityDebugLog("AWAKE");
+
     FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
     CameraSettings = GhostStoryGameContext.Instance.GameSettings.CameraSettings;
     SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;

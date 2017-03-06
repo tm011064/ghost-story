@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ApplyDamageHazard : MonoBehaviour
+public partial class ApplyDamageHazard : MonoBehaviour
 {
   public int PlayerDamageUnits = 1;
 
@@ -8,47 +8,28 @@ public class ApplyDamageHazard : MonoBehaviour
 
   public EnemyContactReaction EnemyContactReaction = EnemyContactReaction.Knockback;
 
-  private GameManager _gameManager;
+  private void ApplyDamage()
+  {
+    if ((GameManager.Instance.Player.PlayerState & PlayerState.Invincible) != 0)
+    {
+      return;
+    }
+
+    if (DestroyHazardOnCollision)
+    {
+      ObjectPoolingManager.Instance.Deactivate(gameObject);
+    }
+
+    GameManager.Instance.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
+  }
 
   void OnTriggerStay2D(Collider2D col)
   {
-    if (col.gameObject == _gameManager.Player.gameObject)
-    {
-      if ((_gameManager.Player.PlayerState & PlayerState.Invincible) != 0)
-      {
-        return;
-      }
-
-      if (DestroyHazardOnCollision)
-      {
-        ObjectPoolingManager.Instance.Deactivate(gameObject);
-      }
-
-      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
-    }
+    ApplyDamage();
   }
 
   void OnTriggerEnter2D(Collider2D col)
   {
-    // we have to check for player as the hazard might have collided with a hazard destroy trigger
-    if (col.gameObject == _gameManager.Player.gameObject)
-    {
-      if ((_gameManager.Player.PlayerState & PlayerState.Invincible) != 0)
-      {
-        return;
-      }
-
-      if (DestroyHazardOnCollision)
-      {
-        ObjectPoolingManager.Instance.Deactivate(gameObject);
-      }
-
-      _gameManager.Player.Health.ApplyDamage(PlayerDamageUnits, EnemyContactReaction);
-    }
-  }
-
-  void Awake()
-  {
-    _gameManager = GameManager.Instance;
+    ApplyDamage();
   }
 }

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objecttypes>
- <objecttype name="Checkpoint" color="#a0a0a4">
-  <property name="Is Level Start" type="bool" default="false"/>
-  <property name="Prefab" type="string" default="Checkpoint"/>
- </objecttype>
  <objecttype name="Cockroach" color="#a0a0a4">
   <property name="Prefab" type="string" default="Cockroach Spawn Location"/>
   <property name="StartDirections" type="string" default="Right"/>
@@ -25,10 +21,6 @@
   <property name="Triggers Room Transition" type="bool"/>
  </objecttype>
  <objecttype name="Camera Bounds" color="#cccccc"/>
- <objecttype name="Green Door" color="#00ff7f">
-  <property name="Color" type="string" default="Green"/>
-  <property name="Tag" type="string" default="RealWorld"/>
- </objecttype>
  <objecttype name="Red Door" color="#ff007f">
   <property name="Color" type="string" default="Red"/>
   <property name="Tag" type="string" default="RealWorld"/>
@@ -54,7 +46,14 @@
   <property name="Prefab" type="string"/>
   <property name="Transition To Portal" type="string"/>
   <property name="Transition To Scene" type="string"/>
-  <property name="Type" type="string" default="SceneTransition"/>
-  <property name="Universe" type="string"/>
+ </objecttype>
+ <objecttype name="Green Door" color="#00ff00">
+  <property name="Door Key" type="string" default="GreenHouseDoorKey"/>
+  <property name="Prefab" type="string" default="Green Door"/>
+ </objecttype>
+ <objecttype name="Scene Front Portal" color="#a0a0a4">
+  <property name="Prefab" type="string"/>
+  <property name="Transition To Portal" type="string"/>
+  <property name="Transition To Scene" type="string"/>
  </objecttype>
 </objecttypes>

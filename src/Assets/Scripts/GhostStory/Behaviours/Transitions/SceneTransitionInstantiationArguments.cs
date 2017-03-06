@@ -12,7 +12,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       var doorKey = (DoorKey)Enum.Parse(typeof(DoorKey), prefabInstantiationArguments.Properties["Door Key"]);
       var doorLocation = (HorizontalDirection)Enum.Parse(typeof(HorizontalDirection), prefabInstantiationArguments.Properties["Transition Direction"]);
 
-      var cameraBounds = prefabInstantiationArguments.WrappingCameraBounds.First();
+      var cameraBounds = prefabInstantiationArguments.WrappingCameraBounds.FirstOrDefault();
 
       return new SceneTransitionInstantiationArguments
       {

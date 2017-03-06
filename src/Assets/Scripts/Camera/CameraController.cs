@@ -102,6 +102,8 @@ public partial class CameraController : MonoBehaviour
   public void Reset()
   {
     _cameraMovementSettingsManager.ClearSettings();
+    _verticalCameraPositionCalculator = null;
+    _horizontalCameraPositionCalculator = null;
   }
 
   public void OnCameraModifierExit(CameraMovementSettings cameraMovementSettings)

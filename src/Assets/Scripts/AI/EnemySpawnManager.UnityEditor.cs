@@ -3,7 +3,7 @@
 using System.Linq;
 using UnityEngine;
 
-public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IInstantiable<InstantiationArguments>
+public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IInstantiable<PrefabInstantiationArguments>
 {
   public Color OutlineGizmoColor = Color.yellow;
 
@@ -33,16 +33,16 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IInstantiable
     }
   }
 
-  public void Instantiate(InstantiationArguments arguments)
+  public void Instantiate(PrefabInstantiationArguments arguments)
   {
     SpawnArguments = arguments
       .Properties
       .Select(kvp => new SpawnArgument { Key = kvp.Key, Value = kvp.Value })
       .ToArray();
 
-    transform.position = arguments.Bounds.center;
+    transform.position = arguments.TiledRectBounds.center;
 
-    transform.ForEachChildComponent<IInstantiable<InstantiationArguments>>(
+    transform.ForEachChildComponent<IInstantiable<PrefabInstantiationArguments>>(
       instantiable => instantiable.Instantiate(arguments));
   }
 }
