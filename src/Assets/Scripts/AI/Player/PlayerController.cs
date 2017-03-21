@@ -182,6 +182,16 @@ public partial class PlayerController : BaseCharacterController
       && CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;
   }
 
+  public bool IsGoingDownSlope()
+  {
+    return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.MovingDownSlope;
+  }
+
+  public bool IsGoingUpSlope()
+  {
+    return CharacterPhysicsManager.LastMoveCalculationResult.IsGoingUpSlope;
+  }
+
   public bool IsGrounded()
   {
     return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;
@@ -319,6 +329,13 @@ public partial class PlayerController : BaseCharacterController
   protected virtual PlayerControlHandler CreateDefaultPlayerControlHandler()
   {
     return new DefaultPlayerControlHandler(this);
+  }
+
+  public void SetHorizontalSpriteScale(HorizontalDirection horizontalDirection)
+  {
+    var value = horizontalDirection == HorizontalDirection.Right ? 1 : -1;
+
+    Sprite.transform.localScale = Sprite.transform.localScale.SetX(value);
   }
 
   public void FlipHorizontalSpriteScale()

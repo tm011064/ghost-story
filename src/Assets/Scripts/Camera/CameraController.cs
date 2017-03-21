@@ -122,7 +122,10 @@ public partial class CameraController : MonoBehaviour
 
     SetCameraSize();
 
-    if (_cameraMovementSettingsManager.SettingsCount == 1)
+    // TODO (Roman): don't move player on scene load only, otherwise do
+    // TODO (Roman): freeze player longer after finish - quick back kills door scroll
+    if (_cameraMovementSettingsManager.SettingsCount == 1
+      && !GameManager.Instance.SceneManager.IsLoading()) // TODO (Roman): the isloading is bad design
     {
       MoveCameraToTargetPosition();
     }
@@ -165,6 +168,7 @@ public partial class CameraController : MonoBehaviour
   {
     _cameraMovementSettingsManager.SettingsChanged += OnCameraMovementSettingsChanged;
     _scrollActionManager.Completed += OnScrollActionManagerCompleted;
+    Transform = gameObject.transform;
   }
 
   void OnDestroy()
@@ -195,8 +199,6 @@ public partial class CameraController : MonoBehaviour
 
       Debug.Log("Found " + CameraTrolleys.Length + " camera trolleys.");
     }
-
-    Transform = gameObject.transform;
 
     GameManager = GameManager.Instance;
 
@@ -307,6 +309,11 @@ public partial class CameraController : MonoBehaviour
     return scaleHeight < 1;
   }
 
+  public float CalculateTargetZAxisPosition()
+  {
+    return Target.position.z - ZAxisOffset;
+  }
+
   public Vector3 CalculateTargetPosition(CameraMovementSettings cameraMovementSettings)
   {
     var verticalCalculator = CamerPositionCalculatorFactory.CreateVertical(this, cameraMovementSettings);
@@ -315,11 +322,18 @@ public partial class CameraController : MonoBehaviour
     return new Vector3(
       horizontalCalculator.CalculateTargetPosition(),
       verticalCalculator.CalculateTargetPosition(),
-      Target.position.z - ZAxisOffset);
+      CalculateTargetZAxisPosition());
+  }
+
+  public bool HasScrollActions()
+  {
+    return _scrollActionManager.HasActions();
   }
 
   private bool IsCameraControlledByScrollAction()
   {
+    var pos = transform.position;
+
     _scrollActionManager.Update(transform.position);
 
     if (!_scrollActionManager.HasActions())
@@ -328,7 +342,6 @@ public partial class CameraController : MonoBehaviour
     }
 
     transform.position = _scrollActionManager.GetPosition();
-
     return true;
   }
 

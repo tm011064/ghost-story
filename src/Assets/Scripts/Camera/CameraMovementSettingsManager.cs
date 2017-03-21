@@ -15,6 +15,7 @@ public class CameraMovementSettingsManager
   private void ChangeSettings(CameraMovementSettings cameraMovementSettings)
   {
     ActiveSettings = cameraMovementSettings;
+
     Logger.UnityDebugLog("CameraMovementSettingsManager -> ChangeSettings, count: " + _cameraMovementSettings.Count + ", " + ActiveSettings.ToString());
 
     var handler = SettingsChanged;
@@ -26,7 +27,7 @@ public class CameraMovementSettingsManager
 
   public void AddSettings(CameraMovementSettings cameraMovementSettings)
   {
-    Logger.UnityDebugLog("CameraMovementSettingsManager -> AddSettings");
+    Logger.UnityDebugLog("CameraMovementSettingsManager -> AddSettings", cameraMovementSettings);
 
     if (cameraMovementSettings.Equals(ActiveSettings))
     {
@@ -45,6 +46,7 @@ public class CameraMovementSettingsManager
     Logger.UnityDebugLog("CameraMovementSettingsManager -> Clearing all settings");
 
     ActiveSettings = null;
+
     _cameraMovementSettings.Clear();
   }
 

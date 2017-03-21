@@ -39,6 +39,6 @@ public class TranslateFrozenPlayerControlHandler : FreezePlayerControlHandler
   {
     PlayerController.transform.position = _translateTransformAction.GetPosition();
 
-    return base.DoUpdate(); ;
+    return base.DoUpdate();
   }
 }

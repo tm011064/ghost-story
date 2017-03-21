@@ -10,11 +10,10 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   protected override void OnAwake()
   {
-    Logger.UnityDebugLog("AWAKE");
-
     FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
     CameraSettings = GhostStoryGameContext.Instance.GameSettings.CameraSettings;
     SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;
+    VerticalSnapWindowSettings = GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings;
 
     HouseDoor = GetComponentInParent<HouseDoor>();
   }
@@ -62,7 +61,8 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
     var cameraPosition = doorPositionRelativeToCameraPosition - fromPortalPosition;
 
-    return AdjustForTransitionDoorWidth(cameraPosition);
+    return AdjustForTransitionDoorWidth(cameraPosition)
+      .SetZ(CameraController.CalculateTargetZAxisPosition());
   }
 
   private Vector3 AdjustForTransitionDoorWidth(Vector3 cameraPosition)
@@ -79,27 +79,21 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   private void SetPlayerPosition(PlayerController player)
   {
-    MovePlayerToTargetPosition(HouseDoor, player);
+    MovePlayerToTargetPosition();
 
     player.transform.position = HouseDoor.transform.position.SetY(player.transform.position.y);
   }
 
-  public void MovePlayerToTargetPosition(HouseDoor houseDoor, PlayerController player)
+  public void MovePlayerToTargetPosition()
   {
-    AdjustPlayerSpriteScale(player);
+    var player = GameManager.Instance.Player;
+
+    player.SetHorizontalSpriteScale(DoorLocation.Opposite());
 
     var playerTranslationVector = CalculatePlayerTranslationVector();
 
-    player.transform.position = houseDoor.transform.position + playerTranslationVector;
+    player.transform.position = HouseDoor.transform.position + playerTranslationVector;
     player.CharacterPhysicsManager.WarpToFloor();
-  }
-
-  private void AdjustPlayerSpriteScale(PlayerController player)
-  {
-    if (DoorLocation == HorizontalDirection.Right)
-    {
-      player.FlipHorizontalSpriteScale();
-    }
   }
 
   private void MovePlayerIntoRoom()
@@ -156,6 +150,9 @@ public class HouseDoorFadeInBehaviour : CameraScroller
       "FadeIn");
 
     CameraController.Reset();
+
+    CameraMovementSettings = CreateCameraMovementSettings(); // TODO (Roman): ???
+
     CameraController.OnCameraModifierEnter(CameraMovementSettings);
   }
 

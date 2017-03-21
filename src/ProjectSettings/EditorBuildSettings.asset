@@ -5,19 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Experimental/Camera Scrolling.unity
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Prototype/Scenes/house_elevator_shaft.unity
+  - enabled: 1
+    path: Assets/Prototype/Scenes/upper_basement.unity
+  - enabled: 1
     path: Assets/Scenes/Empty Level.unity
-  - enabled: 0
-    path: Assets/Scenes/Experimental/Sample Level.unity
-  - enabled: 0
-    path: Assets/Scenes/Enemies/Barrel Met.unity
-  - enabled: 0
-    path: Assets/Scenes/Experimental/Ladders.unity
-  - enabled: 0
-    path: Assets/Scenes/Experimental/Sample Level/three_rooms.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Prototype/Scenes/single_room.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/pantry.unity
@@ -27,11 +21,13 @@ EditorBuildSettings:
     path: Assets/Prototype/Scenes/three_rooms_new.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/three_rooms_shaft.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Prototype/Scenes/Enemies/Cockroach.unity
-  - enabled: 0
-    path: Assets/Prototype/Scenes/three_rooms.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/scene_transition_test_right_door.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/scene_transition_test_left_door.unity
+  - enabled: 1
+    path: Assets/Prototype/Scenes/foyer.unity
+  - enabled: 1
+    path: Assets/Prototype/Scenes/lower_basement.unity

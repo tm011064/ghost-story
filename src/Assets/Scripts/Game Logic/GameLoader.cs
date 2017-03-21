@@ -22,6 +22,11 @@ public class GameLoader : MonoBehaviour
     //  Instantiate(soundManager);
 
     // it is important to call that here as it instanciates the player controller which needs to have the game settings set.
+    //GameManager.Instance.LoadScene();
+  }
+
+  void Start()
+  {
     GameManager.Instance.LoadScene();
   }
 }

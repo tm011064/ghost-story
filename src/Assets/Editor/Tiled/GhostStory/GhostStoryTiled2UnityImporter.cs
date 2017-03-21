@@ -93,6 +93,7 @@ namespace Assets.Editor.Tiled.GhostStory
           new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
           new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
+          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);

@@ -7,18 +7,17 @@ namespace Assets.Editor.Tiled
 {
   public static class TiledXmlExtensions
   {
-    public static Vector2[] ToVectors(this PolyLine polyLine)
+    public static IEnumerable<Vector2> ToVectors(this PolyLine polyLine)
     {
-      var coordinates = polyLine.Points.Split(' ');
-
-      var startPoints = coordinates[0].Split(',');
-      var endPoints = coordinates[1].Split(',');
-
-      return new Vector2[]
-      {
-        new Vector2(int.Parse(startPoints[0]), int.Parse(startPoints[1])),
-        new Vector2(int.Parse(endPoints[0]), int.Parse(endPoints[1]))
-      };
+      return polyLine
+        .Points
+        .Split(' ')
+        .Select(
+          c =>
+          {
+            var points = c.Split(',');
+            return new Vector2(int.Parse(points.First()), -int.Parse(points.Last()));
+          });
     }
 
     public static Dictionary<string, string> ToDictionary(this Properties properties)

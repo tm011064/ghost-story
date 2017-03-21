@@ -104,6 +104,23 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
   private CameraPositionCalculationResult CalculateVerticalPosition()
   {
+    if (_player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x != 0)
+    {
+      if (_player.IsGoingUpSlope())
+      {
+        var position = _player.transform.position.y + CalculateUpwardMovementSnapPosition();
+
+        return CreateNextResult(position, position, CameraSmoothDampSpeed.Slow);
+      }
+
+      if (_player.IsGoingDownSlope())
+      {
+        var position = _player.transform.position.y + CalculateDownwardMovementSnapPosition();
+
+        return CreateNextResult(position, position, CameraSmoothDampSpeed.Slow);
+      }
+    }
+
     if (_player.IsAirborne())
     {
       if (_player.IsGoingUp())

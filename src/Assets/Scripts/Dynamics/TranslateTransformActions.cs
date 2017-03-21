@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -42,5 +43,10 @@ public class TranslateTransformActions
     }
 
     return activeAction.GetPosition();
+  }
+
+  public override string ToString()
+  {
+    return string.Join(Environment.NewLine, _actionQueue.Select(a => a.ToString()).ToArray());
   }
 }

@@ -45,8 +45,8 @@ public class GameManager : MonoBehaviour
     BuildPooledObjects();
 
     _playerControllersByName.Clear();
-
-    GameManager.Instance.SceneManager.OnSceneLoad();
+    // TODO (Important): on scene loads, player can move or attack prior to load animation end
+    SceneManager.OnSceneLoad();
 
 #if !FINAL
     _fpsRenderer.SceneStartTime = Time.time;
@@ -230,17 +230,30 @@ public class GameManager : MonoBehaviour
       }
     }
 
+    private int Repeat(int value, int length)
+    {
+      if (value >= length)
+      {
+        return 0;
+      }
+
+      if (value < 0)
+      {
+        return length - 1;
+      }
+
+      return value;
+    }
+
     private void LoadPortal(int indexIncrement)
     {
       var portals = GameManager.Instance.FindSceneComponents<IScenePortal>().ToArray();
 
-      _portalIndex += indexIncrement;
-      if (_portalIndex >= portals.Length || _portalIndex < 0)
-      {
-        _portalIndex = 0;
-      }
+      _portalIndex = Repeat(_portalIndex + indexIncrement, portals.Length);
 
       GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName = portals[_portalIndex].GetPortalName();
+
+      Logger.UnityDebugLog("Loading from portal " + GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName);
 
       GameManager.Instance.SceneManager.OnSceneLoad();
     }

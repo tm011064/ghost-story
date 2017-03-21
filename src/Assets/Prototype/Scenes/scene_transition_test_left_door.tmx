@@ -114,15 +114,6 @@
   </properties>
   <object id="32" x="336" y="128" width="384" height="240"/>
  </objectgroup>
- <objectgroup name="Checkpoints">
-  <properties>
-   <property name="Commands" value="DestroyPrefab"/>
-   <property name="Layer" value="House"/>
-   <property name="Type" value="PrefabGroup"/>
-   <property name="Universe" value="RealWorld"/>
-  </properties>
-  <object id="52" type="Checkpoint" gid="7" x="384" y="272" width="16" height="16"/>
- </objectgroup>
  <objectgroup name="Camera Modifier">
   <properties>
    <property name="Commands" value="DestroyPrefab"/>
@@ -130,7 +121,7 @@
    <property name="Type" value="CameraModifier"/>
    <property name="Universe" value="Global"/>
   </properties>
-  <object id="54" type="Camera Trigger" x="384" y="240" width="16" height="32"/>
+  <object id="54" type="Camera Trigger" x="336" y="128" width="384" height="240"/>
   <object id="55" type="Camera Bounds" x="336" y="128" width="384" height="240"/>
  </objectgroup>
 </map>

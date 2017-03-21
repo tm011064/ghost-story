@@ -11,6 +11,8 @@ public interface ISceneManager
 
   void ShowBlackScreen();
 
+  void FocusCameraOnPlayer();
+
   void OnSceneLoad();
 
   bool IsFading();
