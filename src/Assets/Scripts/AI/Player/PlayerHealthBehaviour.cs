@@ -19,13 +19,11 @@ public class PlayerHealthBehaviour : BaseMonoBehaviour
     int healthUnits,
     EnemyContactReaction enemyContactReaction = EnemyContactReaction.None)
   {
-    Logger.UnityDebugLog("Health chanded", healthUnits, "c", enemyContactReaction);
     _currentHealthUnits = healthUnits;
 
     var handler = HealthChanged;
     if (handler != null)
     {
-      Logger.UnityDebugLog("handle", _currentHealthUnits);
       handler(_currentHealthUnits, enemyContactReaction);
     }
   }

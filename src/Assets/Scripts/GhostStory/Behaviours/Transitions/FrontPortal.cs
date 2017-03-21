@@ -77,6 +77,8 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       SpawnPlayer();
 
       GameManager.Instance.SceneManager.FadeIn();
+
+      GameManager.Instance.SceneManager.FocusCameraOnPlayer();
     }
   }
 }

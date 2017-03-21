@@ -25,7 +25,7 @@ public class TranslateTransformActionsManager
     return _translateTransformActions.Any();
   }
 
-  public void Update(Vector3 startPosition)
+  public void Update(Vector3 position)
   {
     if (!_translateTransformActions.Any())
     {
@@ -33,7 +33,7 @@ public class TranslateTransformActionsManager
     }
 
     var activeActions = _translateTransformActions.Peek();
-    var updatedPosition = activeActions.Update(startPosition);
+    var updatedPosition = activeActions.Update(position);
 
     if (!activeActions.HasAction())
     {

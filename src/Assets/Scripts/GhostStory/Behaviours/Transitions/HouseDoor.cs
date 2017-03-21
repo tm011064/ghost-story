@@ -16,12 +16,17 @@ public partial class HouseDoor : ScenePortal, IScenePortal
 
   public void SpawnPlayer()
   {
-    GetHouseDoorFadeInBehaviour().MovePlayerToTargetPosition(this, GameManager.Instance.Player);
+    GetHouseDoorFadeInBehaviour().MovePlayerToTargetPosition();
   }
 
   public void SpawnPlayerFromPortal(Vector3 fromPortalPosition)
   {
     GetHouseDoorFadeInBehaviour().StartCameraScroll(fromPortalPosition);
+  }
+
+  public bool IsTransitionDoorActive()
+  {
+    return TransitionDoor.gameObject.activeSelf;
   }
 
   public string GetPortalName()

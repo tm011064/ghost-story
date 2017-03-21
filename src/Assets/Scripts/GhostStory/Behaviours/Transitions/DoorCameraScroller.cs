@@ -4,6 +4,8 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 {
   public partial class DoorCameraScroller : CameraScroller
   {
+    private Door _door;
+
     private GameObject _leftDoor;
 
     private GameObject _rightDoor;
@@ -23,9 +25,10 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;
       VerticalSnapWindowSettings = GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings;
       HorizontalCamereaWindowSettings = GhostStoryGameContext.Instance.GameSettings.HorizontalCamereaWindowSettings;
-      
+
       CameraMovementSettings = CreateCameraMovementSettings();
 
+      _door = GetComponentInParent<Door>();
       _doorTriggerEnterBehaviour = GetComponentInChildren<DoorTriggerEnterBehaviour>();
       _doorTriggerEnterBehaviour.Open += TriggerScroll;
 
@@ -91,6 +94,12 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     public void TriggerScroll()
     {
+      if (IsTransitionDoorActive())
+      {
+        Logger.UnityDebugLog("TRIGGER: " + IsTransitionDoorActive());
+        return;
+      }
+
       MovePlayerIntoDoor();
 
       GhostStoryGameContext.Instance.RegisterCallback(
@@ -105,6 +114,11 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     {
       _leftDoor.SetActive(isActive);
       _rightDoor.SetActive(isActive);
+    }
+
+    bool IsTransitionDoorActive()
+    {
+      return _leftTransitionDoor.activeSelf || _rightTransitionDoor.activeSelf;
     }
 
     void ShowTransitionDoor()

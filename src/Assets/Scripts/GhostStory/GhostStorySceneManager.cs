@@ -61,8 +61,6 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     _loadContext.PortalName = portalName;
     _loadContext.FromPortalPosition = fromPortalPosition;
 
-    var currentSceneName = SceneManager.GetActiveScene().name;
-
     var sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     sceneLoadOperation.allowSceneActivation = false;
 
@@ -125,19 +123,17 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
 
       // TODO (Roman): is this the right place?
       Camera.main.GetComponent<CameraController>().Reset();
-      ForceTriggerCameraModifier();
+      FocusCameraOnPlayer();
 
       FadeIn();
     }
     else
     {
       SpawnPlayerFromPortal();
-
-      ForceTriggerCameraModifier();
     }
   }
 
-  private void ForceTriggerCameraModifier()
+  public void FocusCameraOnPlayer()
   {
     foreach (var cameraModifier in this.FindSceneComponents<CameraModifier>())
     {

@@ -34,7 +34,7 @@ public partial class CameraScroller : MonoBehaviour
 
   protected ScrollStatus Status = ScrollStatus.Idle;
 
-  void Awake()
+  protected void Awake()
   {
     CameraController = Camera.main.GetComponent<CameraController>();
     CameraController.ScrollActionCompleted += OnScrollActionCompleted;

@@ -48,6 +48,11 @@ public class HouseDoorFadeOutBehaviour : MonoBehaviour
 
   public void TriggerScroll()
   {
+    if (HouseDoor.IsTransitionDoorActive())
+    {
+      return;
+    }
+
     MovePlayerIntoDoor();
 
     GhostStoryGameContext.Instance.RegisterCallback(

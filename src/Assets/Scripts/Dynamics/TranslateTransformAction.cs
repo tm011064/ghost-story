@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using UnityEngine;
 
 public class TranslateTransformAction
@@ -84,5 +85,10 @@ public class TranslateTransformAction
     var translationVector = _startPosition + (_path.normalized * (_path.magnitude * percentage));
 
     return translationVector;
+  }
+
+  public override string ToString()
+  {
+    return this.GetFieldValuesFormatted(BindingFlags.Instance | BindingFlags.NonPublic);
   }
 }

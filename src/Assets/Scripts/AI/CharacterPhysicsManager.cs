@@ -96,7 +96,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
   /// this is used to calculate the downward ray that is cast to check for slopes. We use the somewhat arbitrary value 75 degrees
   /// to calculate the length of the ray that checks for slopes.
   /// </summary>
-  private float _slopeLimitTangent = Mathf.Tan(50f * Mathf.Deg2Rad);
+  private float _slopeLimitTangent = Mathf.Tan(75f * Mathf.Deg2Rad);
 
   /// <summary>
   /// holder for our raycast origin corners (TR, TL, BR, BL)
@@ -636,6 +636,30 @@ public class CharacterPhysicsManager : BasePhysicsManager
     } while (!LastMoveCalculationResult.CollisionState.Above);
   }
 
+#if UNITY_EDITOR
+  public void WarpToFloor()
+  {
+    var startPosition = Transform.position;
+    var distance = 0f;
+    var distanceThreshold = 2048f;
+
+    do
+    {
+      Move(new Vector3(0, -1f, 0));
+
+      distance += 1;
+      if (distance > distanceThreshold)
+      {
+        Transform.position = startPosition;
+
+        UnityEditor.EditorApplication.isPaused = true;
+
+        throw new InvalidOperationException("Warped a lot - infinite loop? Start position: " + startPosition);
+      }
+
+    } while (!LastMoveCalculationResult.CollisionState.Below);
+  }
+#else
   public void WarpToFloor()
   {
     do
@@ -643,6 +667,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
       Move(new Vector3(0, -1f, 0));
     } while (!LastMoveCalculationResult.CollisionState.Below);
   }
+#endif
 
   public void WarpToRightWall()
   {
@@ -802,7 +827,6 @@ public class CharacterPhysicsManager : BasePhysicsManager
         if (i == 0)
         {
           // the bottom ray can hit slopes but no other ray can so we have special handling for those cases
-          // Note (Roman): I'm passing in the current raycast hit point as reference point for the slope raycasts
           if (HandleHorizontalSlope(ref moveCalculationResult, Vector2.Angle(raycastHit.normal, Vector2.up), raycastHit.point))
           {
             _raycastHitsThisFrame.Add(raycastHit);
@@ -1080,6 +1104,237 @@ public class CharacterPhysicsManager : BasePhysicsManager
     }
   }
 
+  private void HandleVerticalGoingUpWithSlideUpHelp(
+    ref MoveCalculationResult moveCalculationResult,
+    Vector3 rayDirection,
+    float rayDistance,
+    int mask)
+  {
+    Logger.Trace(TRACE_TAG, "moveVertically -> going up and top edge collision adjustment enabled");
+
+    // apply our horizontal deltaMovement here so that we do our raycast from the actual position we would be in if we had moved
+    var leftOriginX = _raycastOrigins.TopLeft.x + moveCalculationResult.DeltaMovement.x;
+
+    var rightOriginX = _raycastOrigins.BottomRight.x + moveCalculationResult.DeltaMovement.x;
+
+    var topOriginY = _raycastOrigins.TopLeft.y;
+
+    var leftAdjustmentBoundaryPosition = leftOriginX - _skinWidth + EdgeSlideUpCornerWidth;
+
+    var rightAdjustmentBoundaryPosition = rightOriginX + _skinWidth - EdgeSlideUpCornerWidth;
+
+    var hasHit = false;
+
+    var hasHitOutsideAdjustmentBoundaries = false;
+
+    var hasHitWithinLeftAdjustmentBoundaries = false;
+
+    var hasHitWithinRightAdjustmentBoundaries = false;
+
+    for (var i = 0; i < TotalVerticalRays; i++)
+    {
+      _topEdgeCollisionTestContainers[i].InsetLeft = leftOriginX + i * _horizontalDistanceBetweenRays;
+
+      _topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea = _topEdgeCollisionTestContainers[i].InsetLeft <= leftAdjustmentBoundaryPosition;
+
+      _topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea = _topEdgeCollisionTestContainers[i].InsetLeft >= rightAdjustmentBoundaryPosition;
+
+      var ray = new Vector2(_topEdgeCollisionTestContainers[i].InsetLeft, topOriginY);
+
+      _topEdgeCollisionTestContainers[i].RaycastHit2D = Physics2D.Raycast(ray, rayDirection, rayDistance, mask);
+
+      Logger.Trace(TRACE_TAG, "moveVertically -> test ray origin: {0}, ray target position: {1}, delta: {2}, delta target position: {3}",
+        ray,
+        new Vector2(rayDirection.x * rayDistance, rayDirection.y * rayDistance),
+        moveCalculationResult.DeltaMovement,
+        Transform.position + moveCalculationResult.DeltaMovement);
+
+      if (_topEdgeCollisionTestContainers[i].RaycastHit2D)
+      {
+        hasHit = true;
+
+        if (!hasHitOutsideAdjustmentBoundaries
+          && !_topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea
+          && !_topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea)
+        {
+          hasHitOutsideAdjustmentBoundaries = true;
+        }
+
+        if (!hasHitWithinLeftAdjustmentBoundaries
+          && _topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea)
+        {
+          hasHitWithinLeftAdjustmentBoundaries = true;
+        }
+
+        if (!hasHitWithinRightAdjustmentBoundaries
+          && _topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea)
+        {
+          hasHitWithinRightAdjustmentBoundaries = true;
+        }
+
+        Logger.Trace(TRACE_TAG, "moveVertically -> ray hit; hit point: {0}, new delta: {1}, new delta target position: {2}",
+          _topEdgeCollisionTestContainers[i].RaycastHit2D.point,
+          moveCalculationResult.DeltaMovement,
+          Transform.position + moveCalculationResult.DeltaMovement);
+
+        DrawRay(ray, rayDirection * rayDistance, Color.red);
+
+        var deltaMovementY = _topEdgeCollisionTestContainers[i].RaycastHit2D.point.y - ray.y;
+
+        if (!_topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea
+          && !_topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea
+          && Mathf.Abs(deltaMovementY) < _skinWidth + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR)
+        {
+          // direct hit within outside the adjustment area -> no adjustments possible
+          moveCalculationResult.DeltaMovement.y = deltaMovementY;
+          moveCalculationResult.DeltaMovement.y -= _skinWidth;
+
+          moveCalculationResult.CollisionState.Above = true;
+
+          _raycastHitsThisFrame.Add(_topEdgeCollisionTestContainers[i].RaycastHit2D);
+
+          return;
+        }
+      }
+      else
+      {
+        DrawRay(ray, rayDirection * rayDistance, Color.blue);
+      }
+    }
+
+    if (hasHit)
+    {
+      Logger.Trace(TRACE_TAG, string.Format("hasHit: {0}, hasHitOutsideAdjustmentBoundaries: {1}, hasHitWithinLeftAdjustmentBoundaries: {2}, hasHitWithinRightAdjustmentBoundaries: {3}",
+        hasHit,
+        hasHitOutsideAdjustmentBoundaries,
+        hasHitWithinLeftAdjustmentBoundaries,
+        hasHitWithinRightAdjustmentBoundaries));
+
+      Logger.Trace(TRACE_TAG, string.Format("leftOriginX: {0}, leftAdjustmentBoundaryPosition: {1}, rightOriginX: {2}, rightAdjustmentBoundaryPosition: {3}, topOriginY: {4}",
+        leftOriginX,
+        leftAdjustmentBoundaryPosition,
+        rightOriginX,
+        rightAdjustmentBoundaryPosition,
+        topOriginY));
+
+      if (!hasHitOutsideAdjustmentBoundaries)
+      {
+        var leftAdjustmentRaycastHit = new RaycastHit2D();
+
+        // first left
+        var leftAdjustmentRay = new Vector2(leftAdjustmentBoundaryPosition, topOriginY);
+
+        DrawRay(leftAdjustmentRay, rayDirection * rayDistance, Color.yellow);
+
+        leftAdjustmentRaycastHit = Physics2D.Raycast(leftAdjustmentRay, rayDirection, rayDistance, mask);
+
+        if (!leftAdjustmentRaycastHit
+          && !hasHitWithinRightAdjustmentBoundaries)
+        {
+          Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: true, deltaMovement.y: {0}",
+            moveCalculationResult.DeltaMovement.y);
+
+          var leftTopRay = new Vector2(
+            leftOriginX - SkinWidth + EdgeSlideUpCornerWidth,
+            topOriginY + SkinWidth + moveCalculationResult.DeltaMovement.y);
+
+          var raycastHit = Physics2D.Raycast(leftTopRay, -Vector2.right, EdgeSlideUpCornerWidth, mask);
+
+          DrawRay(leftTopRay, -Vector2.right * EdgeSlideUpCornerWidth, Color.magenta);
+
+          Logger.Assert(raycastHit == true,
+            string.Format("This should always hit! raytest: {0}; direction: {1}; magnitude: {2}",
+            leftTopRay,
+            (-Vector2.right),
+            EdgeSlideUpCornerWidth));
+
+          Transform.Translate(
+            EdgeSlideUpCornerWidth - raycastHit.distance + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR,
+            0f,
+            0f,
+            Space.World);
+
+          return;
+        }
+
+        // we reached this line, so do right
+        var rightAdjustmentRaycastHit = new RaycastHit2D();
+
+        var rightAdjustmentRay = new Vector2(rightAdjustmentBoundaryPosition, topOriginY);
+
+        DrawRay(rightAdjustmentRay, rayDirection * rayDistance, Color.yellow);
+
+        rightAdjustmentRaycastHit = Physics2D.Raycast(rightAdjustmentRay, rayDirection, rayDistance, mask);
+
+        if (!rightAdjustmentRaycastHit
+          && !hasHitWithinLeftAdjustmentBoundaries)
+        {
+          Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: true, deltaMovement.y: {0}",
+              moveCalculationResult.DeltaMovement.y);
+
+          var rightTopRay = new Vector2(
+            rightOriginX + SkinWidth - EdgeSlideUpCornerWidth,
+            topOriginY + SkinWidth + moveCalculationResult.DeltaMovement.y);
+
+          var raycastHit = Physics2D.Raycast(rightTopRay, Vector2.right, EdgeSlideUpCornerWidth, mask);
+
+          DrawRay(rightTopRay, -Vector2.right * EdgeSlideUpCornerWidth, Color.magenta);
+
+          Logger.Assert(raycastHit == true,
+            string.Format("This should always hit! raytest: {0}; direction: {1}; magnitude: {2}",
+            rightTopRay,
+            (Vector2.right),
+            EdgeSlideUpCornerWidth));
+
+          Transform.Translate(
+            -(EdgeSlideUpCornerWidth - raycastHit.distance + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR),
+            0f,
+            0f,
+            Space.World);
+
+          return;
+        }
+      }
+
+      // we reached this line, do normal vert ray checks
+      for (var i = 0; i < TotalVerticalRays; i++)
+      {
+        Logger.Trace(TRACE_TAG, _topEdgeCollisionTestContainers[i]);
+
+        if (_topEdgeCollisionTestContainers[i].RaycastHit2D)
+        {
+          Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: true, deltaMovement.y: {0}",
+            moveCalculationResult.DeltaMovement.y);
+
+          // set our new deltaMovement and recalculate the rayDistance taking it into account
+          moveCalculationResult.DeltaMovement.y =
+            _topEdgeCollisionTestContainers[i].RaycastHit2D.point.y - topOriginY;
+
+          Logger.Trace(TRACE_TAG, "moveVertically -> ray hit; hit point: {0}, new delta: {1}, new delta target position: {2}",
+            _topEdgeCollisionTestContainers[i].RaycastHit2D.point,
+            moveCalculationResult.DeltaMovement,
+            Transform.position + moveCalculationResult.DeltaMovement);
+
+          rayDistance = Mathf.Abs(moveCalculationResult.DeltaMovement.y);
+
+          // remember to remove the skinWidth from our deltaMovement
+          moveCalculationResult.DeltaMovement.y -= _skinWidth;
+
+          moveCalculationResult.CollisionState.Above = true;
+
+          _raycastHitsThisFrame.Add(_topEdgeCollisionTestContainers[i].RaycastHit2D);
+
+          // we add a small fudge factor for the float operations here. if our rayDistance is smaller
+          // than the width + fudge bail out because we have a direct impact
+          if (rayDistance < _skinWidth + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR)
+          {
+            break;
+          }
+        }
+      }
+    }
+  }
+
   private void MoveVertically(ref MoveCalculationResult moveCalculationResult)
   {
     Logger.Trace(TRACE_TAG, "moveVertically -> start vert move check");
@@ -1095,306 +1350,85 @@ public class CharacterPhysicsManager : BasePhysicsManager
 
     if (isGoingUp && EnableEdgeSlideUpHelp)
     {
-      Logger.Trace(TRACE_TAG, "moveVertically -> going up and top edge collision adjustment enabled");
+      HandleVerticalGoingUpWithSlideUpHelp(
+        ref moveCalculationResult,
+        rayDirection,
+        rayDistance,
+        mask);
 
-      // apply our horizontal deltaMovement here so that we do our raycast from the actual position we would be in if we had moved
-      var leftOriginX = _raycastOrigins.TopLeft.x + moveCalculationResult.DeltaMovement.x;
+      return;
+    }
 
-      var rightOriginX = _raycastOrigins.BottomRight.x + moveCalculationResult.DeltaMovement.x;
+    var initialRayOrigin = isGoingUp
+      ? _raycastOrigins.TopLeft
+      : _raycastOrigins.BottomLeft;
 
-      var topOriginY = _raycastOrigins.TopLeft.y;
+    // apply our horizontal deltaMovement here so that we do our raycast from the actual 
+    // position we would be in if we had moved
+    initialRayOrigin.x += moveCalculationResult.DeltaMovement.x;
 
-      var leftAdjustmentBoundaryPosition = leftOriginX - _skinWidth + EdgeSlideUpCornerWidth;
+    RaycastHit2D raycastHit;
 
-      var rightAdjustmentBoundaryPosition = rightOriginX + _skinWidth - EdgeSlideUpCornerWidth;
+    for (var i = 0; i < TotalVerticalRays; i++)
+    {
+      var ray = new Vector2(initialRayOrigin.x + i * _horizontalDistanceBetweenRays, initialRayOrigin.y);
 
-      var hasHit = false;
+      raycastHit = Physics2D.Raycast(ray, rayDirection, rayDistance, mask);
 
-      var hasHitOutsideAdjustmentBoundaries = false;
+      DrawRay(ray, rayDirection * rayDistance, raycastHit ? Color.white : Color.red);
 
-      var hasHitWithinLeftAdjustmentBoundaries = false;
+      Logger.Trace(TRACE_TAG, "moveVertically -> test ray origin: {0}, ray target position: {1}, delta: {2}, delta target position: {3}",
+        ray,
+        new Vector2(rayDirection.x * rayDistance, rayDirection.y * rayDistance),
+        moveCalculationResult.DeltaMovement,
+        Transform.position + moveCalculationResult.DeltaMovement);
 
-      var hasHitWithinRightAdjustmentBoundaries = false;
-
-      for (var i = 0; i < TotalVerticalRays; i++)
+      if (raycastHit)
       {
-        _topEdgeCollisionTestContainers[i].InsetLeft = leftOriginX + i * _horizontalDistanceBetweenRays;
+        Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: {0}, deltaMovement.y: {1}",
+          isGoingUp,
+          moveCalculationResult.DeltaMovement.y);
 
-        _topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea = _topEdgeCollisionTestContainers[i].InsetLeft <= leftAdjustmentBoundaryPosition;
+        // set our new deltaMovement and recalculate the rayDistance taking it into account
+        moveCalculationResult.DeltaMovement.y = raycastHit.point.y - ray.y;
 
-        _topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea = _topEdgeCollisionTestContainers[i].InsetLeft >= rightAdjustmentBoundaryPosition;
-
-        var ray = new Vector2(_topEdgeCollisionTestContainers[i].InsetLeft, topOriginY);
-
-        _topEdgeCollisionTestContainers[i].RaycastHit2D = Physics2D.Raycast(ray, rayDirection, rayDistance, mask);
-
-        Logger.Trace(TRACE_TAG, "moveVertically -> test ray origin: {0}, ray target position: {1}, delta: {2}, delta target position: {3}",
-          ray,
-          new Vector2(rayDirection.x * rayDistance, rayDirection.y * rayDistance),
+        Logger.Trace(TRACE_TAG, "moveVertically -> ray hit; hit point: {0}, new delta: {1}, new delta target position: {2}",
+          raycastHit.point,
           moveCalculationResult.DeltaMovement,
           Transform.position + moveCalculationResult.DeltaMovement);
 
-        if (_topEdgeCollisionTestContainers[i].RaycastHit2D)
+        rayDistance = Mathf.Abs(moveCalculationResult.DeltaMovement.y);
+
+        // remember to remove the skinWidth from our deltaMovement
+        if (isGoingUp)
         {
-          hasHit = true;
+          moveCalculationResult.DeltaMovement.y -= _skinWidth;
 
-          if (!hasHitOutsideAdjustmentBoundaries
-            && !_topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea
-            && !_topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea)
-          {
-            hasHitOutsideAdjustmentBoundaries = true;
-          }
-
-          if (!hasHitWithinLeftAdjustmentBoundaries
-            && _topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea)
-          {
-            hasHitWithinLeftAdjustmentBoundaries = true;
-          }
-
-          if (!hasHitWithinRightAdjustmentBoundaries
-            && _topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea)
-          {
-            hasHitWithinRightAdjustmentBoundaries = true;
-          }
-
-          Logger.Trace(TRACE_TAG, "moveVertically -> ray hit; hit point: {0}, new delta: {1}, new delta target position: {2}",
-            _topEdgeCollisionTestContainers[i].RaycastHit2D.point,
-            moveCalculationResult.DeltaMovement,
-            Transform.position + moveCalculationResult.DeltaMovement);
-
-          DrawRay(ray, rayDirection * rayDistance, Color.red);
-
-          var deltaMovementY = _topEdgeCollisionTestContainers[i].RaycastHit2D.point.y - ray.y;
-
-          if (!_topEdgeCollisionTestContainers[i].IsWithinLeftAdjustmentArea
-            && !_topEdgeCollisionTestContainers[i].IsWithinRightAdjustmentArea
-            && Mathf.Abs(deltaMovementY) < _skinWidth + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR)
-          {
-            // direct hit within outside the adjustment area -> no adjustments possible
-            moveCalculationResult.DeltaMovement.y = deltaMovementY;
-            moveCalculationResult.DeltaMovement.y -= _skinWidth;
-
-            moveCalculationResult.CollisionState.Above = true;
-
-            _raycastHitsThisFrame.Add(_topEdgeCollisionTestContainers[i].RaycastHit2D);
-
-            return;
-          }
+          moveCalculationResult.CollisionState.Above = true;
         }
         else
         {
-          DrawRay(ray, rayDirection * rayDistance, Color.blue);
-        }
-      }
+          moveCalculationResult.DeltaMovement.y += _skinWidth;
 
-      if (hasHit)
-      {
-        Logger.Trace(TRACE_TAG, string.Format("hasHit: {0}, hasHitOutsideAdjustmentBoundaries: {1}, hasHitWithinLeftAdjustmentBoundaries: {2}, hasHitWithinRightAdjustmentBoundaries: {3}",
-          hasHit,
-          hasHitOutsideAdjustmentBoundaries,
-          hasHitWithinLeftAdjustmentBoundaries,
-          hasHitWithinRightAdjustmentBoundaries));
+          moveCalculationResult.CollisionState.Below = true;
 
-        Logger.Trace(TRACE_TAG, string.Format("leftOriginX: {0}, leftAdjustmentBoundaryPosition: {1}, rightOriginX: {2}, rightAdjustmentBoundaryPosition: {3}, topOriginY: {4}",
-          leftOriginX,
-          leftAdjustmentBoundaryPosition,
-          rightOriginX,
-          rightAdjustmentBoundaryPosition,
-          topOriginY));
-
-        if (!hasHitOutsideAdjustmentBoundaries)
-        {
-          var leftAdjustmentRaycastHit = new RaycastHit2D();
-
-          // first left
-          var leftAdjustmentRay = new Vector2(leftAdjustmentBoundaryPosition, topOriginY);
-
-          DrawRay(leftAdjustmentRay, rayDirection * rayDistance, Color.yellow);
-
-          leftAdjustmentRaycastHit = Physics2D.Raycast(leftAdjustmentRay, rayDirection, rayDistance, mask);
-
-          if (!leftAdjustmentRaycastHit
-            && !hasHitWithinRightAdjustmentBoundaries)
-          {
-            Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: {0}, deltaMovement.y: {1}",
-              isGoingUp,
-              moveCalculationResult.DeltaMovement.y);
-
-            var leftTopRay = new Vector2(
-              leftOriginX - SkinWidth + EdgeSlideUpCornerWidth,
-              topOriginY + SkinWidth + moveCalculationResult.DeltaMovement.y);
-
-            var raycastHit = Physics2D.Raycast(leftTopRay, -Vector2.right, EdgeSlideUpCornerWidth, mask);
-
-            DrawRay(leftTopRay, -Vector2.right * EdgeSlideUpCornerWidth, Color.magenta);
-
-            Logger.Assert(raycastHit == true,
-              string.Format("This should always hit! raytest: {0}; direction: {1}; magnitude: {2}",
-              leftTopRay,
-              (-Vector2.right),
-              EdgeSlideUpCornerWidth));
-
-            Transform.Translate(
-              EdgeSlideUpCornerWidth - raycastHit.distance + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR,
-              0f,
-              0f,
-              Space.World);
-
-            return;
-          }
-
-          // we reached this line, so do right
-          var rightAdjustmentRaycastHit = new RaycastHit2D();
-
-          var rightAdjustmentRay = new Vector2(rightAdjustmentBoundaryPosition, topOriginY);
-
-          DrawRay(rightAdjustmentRay, rayDirection * rayDistance, Color.yellow);
-
-          rightAdjustmentRaycastHit = Physics2D.Raycast(rightAdjustmentRay, rayDirection, rayDistance, mask);
-
-          if (!rightAdjustmentRaycastHit
-            && !hasHitWithinLeftAdjustmentBoundaries)
-          {
-            Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: {0}, deltaMovement.y: {1}",
-              isGoingUp,
-              moveCalculationResult.DeltaMovement.y);
-
-            var rightTopRay = new Vector2(
-              rightOriginX + SkinWidth - EdgeSlideUpCornerWidth,
-              topOriginY + SkinWidth + moveCalculationResult.DeltaMovement.y);
-
-            var raycastHit = Physics2D.Raycast(rightTopRay, Vector2.right, EdgeSlideUpCornerWidth, mask);
-
-            DrawRay(rightTopRay, -Vector2.right * EdgeSlideUpCornerWidth, Color.magenta);
-
-            Logger.Assert(raycastHit == true,
-              string.Format("This should always hit! raytest: {0}; direction: {1}; magnitude: {2}",
-              rightTopRay,
-              (Vector2.right),
-              EdgeSlideUpCornerWidth));
-
-            Transform.Translate(
-              -(EdgeSlideUpCornerWidth - raycastHit.distance + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR),
-              0f,
-              0f,
-              Space.World);
-
-            return;
-          }
+          moveCalculationResult.CollisionState.LastTimeGrounded = Time.time;
         }
 
-        // we reached this line, do normal vert ray checks
-        for (var i = 0; i < TotalVerticalRays; i++)
+        _raycastHitsThisFrame.Add(raycastHit);
+
+        // this is a hack to deal with the top of slopes. if we walk up a slope and reach the apex we can get in a situation
+        // where our ray gets a hit that is less then skinWidth causing us to be ungrounded the next frame due to residual velocity.
+        if (!isGoingUp && moveCalculationResult.DeltaMovement.y > 0.00001f)
         {
-          Logger.Trace(TRACE_TAG, _topEdgeCollisionTestContainers[i]);
-
-          if (_topEdgeCollisionTestContainers[i].RaycastHit2D)
-          {
-            Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: {0}, deltaMovement.y: {1}",
-              isGoingUp,
-              moveCalculationResult.DeltaMovement.y);
-
-            // set our new deltaMovement and recalculate the rayDistance taking it into account
-            moveCalculationResult.DeltaMovement.y =
-              _topEdgeCollisionTestContainers[i].RaycastHit2D.point.y - topOriginY;
-
-            Logger.Trace(TRACE_TAG, "moveVertically -> ray hit; hit point: {0}, new delta: {1}, new delta target position: {2}",
-              _topEdgeCollisionTestContainers[i].RaycastHit2D.point,
-              moveCalculationResult.DeltaMovement,
-              Transform.position + moveCalculationResult.DeltaMovement);
-
-            rayDistance = Mathf.Abs(moveCalculationResult.DeltaMovement.y);
-
-            // remember to remove the skinWidth from our deltaMovement
-            moveCalculationResult.DeltaMovement.y -= _skinWidth;
-
-            moveCalculationResult.CollisionState.Above = true;
-
-            _raycastHitsThisFrame.Add(_topEdgeCollisionTestContainers[i].RaycastHit2D);
-
-            // we add a small fudge factor for the float operations here. if our rayDistance is smaller
-            // than the width + fudge bail out because we have a direct impact
-            if (rayDistance < _skinWidth + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR)
-            {
-              break;
-            }
-          }
+          moveCalculationResult.IsGoingUpSlope = true;
         }
-      }
-    }
-    else
-    {
-      var initialRayOrigin = isGoingUp
-        ? _raycastOrigins.TopLeft
-        : _raycastOrigins.BottomLeft;
 
-      // apply our horizontal deltaMovement here so that we do our raycast from the actual 
-      // position we would be in if we had moved
-      initialRayOrigin.x += moveCalculationResult.DeltaMovement.x;
-
-      RaycastHit2D raycastHit;
-
-      for (var i = 0; i < TotalVerticalRays; i++)
-      {
-        var ray = new Vector2(initialRayOrigin.x + i * _horizontalDistanceBetweenRays, initialRayOrigin.y);
-
-        DrawRay(ray, rayDirection * rayDistance, Color.red);
-
-        raycastHit = Physics2D.Raycast(ray, rayDirection, rayDistance, mask);
-
-        Logger.Trace(TRACE_TAG, "moveVertically -> test ray origin: {0}, ray target position: {1}, delta: {2}, delta target position: {3}",
-          ray,
-          new Vector2(rayDirection.x * rayDistance, rayDirection.y * rayDistance),
-          moveCalculationResult.DeltaMovement,
-          Transform.position + moveCalculationResult.DeltaMovement);
-
-        if (raycastHit)
+        // we add a small fudge factor for the float operations here. if our rayDistance is smaller
+        // than the width + fudge bail out because we have a direct impact
+        if (rayDistance < _skinWidth + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR)
         {
-          Logger.Trace(TRACE_TAG, "moveVertically -> Vert Ray Hit. isGoingUp: {0}, deltaMovement.y: {1}",
-            isGoingUp,
-            moveCalculationResult.DeltaMovement.y);
-
-          // set our new deltaMovement and recalculate the rayDistance taking it into account
-          moveCalculationResult.DeltaMovement.y = raycastHit.point.y - ray.y;
-
-          Logger.Trace(TRACE_TAG, "moveVertically -> ray hit; hit point: {0}, new delta: {1}, new delta target position: {2}",
-            raycastHit.point,
-            moveCalculationResult.DeltaMovement,
-            Transform.position + moveCalculationResult.DeltaMovement);
-
-          rayDistance = Mathf.Abs(moveCalculationResult.DeltaMovement.y);
-
-          // remember to remove the skinWidth from our deltaMovement
-          if (isGoingUp)
-          {
-            moveCalculationResult.DeltaMovement.y -= _skinWidth;
-
-            moveCalculationResult.CollisionState.Above = true;
-          }
-          else
-          {
-            moveCalculationResult.DeltaMovement.y += _skinWidth;
-
-            moveCalculationResult.CollisionState.Below = true;
-
-            moveCalculationResult.CollisionState.LastTimeGrounded = Time.time;
-          }
-
-          _raycastHitsThisFrame.Add(raycastHit);
-
-          // this is a hack to deal with the top of slopes. if we walk up a slope and reach the apex we can get in a situation
-          // where our ray gets a hit that is less then skinWidth causing us to be ungrounded the next frame due to residual velocity.
-          if (!isGoingUp && moveCalculationResult.DeltaMovement.y > 0.00001f)
-          {
-            moveCalculationResult.IsGoingUpSlope = true;
-          }
-
-          // we add a small fudge factor for the float operations here. if our rayDistance is smaller
-          // than the width + fudge bail out because we have a direct impact
-          if (rayDistance < _skinWidth + K_SKIN_WIDTH_FLOAT_FUDGE_FACTOR)
-          {
-            break;
-          }
+          break;
         }
       }
     }
