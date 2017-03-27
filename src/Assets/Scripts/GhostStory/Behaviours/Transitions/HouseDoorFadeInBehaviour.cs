@@ -154,7 +154,7 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
     CameraController.Reset();
 
-    CameraMovementSettings = CreateCameraMovementSettings(); // TODO (Roman): ???
+    CameraMovementSettings = CreateCameraMovementSettings();
 
     CameraController.OnCameraModifierEnter(CameraMovementSettings);
   }

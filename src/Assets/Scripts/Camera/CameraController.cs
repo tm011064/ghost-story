@@ -113,7 +113,6 @@ public partial class CameraController : MonoBehaviour
 
   void OnCameraMovementSettingsChanged()
   {
-    Logger.UnityDebugLog("OnCameraMovementSettingsChanged");
     _verticalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateVertical(
       this,
       _cameraMovementSettingsManager.ActiveSettings);
@@ -123,13 +122,18 @@ public partial class CameraController : MonoBehaviour
 
     SetCameraSize();
 
-    if (_cameraMovementSettingsManager.SettingsCount == 1
-      && !GameManager.Instance.SceneManager.IsLoading()) // TODO (Roman): the isloading is bad design
+    if (CanMoveCameraToTargetPosition())
     {
       MoveCameraToTargetPosition();
     }
 
     Logger.Info("Camera movement set to: " + _cameraMovementSettingsManager.ActiveSettings.ToString());
+  }
+
+  private bool CanMoveCameraToTargetPosition()
+  {
+    return _cameraMovementSettingsManager.SettingsCount == 1
+      && !GameManager.Instance.SceneManager.IsLoading();
   }
 
   private void SetCameraSize()
@@ -316,7 +320,6 @@ public partial class CameraController : MonoBehaviour
 
   public Vector3 CalculateTargetPosition(CameraMovementSettings cameraMovementSettings)
   {
-    Logger.UnityDebugLog("CalculateTargetPosition");
     var verticalCalculator = CamerPositionCalculatorFactory.CreateVertical(this, cameraMovementSettings);
     var horizontalCalculator = CamerPositionCalculatorFactory.CreateHorizontal(this, cameraMovementSettings);
 

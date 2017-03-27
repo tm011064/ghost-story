@@ -121,7 +121,6 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
     {
       SpawnPlayer();
 
-      // TODO (Roman): is this the right place?
       Camera.main.GetComponent<CameraController>().Reset();
       FocusCameraOnPlayer();
 

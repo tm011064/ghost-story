@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
 
       GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName = portals[_portalIndex].GetPortalName();
 
-      Logger.UnityDebugLog("Loading from portal " + GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName);
+      Logger.Info("Loading from portal " + GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName);
 
       GameManager.Instance.SceneManager.OnSceneLoad();
     }
