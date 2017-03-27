@@ -26,8 +26,7 @@ public class FullScreenScrollSettings
 
   public override string ToString()
   {
-    return string.Format("transitionTime: {0};",
-      TransitionTime);
+    return this.GetFieldValuesFormatted();
   }
 
   public FullScreenScrollSettings Clone()

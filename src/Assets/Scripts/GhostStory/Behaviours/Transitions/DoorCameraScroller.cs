@@ -87,16 +87,12 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         .3f,
         () => GameManager.Instance.SceneManager.FadeIn(OnFadeInCompleted),
         "FadeIn");
-
-      CameraController.Reset();
-      CameraController.OnCameraModifierEnter(CameraMovementSettings);
     }
 
     public void TriggerScroll()
     {
       if (IsTransitionDoorActive())
       {
-        Logger.UnityDebugLog("TRIGGER: " + IsTransitionDoorActive());
         return;
       }
 
@@ -146,6 +142,8 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     void StartCameraScroll()
     {
+      CameraController.Reset();
+
       var targetPosition = CameraController.CalculateTargetPosition(CameraMovementSettings);
       var cameraPosition = CameraController.Transform.position;
 

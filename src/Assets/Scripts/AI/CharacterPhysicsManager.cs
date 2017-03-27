@@ -451,11 +451,26 @@ public class CharacterPhysicsManager : BasePhysicsManager
       Velocity = moveCalculationResult.DeltaMovement / Time.deltaTime;
     }
 
-    LastMoveCalculationResult = moveCalculationResult;
+    LastMoveCalculationResult = CreateMoveCalculationResult(moveCalculationResult);
 
     LastRaycastHits = new List<RaycastHit2D>(_raycastHitsThisFrame);
 
     return moveCalculationResult;
+  }
+
+  private MoveCalculationResult CreateMoveCalculationResult(MoveCalculationResult newResult)
+  {
+    newResult.HorizontalDirection = newResult.DeltaMovement.x > 0
+      ? HorizontalDirection.Right
+      : newResult.DeltaMovement.x < 0
+        ? HorizontalDirection.Left
+        : LastMoveCalculationResult.HorizontalDirection;
+
+    newResult.PreviousCollisionState = LastMoveCalculationResult.CollisionState;
+    newResult.PreviousDeltaMovement = LastMoveCalculationResult.DeltaMovement;
+    newResult.PreviousHorizontalDirection = LastMoveCalculationResult.HorizontalDirection;
+
+    return newResult;
   }
 
   public MoveCalculationResult CalculateMove(Vector3 deltaMovement)
@@ -492,7 +507,6 @@ public class CharacterPhysicsManager : BasePhysicsManager
     PrimeRaycastOrigins();
 
     // first, we check for a slope below us before moving
-    // only check slopes if we are going down and grounded
     if (moveCalculationResult.DeltaMovement.y < 0 && moveCalculationResult.CollisionState.WasGroundedLastFrame)
     {
       HandleVerticalSlope(ref moveCalculationResult);
@@ -519,7 +533,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
     // next, check movement in the vertical dir
     if (moveCalculationResult.DeltaMovement.y != 0)
     {
-      if (moveCalculationResult.IsGoingUpSlope)
+      if (moveCalculationResult.CollisionState.MovingUpSlope)
       {
         MoveVerticallyOnSlope(ref moveCalculationResult);
       }
@@ -597,7 +611,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
     }
 
     // if we are going up a slope we artificially set a y velocity so we need to zero it out here
-    if (moveCalculationResult.IsGoingUpSlope)
+    if (moveCalculationResult.CollisionState.MovingUpSlope)
     {
       Velocity.y = 0;
     }
@@ -610,7 +624,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
       }
     }
 
-    LastMoveCalculationResult = moveCalculationResult;
+    LastMoveCalculationResult = CreateMoveCalculationResult(moveCalculationResult);
 
     LastRaycastHits = new List<RaycastHit2D>(_raycastHitsThisFrame);
   }
@@ -782,12 +796,6 @@ public class CharacterPhysicsManager : BasePhysicsManager
     return characterWallState;
   }
 
-  /// <summary>
-  /// we have to use a bit of trickery in this one. The rays must be cast from a small distance inside of our
-  /// collider (skinWidth) to avoid zero distance rays which will get the wrong normal. Because of this small offset
-  /// we have to increase the ray distance skinWidth then remember to remove skinWidth from deltaMovement before
-  /// actually moving the player
-  /// </summary>
   private void MoveHorizontally(ref MoveCalculationResult moveCalculationResult)
   {
     var isGoingRight = moveCalculationResult.DeltaMovement.x > 0;
@@ -900,10 +908,6 @@ public class CharacterPhysicsManager : BasePhysicsManager
     }
   }
 
-  /// <summary>
-  /// handles adjusting deltaMovement if we are going up a slope
-  /// </summary>
-  /// <returns><c>true</c>, if horizontal slope was handled, <c>false</c> otherwise.</returns>
   private bool HandleHorizontalSlope(
     ref MoveCalculationResult moveCalculationResult,
     float angle,
@@ -916,124 +920,124 @@ public class CharacterPhysicsManager : BasePhysicsManager
     }
 
     // if we can walk on slopes and our angle is small enough we need to move up
-    if (angle < SlopeLimit)
-    {
-      // we only need to adjust the deltaMovement if we are not jumping
-      if (moveCalculationResult.DeltaMovement.y < JumpingThreshold)
-      {
-        // apply the slopeModifier to slow our movement up the slope
-        var slopeModifier =
-          (SlopeSpeedMultiplierOverride == null
-            ? SlopeSpeedMultiplier
-            : SlopeSpeedMultiplierOverride)
-          .Evaluate(angle);
-
-        var rayOrigin = moveCalculationResult.DeltaMovement.x > 0
-          ? new Vector2(horizontalRaycastHit.x - .1f, horizontalRaycastHit.y)
-          : new Vector2(horizontalRaycastHit.x + .1f, horizontalRaycastHit.y);
-
-        var currentdelta = Vector2.zero;
-
-        var targetDelta = new Vector2();
-
-        // smooth y movement when we climb. we make the y movement equivalent to the actual y location that corresponds
-        // to our new x location using our good friend Pythagoras
-        var targetMoveX = moveCalculationResult.DeltaMovement.x * slopeModifier;
-
-        var targetMoveMultiplier = targetMoveX >= 0 ? -1f : 1f;
-
-        targetDelta.x = targetMoveX;
-        targetDelta.y = Mathf.Abs(Mathf.Tan(angle * Mathf.Deg2Rad) * targetDelta.x);
-
-        RaycastHit2D raycastHit;
-
-        do
-        {
-          // check whether we go through a wall, if so adjust...
-
-          Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> Raycast test; Current Position: {0}, Target Delta: {1}, Target Position: {2}, Current Delta: {3}, Target Move X: {4}, angle: {5}",
-            rayOrigin,
-            targetDelta,
-            (rayOrigin + targetDelta),
-            currentdelta,
-            targetMoveX,
-            angle);
-
-          if (moveCalculationResult.CollisionState.WasGroundedLastFrame)
-          {
-            raycastHit = Physics2D.Raycast(rayOrigin, targetDelta.normalized, targetDelta.magnitude, PlatformMask);
-          }
-          else
-          {
-            raycastHit = Physics2D.Raycast(rayOrigin, targetDelta.normalized, targetDelta.magnitude, _platformMaskWithoutOneWay);
-          }
-
-          if (raycastHit)
-          {//we crossed an edge when using Pythagoras calculation, so we set the actual delta movement to the ray hit location
-            var raycastHitVector = (raycastHit.point - rayOrigin);
-
-            currentdelta += raycastHitVector;
-
-            targetMoveX = targetMoveX + Mathf.Abs(currentdelta.x) * targetMoveMultiplier;
-
-            Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> hit; Hit Point: {5}, Current Position: {0}, Target Delta: {1}, Target Position: {2}, Current Delta: {3}, Target Move X: {4}",
-              rayOrigin,
-              targetDelta,
-              (rayOrigin + targetDelta),
-              currentdelta,
-              targetMoveX,
-              raycastHit.point);
-
-            // we have adjusted the delta, now do the same thing again...
-            angle = Vector2.Angle(raycastHit.normal, Vector2.up);
-
-            if (angle < SlopeLimit)
-            {
-              rayOrigin = rayOrigin + currentdelta;
-
-              targetDelta.x = targetMoveX;
-              targetDelta.y = Mathf.Abs(Mathf.Tan(angle * Mathf.Deg2Rad) * targetDelta.x);
-            }
-            else
-            {
-              Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> slope limit exceeded after hit.");
-
-              break;
-            }
-          }
-          else
-          {
-            currentdelta += targetDelta;
-
-            Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> no hit; final delta movement: {0}, final new position: {1}",
-              currentdelta,
-              Transform.position + new Vector3(currentdelta.x, currentdelta.y));
-          }
-        } while (raycastHit);
-
-        moveCalculationResult.DeltaMovement.y = currentdelta.y;
-
-        moveCalculationResult.DeltaMovement.x = currentdelta.x;
-
-        moveCalculationResult.IsGoingUpSlope = true;
-
-        moveCalculationResult.CollisionState.Below = true;
-
-        moveCalculationResult.CollisionState.LastTimeGrounded = Time.time;
-      }
-      else
-      {
-        Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> Jump threshold exceeded: deltaMovement.y >= slopeLimit [{0} >= {1}]",
-          moveCalculationResult.DeltaMovement.y,
-          JumpingThreshold);
-      }
-    }
-    else // too steep. get out of here
+    if (angle >= SlopeLimit)
     {
       Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> slope limit exceeded.");
 
       moveCalculationResult.DeltaMovement.x = 0;
+
+      return true;
     }
+
+    // we only need to adjust the deltaMovement if we are not jumping
+    if (moveCalculationResult.DeltaMovement.y >= JumpingThreshold)
+    {
+      Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> Jump threshold exceeded: deltaMovement.y >= slopeLimit [{0} >= {1}]",
+        moveCalculationResult.DeltaMovement.y,
+        JumpingThreshold);
+
+      return true;
+    }
+
+    // apply the slopeModifier to slow our movement up the slope
+    var slopeModifier =
+      (SlopeSpeedMultiplierOverride == null
+        ? SlopeSpeedMultiplier
+        : SlopeSpeedMultiplierOverride)
+      .Evaluate(angle);
+
+    var rayOrigin = moveCalculationResult.DeltaMovement.x > 0
+      ? new Vector2(horizontalRaycastHit.x - .1f, horizontalRaycastHit.y)
+      : new Vector2(horizontalRaycastHit.x + .1f, horizontalRaycastHit.y);
+
+    var currentdelta = Vector2.zero;
+
+    var targetDelta = new Vector2();
+
+    // smooth y movement when we climb. we make the y movement equivalent to the actual y location that corresponds
+    // to our new x location using our good friend Pythagoras
+    var targetMoveX = moveCalculationResult.DeltaMovement.x * slopeModifier;
+
+    var targetMoveMultiplier = targetMoveX >= 0 ? -1f : 1f;
+
+    targetDelta.x = targetMoveX;
+    targetDelta.y = Mathf.Abs(Mathf.Tan(angle * Mathf.Deg2Rad) * targetDelta.x);
+
+    RaycastHit2D raycastHit;
+
+    do
+    {
+      // check whether we go through a wall, if so adjust...
+
+      Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> Raycast test; Current Position: {0}, Target Delta: {1}, Target Position: {2}, Current Delta: {3}, Target Move X: {4}, angle: {5}",
+        rayOrigin,
+        targetDelta,
+        (rayOrigin + targetDelta),
+        currentdelta,
+        targetMoveX,
+        angle);
+
+      if (moveCalculationResult.CollisionState.WasGroundedLastFrame)
+      {
+        raycastHit = Physics2D.Raycast(rayOrigin, targetDelta.normalized, targetDelta.magnitude, PlatformMask);
+      }
+      else
+      {
+        raycastHit = Physics2D.Raycast(rayOrigin, targetDelta.normalized, targetDelta.magnitude, _platformMaskWithoutOneWay);
+      }
+
+      if (raycastHit)
+      {//we crossed an edge when using Pythagoras calculation, so we set the actual delta movement to the ray hit location
+        var raycastHitVector = (raycastHit.point - rayOrigin);
+
+        currentdelta += raycastHitVector;
+
+        targetMoveX = targetMoveX + Mathf.Abs(currentdelta.x) * targetMoveMultiplier;
+
+        Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> hit; Hit Point: {5}, Current Position: {0}, Target Delta: {1}, Target Position: {2}, Current Delta: {3}, Target Move X: {4}",
+          rayOrigin,
+          targetDelta,
+          (rayOrigin + targetDelta),
+          currentdelta,
+          targetMoveX,
+          raycastHit.point);
+
+        // we have adjusted the delta, now do the same thing again...
+        angle = Vector2.Angle(raycastHit.normal, Vector2.up);
+
+        if (angle < SlopeLimit)
+        {
+          rayOrigin = rayOrigin + currentdelta;
+
+          targetDelta.x = targetMoveX;
+          targetDelta.y = Mathf.Abs(Mathf.Tan(angle * Mathf.Deg2Rad) * targetDelta.x);
+        }
+        else
+        {
+          Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> slope limit exceeded after hit.");
+
+          break;
+        }
+      }
+      else
+      {
+        currentdelta += targetDelta;
+
+        Logger.Trace(TRACE_TAG, "handleHorizontalSlope -> no hit; final delta movement: {0}, final new position: {1}",
+          currentdelta,
+          Transform.position + new Vector3(currentdelta.x, currentdelta.y));
+      }
+    } while (raycastHit);
+
+    moveCalculationResult.DeltaMovement.y = currentdelta.y;
+
+    moveCalculationResult.DeltaMovement.x = currentdelta.x;
+
+    moveCalculationResult.CollisionState.MovingUpSlope = true;
+
+    moveCalculationResult.CollisionState.Below = true;
+
+    moveCalculationResult.CollisionState.LastTimeGrounded = Time.time;
 
     return true;
   }
@@ -1048,8 +1052,9 @@ public class CharacterPhysicsManager : BasePhysicsManager
 
     var initialRayOrigin = _raycastOrigins.TopLeft;
 
-    // if we are moving up, we should ignore the layers in oneWayPlatformMask
-    var mask = moveCalculationResult.CollisionState.WasGroundedLastFrame ? PlatformMask : _platformMaskWithoutOneWay;
+    var mask = moveCalculationResult.CollisionState.WasGroundedLastFrame
+      ? PlatformMask
+      : _platformMaskWithoutOneWay;
 
     RaycastHit2D raycastHit;
 
@@ -1421,7 +1426,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
         // where our ray gets a hit that is less then skinWidth causing us to be ungrounded the next frame due to residual velocity.
         if (!isGoingUp && moveCalculationResult.DeltaMovement.y > 0.00001f)
         {
-          moveCalculationResult.IsGoingUpSlope = true;
+          moveCalculationResult.CollisionState.MovingUpSlope = true;
         }
 
         // we add a small fudge factor for the float operations here. if our rayDistance is smaller
@@ -1453,40 +1458,45 @@ public class CharacterPhysicsManager : BasePhysicsManager
     DrawRay(slopeRay, rayDirection * slopeCheckRayDistance, Color.yellow);
 
     var raycastHit = Physics2D.Raycast(slopeRay, rayDirection, slopeCheckRayDistance, PlatformMask);
-
-    if (raycastHit)
+    if (!raycastHit)
     {
-      // bail out if we have no slope
-      var angle = Vector2.Angle(raycastHit.normal, Vector2.up);
+      return;
+    }
 
-      if (angle == 0)
-      {
-        return;
-      }
+    var angle = Vector2.Angle(raycastHit.normal, Vector2.up);
+    if (angle == 0)
+    {
+      return;
+    }
 
-      // we are moving down the slope if our normal and movement direction are in the same x direction
-      var isMovingDownSlope =
-        Mathf.Sign(raycastHit.normal.x) == Mathf.Sign(moveCalculationResult.DeltaMovement.x);
+    moveCalculationResult.CollisionState.IsOnSlope = true;
 
-      if (isMovingDownSlope)
-      {
-        // going down we want to speed up in most cases so the slopeSpeedMultiplier curve should be > 1 for negative angles
-        var slopeModifier = (SlopeSpeedMultiplierOverride == null ? SlopeSpeedMultiplier : SlopeSpeedMultiplierOverride).Evaluate(-angle);
+    moveCalculationResult.CollisionState.Below = true;
 
-        Logger.Trace(TRACE_TAG, "HandleVerticalSlope -> moving down, slope modifier: {0}, angle: {1}, slopeSpeedMultiplierOverride == null: {2}",
-          slopeModifier,
-          angle,
-          SlopeSpeedMultiplierOverride == null);
+    // we are moving down the slope if our normal and movement direction are in the same x direction
+    moveCalculationResult.CollisionState.FacingDownSlope =
+      Mathf.Sign(raycastHit.normal.x) == Mathf.Sign(moveCalculationResult.DeltaMovement.x);
 
-        // we add the extra downward movement here to ensure we "stick" to the surface below
-        moveCalculationResult.DeltaMovement.y += raycastHit.point.y - slopeRay.y - SkinWidth;
+    moveCalculationResult.CollisionState.FacingUpSlope = !moveCalculationResult.CollisionState.FacingDownSlope;
 
-        moveCalculationResult.DeltaMovement.x *= slopeModifier;
+    if (moveCalculationResult.CollisionState.FacingDownSlope)
+    {
+      // going down we want to speed up in most cases so the slopeSpeedMultiplier curve should be > 1 for negative angles
+      var slopeModifier = (SlopeSpeedMultiplierOverride == null
+        ? SlopeSpeedMultiplier
+        : SlopeSpeedMultiplierOverride).Evaluate(-angle);
 
-        moveCalculationResult.CollisionState.MovingDownSlope = true;
+      Logger.Trace(TRACE_TAG, "HandleVerticalSlope -> moving down, slope modifier: {0}, angle: {1}, slopeSpeedMultiplierOverride == null: {2}",
+        slopeModifier,
+        angle,
+        SlopeSpeedMultiplierOverride == null);
 
-        moveCalculationResult.CollisionState.SlopeAngle = angle;
-      }
+      // we add the extra downward movement here to ensure we "stick" to the surface below
+      moveCalculationResult.DeltaMovement.y += raycastHit.point.y - slopeRay.y - SkinWidth;
+
+      moveCalculationResult.DeltaMovement.x *= slopeModifier;
+
+      moveCalculationResult.CollisionState.SlopeAngle = angle;
     }
   }
 

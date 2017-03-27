@@ -1,19 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Reflection;
+using UnityEngine;
 
 public class SmoothDampedPositionCalculator
 {
   private float _lastDirection;
 
   private float _smoothDampVelocity;
-  
+
   public SmoothDampedPositionCalculator(float direction)
   {
     _lastDirection = Mathf.Sign(direction);
-  }
-
-  public bool IsSameDirection(float distance)
-  {
-    return Mathf.Sign(_lastDirection) == Mathf.Sign(distance);
   }
 
   public float CalculatePosition(float from, float to, float smoothDampTime)
@@ -40,6 +36,11 @@ public class SmoothDampedPositionCalculator
 
   public override string ToString()
   {
-    return "LastDirection: " + _lastDirection + ", SmoothDampVelocity: " + _smoothDampVelocity;
+    return this.GetFieldValuesFormatted(BindingFlags.Instance | BindingFlags.NonPublic);
+  }
+
+  public void Reset()
+  {
+    _smoothDampVelocity = 0;
   }
 }

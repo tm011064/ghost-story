@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 22/03/2017 07:26:09-->
+<!--Last exported: 27/03/2017 06:56:50-->
 <Tiled2Unity version="1.0.7.7">
   <AssignMaterial mesh="mesh_0001" material="blocks_192x128" />
   <AssignMaterial mesh="mesh_0002" material="Blocks_8x8" />
@@ -88,7 +88,7 @@
       <Property name="Universe" value="RealWorld" />
       <GameObject name="Basement Entry" x="1288" y="-152" rotation="0" layer="Scene Front Portal">
         <Property name="Prefab" value="Elevator Shaft" />
-        <Property name="Transition To Portal" value="Lower Entry" />
+        <Property name="Transition To Portal" value="Basement Entry" />
         <Property name="Transition To Scene" value="house_elevator_shaft" />
         <BoxCollider2D width="48" height="48" />
       </GameObject>

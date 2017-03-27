@@ -10,7 +10,13 @@
 
   public bool BecameGroundedThisFrame;
 
-  public bool MovingDownSlope;
+  public bool FacingDownSlope;
+
+  public bool FacingUpSlope;
+
+  public bool MovingUpSlope;
+
+  public bool IsOnSlope;
 
   public float SlopeAngle;
 
@@ -31,7 +37,7 @@
   {
     CharacterWallState = CharacterWallState.NotOnWall;
 
-    Right = Left = Above = Below = BecameGroundedThisFrame = MovingDownSlope = IsFullyGrounded = false;
+    Right = Left = Above = Below = BecameGroundedThisFrame = FacingDownSlope = IsFullyGrounded = MovingUpSlope = IsOnSlope = false;
 
     SlopeAngle = 0f;
   }
@@ -39,6 +45,6 @@
   public override string ToString()
   {
     return string.Format("[CharacterCollisionState2D] r: {0}, l: {1}, a: {2}, b: {3}, movingDownSlope: {4}, angle: {5}, wasGroundedLastFrame: {6}, becameGroundedThisFrame: {7}, onWallState: {8}, ifg: {9}",
-      Right, Left, Above, Below, MovingDownSlope, SlopeAngle, WasGroundedLastFrame, BecameGroundedThisFrame, CharacterWallState, IsFullyGrounded);
+      Right, Left, Above, Below, FacingDownSlope, SlopeAngle, WasGroundedLastFrame, BecameGroundedThisFrame, CharacterWallState, IsFullyGrounded);
   }
 }

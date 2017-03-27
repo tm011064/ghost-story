@@ -113,6 +113,7 @@ public partial class CameraController : MonoBehaviour
 
   void OnCameraMovementSettingsChanged()
   {
+    Logger.UnityDebugLog("OnCameraMovementSettingsChanged");
     _verticalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateVertical(
       this,
       _cameraMovementSettingsManager.ActiveSettings);
@@ -122,8 +123,6 @@ public partial class CameraController : MonoBehaviour
 
     SetCameraSize();
 
-    // TODO (Roman): don't move player on scene load only, otherwise do
-    // TODO (Roman): freeze player longer after finish - quick back kills door scroll
     if (_cameraMovementSettingsManager.SettingsCount == 1
       && !GameManager.Instance.SceneManager.IsLoading()) // TODO (Roman): the isloading is bad design
     {
@@ -240,8 +239,9 @@ public partial class CameraController : MonoBehaviour
 
   void UpdateCameraPosition()
   {
-    if (IsCameraControlledByScrollAction())
+    if (_scrollActionManager.HasActions())
     {
+      transform.position = _scrollActionManager.CalculatePosition(transform.position);
       return;
     }
 
@@ -316,6 +316,7 @@ public partial class CameraController : MonoBehaviour
 
   public Vector3 CalculateTargetPosition(CameraMovementSettings cameraMovementSettings)
   {
+    Logger.UnityDebugLog("CalculateTargetPosition");
     var verticalCalculator = CamerPositionCalculatorFactory.CreateVertical(this, cameraMovementSettings);
     var horizontalCalculator = CamerPositionCalculatorFactory.CreateHorizontal(this, cameraMovementSettings);
 
@@ -328,21 +329,6 @@ public partial class CameraController : MonoBehaviour
   public bool HasScrollActions()
   {
     return _scrollActionManager.HasActions();
-  }
-
-  private bool IsCameraControlledByScrollAction()
-  {
-    var pos = transform.position;
-
-    _scrollActionManager.Update(transform.position);
-
-    if (!_scrollActionManager.HasActions())
-    {
-      return false;
-    }
-
-    transform.position = _scrollActionManager.GetPosition();
-    return true;
   }
 
   class ZoomTimer : UpdateTimer

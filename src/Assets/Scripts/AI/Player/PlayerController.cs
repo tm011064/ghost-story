@@ -182,16 +182,6 @@ public partial class PlayerController : BaseCharacterController
       && CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;
   }
 
-  public bool IsGoingDownSlope()
-  {
-    return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.MovingDownSlope;
-  }
-
-  public bool IsGoingUpSlope()
-  {
-    return CharacterPhysicsManager.LastMoveCalculationResult.IsGoingUpSlope;
-  }
-
   public bool IsGrounded()
   {
     return CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.Below == true;

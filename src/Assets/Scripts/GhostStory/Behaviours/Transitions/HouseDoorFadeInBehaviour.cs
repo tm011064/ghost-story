@@ -10,10 +10,13 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   protected override void OnAwake()
   {
+    OverrideSettings(
+      GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings,
+      GhostStoryGameContext.Instance.GameSettings.CameraSettings,
+      GhostStoryGameContext.Instance.GameSettings.HorizontalCamereaWindowSettings,
+      GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings);
+
     FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
-    CameraSettings = GhostStoryGameContext.Instance.GameSettings.CameraSettings;
-    SmoothDampMoveSettings = GhostStoryGameContext.Instance.GameSettings.SmoothDampMoveSettings;
-    VerticalSnapWindowSettings = GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings;
 
     HouseDoor = GetComponentInParent<HouseDoor>();
   }

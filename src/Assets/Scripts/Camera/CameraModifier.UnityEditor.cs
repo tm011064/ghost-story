@@ -10,8 +10,24 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
   {
     var cameraController = Camera.main.GetComponentOrThrow<CameraController>();
 
-    VerticalLockSettings = CreateVerticalLockSettings(arguments.Bounds, cameraController);
-    HorizontalLockSettings = CreateHorizontalLockSettings(arguments.Bounds, cameraController);
+    VerticalLockSettings = new VerticalLockSettings
+    {
+      Enabled = true,
+      EnableDefaultVerticalLockPosition = false,
+      DefaultVerticalLockPosition = 0f,
+      EnableTopVerticalLock = true,
+      EnableBottomVerticalLock = true,
+      TopVerticalLockPosition = arguments.Bounds.max.y,
+      BottomVerticalLockPosition = arguments.Bounds.min.y
+    };
+    HorizontalLockSettings = new HorizontalLockSettings
+    {
+      Enabled = true,
+      EnableLeftHorizontalLock = true,
+      EnableRightHorizontalLock = true,
+      LeftHorizontalLockPosition = arguments.Bounds.min.x,
+      RightHorizontalLockPosition = arguments.Bounds.max.x
+    };
 
     foreach (var args in arguments.BoundsPropertyInfos)
     {
@@ -33,40 +49,6 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
         boxColliderTriggerEnterBehaviour.PlayerStatesNeededToEnter = new PlayerState[] { PlayerState.ClimbingLadder };
       }
     }
-  }
-
-  private VerticalLockSettings CreateVerticalLockSettings(Bounds bounds, CameraController cameraController)
-  {
-    var verticalLockSettings = new VerticalLockSettings
-    {
-      Enabled = true,
-      EnableDefaultVerticalLockPosition = false,
-      DefaultVerticalLockPosition = 0f,
-      EnableTopVerticalLock = true,
-      EnableBottomVerticalLock = true,
-      TopVerticalLockPosition = bounds.max.y,
-      BottomVerticalLockPosition = bounds.min.y
-    };
-
-    SetVerticalBoundaries(verticalLockSettings, cameraController);
-
-    return verticalLockSettings;
-  }
-
-  private HorizontalLockSettings CreateHorizontalLockSettings(Bounds bounds, CameraController cameraController)
-  {
-    var horizontalLockSettings = new HorizontalLockSettings
-    {
-      Enabled = true,
-      EnableLeftHorizontalLock = true,
-      EnableRightHorizontalLock = true,
-      LeftHorizontalLockPosition = bounds.min.x,
-      RightHorizontalLockPosition = bounds.max.x
-    };
-
-    SetHorizontalBoundaries(horizontalLockSettings, cameraController);
-
-    return horizontalLockSettings;
   }
 
   void OnDrawGizmos()

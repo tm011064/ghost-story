@@ -25,13 +25,8 @@ public class TranslateTransformActionsManager
     return _translateTransformActions.Any();
   }
 
-  public void Update(Vector3 position)
+  public Vector3 CalculatePosition(Vector3 position)
   {
-    if (!_translateTransformActions.Any())
-    {
-      return;
-    }
-
     var activeActions = _translateTransformActions.Peek();
     var updatedPosition = activeActions.Update(position);
 
@@ -44,7 +39,12 @@ public class TranslateTransformActionsManager
       }
 
       _translateTransformActions.Dequeue();
-      Update(updatedPosition);
+      if (_translateTransformActions.Any())
+      {
+        return CalculatePosition(updatedPosition);
+      }
     }
+
+    return updatedPosition;
   }
 }

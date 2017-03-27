@@ -8,5 +8,16 @@ public struct MoveCalculationResult
 
   public Vector3 OriginalDeltaMovement;
 
-  public bool IsGoingUpSlope;
+  public HorizontalDirection HorizontalDirection;
+
+  public HorizontalDirection PreviousHorizontalDirection;
+
+  public CharacterCollisionState2D PreviousCollisionState;
+
+  public Vector3 PreviousDeltaMovement;
+
+  public bool HasHorizontalDirectionChanged()
+  {
+    return HorizontalDirection != PreviousHorizontalDirection;
+  }
 }

@@ -253,7 +253,7 @@
   <object id="4" name="Basement Entry" type="Scene Front Portal" x="1288" y="152" width="48" height="48">
    <properties>
     <property name="Prefab" value="Elevator Shaft"/>
-    <property name="Transition To Portal" value="Lower Entry"/>
+    <property name="Transition To Portal" value="Basement Entry"/>
     <property name="Transition To Scene" value="house_elevator_shaft"/>
    </properties>
   </object>

@@ -18,6 +18,8 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
   private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator;
 
+  private readonly SlopeCalculator _slopeCalculator;
+
   private CameraPositionCalculationResult _lastResult;
 
   private float _cameraPosition;
@@ -43,6 +45,7 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
     _lastResult = CreateLastResultFromCameraController();
 
     _cameraPosition = _cameraController.transform.position.y;
+    _slopeCalculator = new SlopeCalculator(this);
   }
 
   public float WindowPosition { get { return _lastResult.WindowPosition; } }
@@ -85,6 +88,7 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
   public void Update()
   {
+    _slopeCalculator.Update();
     _lastResult = CalculateVerticalPosition();
 
     _cameraPosition = _smoothDampedPositionCalculator.CalculatePosition(
@@ -104,21 +108,9 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
   private CameraPositionCalculationResult CalculateVerticalPosition()
   {
-    if (_player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x != 0)
+    if (_player.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.IsOnSlope)
     {
-      if (_player.IsGoingUpSlope())
-      {
-        var position = _player.transform.position.y + CalculateUpwardMovementSnapPosition();
-
-        return CreateNextResult(position, position, CameraSmoothDampSpeed.Slow);
-      }
-
-      if (_player.IsGoingDownSlope())
-      {
-        var position = _player.transform.position.y + CalculateDownwardMovementSnapPosition();
-
-        return CreateNextResult(position, position, CameraSmoothDampSpeed.Slow);
-      }
+      return _slopeCalculator.Calculate();
     }
 
     if (_player.IsAirborne())
@@ -283,6 +275,63 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
       WindowPosition = windowPosition,
       CameraSmoothDampSpeed = cameraSmoothDampSpeed
     };
+  }
+
+  private class SlopeCalculator
+  {
+    private readonly VerticalGroundSnappingCalculator _calculator;
+
+    private bool _onSlope;
+
+    private float _targetPosition;
+
+    private float _deltaTargetPosition;
+
+    public SlopeCalculator(VerticalGroundSnappingCalculator calculator)
+    {
+      _calculator = calculator;
+    }
+
+    public void Update()
+    {
+      if (!_calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.IsOnSlope)
+      {
+        _onSlope = false;
+
+        return;
+      }
+
+      if (!_onSlope || _calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.HasHorizontalDirectionChanged())
+      {
+        _targetPosition = CalculateTargetPosition();
+        _deltaTargetPosition = _calculator._lastResult.CameraPosition - _targetPosition;
+      }
+
+      _onSlope = true;
+    }
+
+    private float CalculateTargetPosition()
+    {
+      var snapPosition = _calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.FacingUpSlope
+        ? _calculator.CalculateUpwardMovementSnapPosition()
+        : _calculator.CalculateDownwardMovementSnapPosition();
+
+      return _calculator._player.transform.position.y + snapPosition;
+    }
+
+    public CameraPositionCalculationResult Calculate()
+    {
+      _deltaTargetPosition = Mathf.Lerp(_deltaTargetPosition, 0, Time.deltaTime * 2f);
+
+      if (_calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x != 0)
+      {
+        _targetPosition = CalculateTargetPosition();
+      }
+
+      var position = _targetPosition + _deltaTargetPosition;
+
+      return _calculator.CreateNextResult(position, position, CameraSmoothDampSpeed.Slow);
+    }
   }
 
   private class CameraPositionCalculationResult

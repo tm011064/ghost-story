@@ -3,24 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public partial class CameraScroller : MonoBehaviour
+public partial class CameraScroller : CameraMovementSettingsBehaviour
 {
-  public HorizontalCamereaWindowSettings HorizontalCamereaWindowSettings;
-
-  public VerticalSnapWindowSettings VerticalSnapWindowSettings;
-
-  public ZoomSettings ZoomSettings;
-
-  public SmoothDampMoveSettings SmoothDampMoveSettings;
-
   public FullScreenScrollSettings FullScreenScrollSettings;
-
-  public CameraSettings CameraSettings;
 
   [Tooltip("The dimensions of the camera boundaries")]
   public Vector2 Size;
-
-  protected CameraMovementSettings CameraMovementSettings;
 
   protected CameraController CameraController;
 
@@ -67,22 +55,6 @@ public partial class CameraScroller : MonoBehaviour
       enterTrigger.Entered -= (_, e) => OnEnter(e.SourceCollider);
       enterTrigger.Exited -= (_, e) => CameraController.OnCameraModifierExit(CameraMovementSettings);
     }
-  }
-
-  protected CameraMovementSettings CreateCameraMovementSettings()
-  {
-    var horizontalLockSettings = CreateHorizontalLockSettings();
-
-    var verticalLockSettings = CreateVerticalLockSettings();
-
-    return new CameraMovementSettings(
-      HorizontalCamereaWindowSettings,
-      VerticalSnapWindowSettings,
-      verticalLockSettings,
-      horizontalLockSettings,
-      ZoomSettings,
-      SmoothDampMoveSettings,
-      CameraSettings);
   }
 
   private void StartScroll(Collider2D collider)
@@ -185,9 +157,15 @@ public partial class CameraScroller : MonoBehaviour
     }
   }
 
-  private VerticalLockSettings CreateVerticalLockSettings()
+  protected enum ScrollStatus
   {
-    var verticalLockSettings = new VerticalLockSettings
+    Scrolling,
+    Idle
+  }
+
+  protected override VerticalLockSettings CreateBaseVerticalLockSettings()
+  {
+    return new VerticalLockSettings
     {
       Enabled = true,
       EnableDefaultVerticalLockPosition = false,
@@ -197,21 +175,11 @@ public partial class CameraScroller : MonoBehaviour
       TopVerticalLockPosition = transform.position.y + Size.y * .5f,
       BottomVerticalLockPosition = transform.position.y - Size.y * .5f
     };
-
-    verticalLockSettings.TopBoundary =
-      verticalLockSettings.TopVerticalLockPosition
-      - CameraController.TargetScreenSize.y * .5f / ZoomSettings.ZoomPercentage;
-
-    verticalLockSettings.BottomBoundary =
-      verticalLockSettings.BottomVerticalLockPosition
-      + CameraController.TargetScreenSize.y * .5f / ZoomSettings.ZoomPercentage;
-
-    return verticalLockSettings;
   }
 
-  private HorizontalLockSettings CreateHorizontalLockSettings()
+  protected override HorizontalLockSettings CreateBaseHorizontalLockSettings()
   {
-    var horizontalLockSettings = new HorizontalLockSettings
+    return new HorizontalLockSettings
     {
       Enabled = true,
       EnableLeftHorizontalLock = true,
@@ -219,21 +187,5 @@ public partial class CameraScroller : MonoBehaviour
       LeftHorizontalLockPosition = transform.position.x - Size.x * .5f,
       RightHorizontalLockPosition = transform.position.x + Size.x * .5f
     };
-
-    horizontalLockSettings.LeftBoundary =
-      horizontalLockSettings.LeftHorizontalLockPosition
-      + CameraController.TargetScreenSize.x * .5f / ZoomSettings.ZoomPercentage;
-
-    horizontalLockSettings.RightBoundary =
-      horizontalLockSettings.RightHorizontalLockPosition
-      - CameraController.TargetScreenSize.x * .5f / ZoomSettings.ZoomPercentage;
-
-    return horizontalLockSettings;
-  }
-
-  protected enum ScrollStatus
-  {
-    Scrolling,
-    Idle
   }
 }

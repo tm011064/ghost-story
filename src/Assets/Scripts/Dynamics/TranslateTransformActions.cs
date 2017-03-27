@@ -22,17 +22,17 @@ public class TranslateTransformActions
     return _actionQueue.Peek().GetPosition();
   }
 
-  public Vector3 Update(Vector3 startPosition)
+  public Vector3 Update(Vector3 position)
   {
     if (!_actionQueue.Any())
     {
-      return startPosition;
+      return position;
     }
 
     var activeAction = _actionQueue.Peek();
     if (!activeAction.IsStarted())
     {
-      activeAction.Start(startPosition);
+      activeAction.Start(position);
     }
 
     if (activeAction.IsCompleted())

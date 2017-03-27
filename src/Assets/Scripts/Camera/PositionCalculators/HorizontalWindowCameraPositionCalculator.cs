@@ -97,7 +97,7 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
       return _cameraController.transform.position.x;
     }
 
-    if (!_smoothDampedPositionCalculator.IsSameDirection(_player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x))
+    if (_player.CharacterPhysicsManager.LastMoveCalculationResult.HasHorizontalDirectionChanged())
     {
       _windowPosition = 0;
     }
