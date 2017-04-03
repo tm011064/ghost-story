@@ -172,6 +172,8 @@ public class GameManager : MonoBehaviour
       "Menu Exit",
       "Menu Debug Toggle Available",
       "Pause",
+      "Right Shoulder",
+      "Left Shoulder",
       "Switch"
     };
 

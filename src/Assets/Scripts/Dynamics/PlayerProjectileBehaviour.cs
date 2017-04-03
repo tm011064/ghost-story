@@ -11,8 +11,15 @@ public class PlayerProjectileBehaviour : MonoBehaviour
 
   private IProjectileReboundBehaviour _projectileReboundBehaviour;
 
+  private Animator _animator;
+
+  private SpriteRenderer _sprite;
+
   void Awake()
   {
+    _animator = GetComponent<Animator>();
+    _sprite = GetComponentInChildren<SpriteRenderer>();
+
     if (ProjectileBlockedBehaviour == ProjectileBlockedBehaviour.Rebound)
     {
       _projectileReboundBehaviour = this.GetComponentOrThrow<IProjectileReboundBehaviour>();
@@ -24,6 +31,14 @@ public class PlayerProjectileBehaviour : MonoBehaviour
     transform.position = startPosition;
 
     _velocity = velocity.ToVector3();
+
+    var zRotation = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+    _sprite.transform.rotation = Quaternion.Euler(0f, 0f, zRotation);
+
+    if (_animator != null)
+    {
+      _animator.Play("Emitted");
+    }
   }
 
   void Update()

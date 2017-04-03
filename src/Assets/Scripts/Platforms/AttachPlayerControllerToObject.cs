@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class AttachPlayerControllerToObject : MonoBehaviour, IAttachableObject
 {
-  protected PlayerController _playerController;
-
   public event Action PlayerControllerGotGrounded;
 
   public event Action<IAttachableObject, GameObject> Attached;
@@ -13,10 +11,12 @@ public class AttachPlayerControllerToObject : MonoBehaviour, IAttachableObject
 
   void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
   {
-    if (e.PreviousPlatform == gameObject 
-      && _playerController.transform.parent == gameObject.transform)
+    Logger.UnityDebugLog("OnPlayerGroundedPlatformChanged");
+
+    if (e.PreviousPlatform == gameObject
+      && GameManager.Instance.Player.transform.parent == gameObject.transform)
     {
-      _playerController.transform.parent = null;
+      GameManager.Instance.Player.transform.parent = null;
 
       var handler = Detached;
 
@@ -25,23 +25,23 @@ public class AttachPlayerControllerToObject : MonoBehaviour, IAttachableObject
         handler.Invoke(this, gameObject);
       }
 
-      Logger.Info("Removed parent (" + gameObject.name + " [ " + GetHashCode() + " ]) relationship from child (" + _playerController.name + ") [1]");
+      Logger.Info("Removed parent (" + gameObject.name + " [ " + GetHashCode() + " ]) relationship from child (" + GameManager.Instance.Player.name + ") [1]");
     }
     else
     {
       if (e.CurrentPlatform == gameObject
-        && _playerController.transform.parent != gameObject.transform)
+        && GameManager.Instance.Player.transform.parent != gameObject.transform)
       {
-        if (_playerController.transform.parent != null)
+        if (GameManager.Instance.Player.transform.parent != null)
         {
-          _playerController.transform.parent = null;
+          GameManager.Instance.Player.transform.parent = null;
 
-          Logger.Info("Removed parent (" + gameObject.name + " [ " + GetHashCode() + " ]) relationship from child (" + _playerController.name + ") [2]");
+          Logger.Info("Removed parent (" + gameObject.name + " [ " + GetHashCode() + " ]) relationship from child (" + GameManager.Instance.Player.name + ") [2]");
         }
 
-        _playerController.transform.parent = gameObject.transform;
+        GameManager.Instance.Player.transform.parent = gameObject.transform;
 
-        Logger.Info("Added parent (" + gameObject.name + " [ " + GetHashCode() + " ]) relationship to child (" + _playerController.name + ")");
+        Logger.Info("Added parent (" + gameObject.name + " [ " + GetHashCode() + " ]) relationship to child (" + GameManager.Instance.Player.name + ")");
 
         var playerControllerGotGroundedHandler = PlayerControllerGotGrounded;
 
@@ -62,22 +62,20 @@ public class AttachPlayerControllerToObject : MonoBehaviour, IAttachableObject
 
   void OnBeforeDisable()
   {
-    if (_playerController != null 
-      && _playerController.transform.parent == gameObject.transform)
+    if (GameManager.Instance.Player != null
+      && GameManager.Instance.Player.transform.parent == gameObject.transform)
     {
-      _playerController.transform.parent = null;
+      GameManager.Instance.Player.transform.parent = null;
     }
   }
 
-  void OnEnable()
+  void Start()
   {
-    _playerController = GameManager.Instance.Player;
-
-    _playerController.GroundedPlatformChanged += OnPlayerGroundedPlatformChanged;
+    GameManager.Instance.Player.GroundedPlatformChanged += OnPlayerGroundedPlatformChanged;
   }
 
-  void OnDisable()
+  void OnDestroy()
   {
-    _playerController.GroundedPlatformChanged -= OnPlayerGroundedPlatformChanged;
+    GameManager.Instance.Player.GroundedPlatformChanged -= OnPlayerGroundedPlatformChanged;
   }
 }

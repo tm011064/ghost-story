@@ -53,7 +53,7 @@ public class DontGoThroughThings : MonoBehaviour
 
       if (raycastHit)
       {
-        _collider.SendMessage("OnTriggerEnter2D", raycastHit.collider, SendMessageOptions.DontRequireReceiver);
+        _collider.SendMessageUpwards("OnTriggerEnter2D", raycastHit.collider, SendMessageOptions.DontRequireReceiver);
       }
     }
 

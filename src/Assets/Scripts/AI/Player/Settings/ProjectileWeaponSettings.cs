@@ -18,10 +18,5 @@ public class ProjectileWeaponSettings
 
   public Vector2 AirborneSpawnLocation;
 
-  public Vector2 LadderSpawnLocation;
-
   public string InputButtonName;
-
-  [Tooltip("The length of the shoot animation to play")]
-  public float AnimationClipLength;
 }

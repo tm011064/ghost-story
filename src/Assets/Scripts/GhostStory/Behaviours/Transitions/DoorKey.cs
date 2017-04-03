@@ -2,5 +2,6 @@
 {
   GreenHouseDoorKey,
   RedHouseDoorKey,
-  PurpleHouseDoorKey
+  PurpleHouseDoorKey,
+  AlternateDoorKey
 }

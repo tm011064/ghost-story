@@ -11,7 +11,7 @@
       "Yoyo Up",
       "Yoyo Down",
       "Yoyo 360",
-      "Yoyo 180");
+      "Yoyo 180"); // TODO (Roman): kino player controller and register here
 
     base.OnAwake();
   }

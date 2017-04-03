@@ -99,22 +99,7 @@ public class PlayerControlHandler : BaseControlHandler
 
   protected float GetNormalizedHorizontalSpeed(AxisState hAxis)
   {
-    float normalizedHorizontalSpeed;
-
-    if (hAxis.Value > 0f && hAxis.Value >= hAxis.LastValue)
-    {
-      normalizedHorizontalSpeed = 1;
-    }
-    else if (hAxis.Value < 0f && hAxis.Value <= hAxis.LastValue)
-    {
-      normalizedHorizontalSpeed = -1;
-    }
-    else
-    {
-      normalizedHorizontalSpeed = 0;
-    }
-
-    return normalizedHorizontalSpeed;
+    return hAxis.Value > 0 ? 1 : (hAxis.Value < 0 ? -1 : 0);
   }
 
   protected float GetHorizontalVelocityWithDamping(Vector3 velocity, float hAxis, float normalizedHorizontalSpeed)
@@ -254,7 +239,7 @@ public class PlayerControlHandler : BaseControlHandler
 
       value = 0f;
     }
-    
+
     if (canJump
       && (GameManager.InputStateManager.GetButtonState("Jump").ButtonPressState & allowedJumpButtonPressState) != 0)
     {
