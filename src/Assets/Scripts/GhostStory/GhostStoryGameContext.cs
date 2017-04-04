@@ -41,19 +41,22 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   void Start()
   {
-    UpdateGameState(
-      LoadGameState());
+    UpdateGameState(LoadGameState());
 
     DisableAndHideAllObjects();
-    SwitchToRealWorld();
+
+    SwitchUniverse(GameState.ActiveUniverse);
   }
 
   public void OnSceneLoad()
   {
     Reset();
 
+    NotifyGameStateChanged();
+
     DisableAndHideAllObjects();
-    SwitchToRealWorld();
+
+    SwitchUniverse(GameState.ActiveUniverse);
   }
 
   public void Reset()

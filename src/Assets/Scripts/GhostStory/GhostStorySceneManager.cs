@@ -116,8 +116,8 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
   public void OnSceneLoad()
   {
     ActivatePlayer();
-
-    if (!_loadContext.IsLoading)
+    
+    if (!IsLoading())
     {
       SpawnPlayer();
 

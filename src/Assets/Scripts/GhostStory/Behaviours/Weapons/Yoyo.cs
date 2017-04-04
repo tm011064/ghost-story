@@ -25,7 +25,6 @@ public class Yoyo : AbstractYoyo, IWeapon
 
   protected override string GetAttackAnimation(XYAxisState axisState)
   {
-    // TODO (Important): for some reason, when switching scenes the yoyo attack gets replaced with 360 after airborne attack
     if (axisState.IsDown())
     {
       return "Yoyo Down";

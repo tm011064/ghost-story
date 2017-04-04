@@ -215,12 +215,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Right Shoulder
-    descriptiveName: R1
+    descriptiveName: R2
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: t
     altNegativeButton: 
-    altPositiveButton: joystick button 5
+    altPositiveButton: joystick button 7
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -231,12 +231,12 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Left Shoulder
-    descriptiveName: L1
+    descriptiveName: L2
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: r
     altNegativeButton: 
-    altPositiveButton: joystick button 4
+    altPositiveButton: joystick button 6
     gravity: 1000
     dead: 0.001
     sensitivity: 1000

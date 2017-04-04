@@ -14,11 +14,6 @@
 
   private void OnGameStateChanged(GhostStoryGameState gameState)
   {
-    UpdatePlayerWeaponStates(gameState);
-  }
-
-  private void UpdatePlayerWeaponStates(GhostStoryGameState gameState)
-  {
     foreach (var weapon in Weapons)
     {
       weapon.gameObject.SetActive(

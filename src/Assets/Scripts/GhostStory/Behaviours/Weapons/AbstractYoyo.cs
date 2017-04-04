@@ -27,8 +27,6 @@ public abstract class AbstractYoyo : AbstractWeaponBehaviour
       return;
     }
 
-    Logger.Info("Finished Yoyo Attack");
-
     _isAttacking = false;
     AttackAnimation = null;
 
