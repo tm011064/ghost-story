@@ -27,7 +27,7 @@ public class CeilingCockroachControlHandler : BaseControlHandler
     _direction = _enemyMovementSettings.StartDirection;
     _finishSpurtTime = Time.time + Random.Range(.1f, .6f);
 
-    _enemyController.AdjustSpriteScale(_direction);
+    _enemyController.AdjustHorizontalSpriteScale(_direction);
 
     return true;
   }

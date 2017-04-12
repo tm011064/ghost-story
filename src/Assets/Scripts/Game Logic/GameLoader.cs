@@ -8,6 +8,9 @@ public class GameLoader : MonoBehaviour
 
   void Awake()
   {
+    //PlayerPrefs.DeleteAll();
+    //Application.Quit();
+
     Logger.Initialize(GameSettings.LogSettings);
 
     if (GameManager.Instance == null)

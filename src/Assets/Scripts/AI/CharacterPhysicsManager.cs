@@ -475,7 +475,6 @@ public class CharacterPhysicsManager : BasePhysicsManager
 
   public MoveCalculationResult CalculateMove(Vector3 deltaMovement)
   {
-    // set small movements to zero
     if (deltaMovement.x <= POSITIVE_ZERO_MOVE_FUDGE_FACTOR && deltaMovement.x >= NEGATIVE_ZERO_MOVE_FUDGE_FACTOR)
     {
       deltaMovement.x = 0f;
@@ -642,27 +641,20 @@ public class CharacterPhysicsManager : BasePhysicsManager
     PerformMove(moveCalculationResult);
   }
 
-  public void WarpToCeiling()
+  private void Warp(Vector3 deltaMovement, Func<bool> until)
   {
+#if UNITY_EDITOR
+    var startPosition = Transform.position;
+    var distance = 10000f;
+#endif
+
     do
     {
-      Move(new Vector3(0, 1f, 0));
-    } while (!LastMoveCalculationResult.CollisionState.Above);
-  }
+      Move(deltaMovement);
 
 #if UNITY_EDITOR
-  public void WarpToFloor()
-  {
-    var startPosition = Transform.position;
-    var distance = 0f;
-    var distanceThreshold = 2048f;
-
-    do
-    {
-      Move(new Vector3(0, -1f, 0));
-
-      distance += 1;
-      if (distance > distanceThreshold)
+      distance -= deltaMovement.magnitude;
+      if (distance < 0)
       {
         Transform.position = startPosition;
 
@@ -670,33 +662,29 @@ public class CharacterPhysicsManager : BasePhysicsManager
 
         throw new InvalidOperationException("Warped a lot - infinite loop? Start position: " + startPosition);
       }
+#endif
 
-    } while (!LastMoveCalculationResult.CollisionState.Below);
+    } while (until());
   }
-#else
+
+  public void WarpToCeiling()
+  {
+    Warp(new Vector3(0, 1, 0), () => !LastMoveCalculationResult.CollisionState.Above);
+  }
+
   public void WarpToFloor()
   {
-    do
-    {
-      Move(new Vector3(0, -1f, 0));
-    } while (!LastMoveCalculationResult.CollisionState.Below);
+    Warp(new Vector3(0, -1, 0), () => !LastMoveCalculationResult.CollisionState.Below);
   }
-#endif
 
   public void WarpToRightWall()
   {
-    do
-    {
-      Move(new Vector3(1, 0, 0));
-    } while (!LastMoveCalculationResult.CollisionState.Right);
+    Warp(new Vector3(1, 0, 0), () => !LastMoveCalculationResult.CollisionState.Right);
   }
 
   public void WarpToLeftWall()
   {
-    do
-    {
-      Move(new Vector3(-1, 0, 0));
-    } while (!LastMoveCalculationResult.CollisionState.Left);
+    Warp(new Vector3(-1, 0, 0), () => !LastMoveCalculationResult.CollisionState.Left);
   }
 
   /// <summary>

@@ -139,7 +139,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
       .ToArray();
 
     var misaHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
-    var kinoHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
+    var kinoHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Kino.ToString()).Health.HealthUnits;
 
     var gameState = new GhostStoryGameState
     {

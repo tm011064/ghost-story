@@ -4,8 +4,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 {
   public partial class DoorCameraScroller : CameraScroller
   {
-    private Door _door;
-
     private GameObject _leftDoor;
 
     private GameObject _rightDoor;
@@ -28,7 +26,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
       CameraMovementSettings = CreateCameraMovementSettings();
 
-      _door = GetComponentInParent<Door>();
       _doorTriggerEnterBehaviour = GetComponentInChildren<DoorTriggerEnterBehaviour>();
       _doorTriggerEnterBehaviour.Open += TriggerScroll;
 

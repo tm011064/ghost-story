@@ -48,4 +48,41 @@ public static class TransformExtensions
       }
     }
   }
+
+  public static void AdjustSpriteScale(this Transform transform, params Direction[] directions)
+  {
+    foreach (var direction in directions)
+    {
+      switch (direction)
+      {
+        case Direction.Down:
+          if (transform.localScale.y < 1)
+          {
+            transform.localScale = transform.localScale.MultiplyY(-1);
+          }
+          break;
+
+        case Direction.Up:
+          if (transform.localScale.y > -1)
+          {
+            transform.localScale = transform.localScale.MultiplyY(-1);
+          }
+          break;
+
+        case Direction.Left:
+          if (transform.localScale.x > -1)
+          {
+            transform.localScale = transform.localScale.MultiplyX(-1);
+          }
+          break;
+
+        case Direction.Right:
+          if (transform.localScale.x < 1)
+          {
+            transform.localScale = transform.localScale.MultiplyX(-1);
+          }
+          break;
+      }
+    }
+  }
 }

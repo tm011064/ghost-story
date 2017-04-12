@@ -23,8 +23,7 @@ public class GameManager : MonoBehaviour
 
   public InputSettings InputSettings = new InputSettings();
 
-  private readonly Dictionary<string, PlayerController> _playerControllersByName
-    = new Dictionary<string, PlayerController>(StringComparer.OrdinalIgnoreCase);
+  private Dictionary<string, PlayerController> _playerControllersByName;
 
 #if !FINAL
   private readonly FPSRenderer _fpsRenderer = new FPSRenderer();
@@ -44,7 +43,8 @@ public class GameManager : MonoBehaviour
   {
     BuildPooledObjects();
 
-    _playerControllersByName.Clear();
+    LoadPlayerControllers();
+
     // TODO (Important): on scene loads, player can move or attack prior to load animation end
     SceneManager.OnSceneLoad();
 
@@ -53,32 +53,26 @@ public class GameManager : MonoBehaviour
 #endif
   }
 
+  private void LoadPlayerControllers()
+  {
+    _playerControllersByName = PlayableCharacters
+      .Select(p => new
+      {
+        PlayerController = Instantiate(p.PlayerController, Vector3.zero, Quaternion.identity) as PlayerController,
+        Name = p.PlayerController.name
+      })
+      .ToDictionary(p => p.Name, p => p.PlayerController, StringComparer.OrdinalIgnoreCase);
+
+    Logger.Info("Loaded Player Controllers: " + string.Join(", ", _playerControllersByName.Keys.ToArray()));
+  }
+
   public void ActivatePlayer(string name, Vector3 position)
   {
-    Player = GetPlayerController(name);
+    Player = _playerControllersByName[name];
     Player.transform.position = position;
     Player.gameObject.SetActive(true);
 
     Camera.main.GetComponent<CameraController>().Target = Player.transform;
-  }
-
-  private PlayerController GetPlayerController(string name)
-  {
-    PlayerController playerController;
-    if (!_playerControllersByName.TryGetValue(name, out playerController))
-    {
-      var prefab = PlayableCharacters.Single(
-        p => string.Equals(p.PlayerController.name, name, StringComparison.OrdinalIgnoreCase));
-
-      playerController = Instantiate(
-        prefab.PlayerController,
-        Vector3.zero,
-        Quaternion.identity) as PlayerController;
-
-      _playerControllersByName[name] = playerController;
-    }
-
-    return playerController;
   }
 
   private void BuildPooledObjects()

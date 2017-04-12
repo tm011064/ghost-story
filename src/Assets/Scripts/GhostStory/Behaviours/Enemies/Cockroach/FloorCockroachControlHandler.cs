@@ -32,7 +32,7 @@ public class FloorCockroachControlHandler : BaseControlHandler
     _direction = _enemyMovementSettings.StartDirection;
     _shouldTurnAroundOnNextSpurt = false;
 
-    _enemyController.AdjustSpriteScale(_direction);
+    _enemyController.AdjustHorizontalSpriteScale(_direction);
 
     return true;
   }

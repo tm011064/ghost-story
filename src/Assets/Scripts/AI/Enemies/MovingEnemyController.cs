@@ -9,7 +9,10 @@ public class MovingEnemyController : BaseCharacterController, IPlayerCollidable,
   void Awake()
   {
     CharacterPhysicsManager = GetComponent<CharacterPhysicsManager>();
-    CharacterPhysicsManager.BoxCollider = GetComponent<BoxCollider2D>();
+    if (CharacterPhysicsManager != null)
+    {
+      CharacterPhysicsManager.BoxCollider = GetComponent<BoxCollider2D>();
+    }
 
     Animator = GetComponent<Animator>();
 
@@ -21,13 +24,21 @@ public class MovingEnemyController : BaseCharacterController, IPlayerCollidable,
     transform.localScale = transform.localScale.SetX(transform.localScale.x * -1);
   }
 
-  public void AdjustSpriteScale(Direction direction)
+  public void AdjustVerticalSpriteScale(Direction direction)
   {
-    if ((direction == Direction.Right && transform.localScale.x < 1f)
-      || (direction == Direction.Left && transform.localScale.x > -1f))
+    if ((direction == Direction.Down && transform.localScale.y < 1)
+      || (direction == Direction.Up && transform.localScale.y > -1))
     {
-      transform.localScale = transform.localScale.SetX(
-        transform.localScale.x * -1);
+      transform.localScale = transform.localScale.MultiplyY(-1);
+    }
+  }
+
+  public void AdjustHorizontalSpriteScale(Direction direction)
+  {
+    if ((direction == Direction.Right && transform.localScale.x < 1)
+      || (direction == Direction.Left && transform.localScale.x > -1))
+    {
+      transform.localScale = transform.localScale.MultiplyX(-1);
     }
   }
 

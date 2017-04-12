@@ -21,7 +21,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     private void CreateCameraModifier(PrefabInstantiationArguments arguments)
     {
-      return;
+      return; // TODO (Roman): figure that one out
       var wrappingCameraBounds = arguments.WrappingCameraBounds.SingleOrDefault();
       if (wrappingCameraBounds == null)
       {

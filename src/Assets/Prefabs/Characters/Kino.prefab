@@ -83,7 +83,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1690257945412818
 GameObject:
   m_ObjectHideFlags: 1
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe2ee7b0f2a57064bbbf8324c73bef05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthUnits: 28
+  HealthUnits: 10
 --- !u!114 &114689039021373378
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -490,7 +490,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

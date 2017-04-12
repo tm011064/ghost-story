@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 114000012104058610}
   - component: {fileID: 114000014249619662}
   m_Layer: 8
-  m_Name: misa
+  m_Name: Misa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8735e586990606e489caaa21157e17f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthUnits: 28
+  HealthUnits: 10
 --- !u!212 &212000012844252114
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -745,7 +745,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

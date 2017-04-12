@@ -8,8 +8,6 @@ public partial class CameraModifier : IInstantiable<CameraModifierInstantiationA
 
   public void Instantiate(CameraModifierInstantiationArguments arguments)
   {
-    var cameraController = Camera.main.GetComponentOrThrow<CameraController>();
-
     VerticalLockSettings = new VerticalLockSettings
     {
       Enabled = true,

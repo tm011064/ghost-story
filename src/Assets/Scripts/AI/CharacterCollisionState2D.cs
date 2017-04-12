@@ -44,7 +44,6 @@
 
   public override string ToString()
   {
-    return string.Format("[CharacterCollisionState2D] r: {0}, l: {1}, a: {2}, b: {3}, movingDownSlope: {4}, angle: {5}, wasGroundedLastFrame: {6}, becameGroundedThisFrame: {7}, onWallState: {8}, ifg: {9}",
-      Right, Left, Above, Below, FacingDownSlope, SlopeAngle, WasGroundedLastFrame, BecameGroundedThisFrame, CharacterWallState, IsFullyGrounded);
+    return this.GetFieldValuesFormatted();
   }
 }

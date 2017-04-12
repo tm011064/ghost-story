@@ -5,8 +5,6 @@ public partial class CameraController : MonoBehaviour
 {
   public float ZAxisOffset;
 
-  public bool UseFixedUpdate = false;
-
   public Vector2 TargetScreenSize = new Vector2(1920, 1080);
 
   public bool UseFixedAspectRatio = false;
@@ -226,22 +224,6 @@ public partial class CameraController : MonoBehaviour
   }
 
   void LateUpdate()
-  {
-    if (!UseFixedUpdate)
-    {
-      UpdateCameraPosition();
-    }
-  }
-
-  void FixedUpdate()
-  {
-    if (UseFixedUpdate)
-    {
-      UpdateCameraPosition();
-    }
-  }
-
-  void UpdateCameraPosition()
   {
     if (_scrollActionManager.HasActions())
     {

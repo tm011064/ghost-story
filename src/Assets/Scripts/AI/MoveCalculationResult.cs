@@ -20,4 +20,9 @@ public struct MoveCalculationResult
   {
     return HorizontalDirection != PreviousHorizontalDirection;
   }
+
+  public override string ToString()
+  {
+    return this.GetFieldValuesFormatted();
+  }
 }

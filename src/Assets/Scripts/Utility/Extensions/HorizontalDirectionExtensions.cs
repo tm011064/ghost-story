@@ -12,4 +12,20 @@ public static class HorizontalDirectionExtensions
 
     throw new NotSupportedException();
   }
+
+  public static HorizontalDirection ToHorizontalDirection(this Direction direction)
+  {
+    switch (direction)
+    {
+      case Direction.Right: return HorizontalDirection.Right;
+      case Direction.Left: return HorizontalDirection.Left;
+    }
+
+    throw new NotSupportedException();
+  }
+
+  public static float Multiplier(this HorizontalDirection direction)
+  {
+    return direction == HorizontalDirection.Left ? -1 : 1;
+  }
 }

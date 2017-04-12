@@ -53,11 +53,11 @@ GameObject:
   - component: {fileID: 4000011207011336}
   - component: {fileID: 95000011421316384}
   - component: {fileID: 61000012497482016}
-  - component: {fileID: 114000013327593978}
   - component: {fileID: 114000011243495214}
   - component: {fileID: 114000011647721714}
   - component: {fileID: 50000014234175438}
   - component: {fileID: 114000010200674820}
+  - component: {fileID: 114045681079740750}
   m_Layer: 10
   m_Name: Cockroach
   m_TagString: Untagged
@@ -253,7 +253,7 @@ MonoBehaviour:
   ContinuousSpawnInterval: 2
   RespawnOnDestroyDelay: 1
   SpawnArguments: []
---- !u!114 &114000013327593978
+--- !u!114 &114045681079740750
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -261,16 +261,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000014081318236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 746a9383232e90d41a3964dce27b79c6, type: 3}
+  m_Script: {fileID: 11500000, guid: eb83f8e623c11754ba6e60e02076f2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterPhysicsManager: {fileID: 0}
   Animator: {fileID: 0}
   MovementSettings:
     StartDirection: 4
-    Speed: 200
-    AirborneSpeed: 200
-    Gravity: -800
+    Speed: 10
+    AirborneSpeed: 10
+    Gravity: -400
   StartDirections: 
   Location: 0
 --- !u!212 &212000010865515464

@@ -26,11 +26,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
           doorLocation,
           CameraModifierPadding);
 
-        var cameraModifierBounds = GetInnerCameraModifierBounds(
-          arguments.TiledRectBounds,
-          intersectingCameraBounds,
-          CameraModifierPadding);
-
         var boxColliderGameObject = CreateBoxColliderGameObject(triggerBounds, "Door Handle Trigger");
 
         var triggerEnterBehaviour = boxColliderGameObject.AddComponent<DoorTriggerEnterBehaviour>();

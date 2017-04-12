@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public static class DirectionExtensions
 {
@@ -51,5 +52,27 @@ public static class DirectionExtensions
     }
 
     return 1;
+  }
+
+  public static Direction Update(this Direction self, Vector3 vector)
+  {
+    return (
+      vector.x > 0
+        ? Direction.Right
+        : vector.x < 0
+          ? Direction.Left
+          : (self | Direction.Right) != 0 ? Direction.Right : Direction.Left)
+      | (
+        vector.y > 0
+          ? Direction.Up
+          : vector.y < 0
+            ? Direction.Down
+            : (self | Direction.Up) != 0 ? Direction.Up : Direction.Down);
+  }
+
+  public static string ToDirectionString(this Direction self)
+  {
+    return ((self & Direction.Left) != 0 ? "Left" : "Right")
+      + ((self & Direction.Up) != 0 ? " Up" : " Down");
   }
 }

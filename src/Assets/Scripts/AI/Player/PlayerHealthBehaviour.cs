@@ -2,7 +2,7 @@
 
 public class PlayerHealthBehaviour : BaseMonoBehaviour
 {
-  public int HealthUnits = 28;
+  public int HealthUnits = 10;
 
   private int _currentHealthUnits;
 
