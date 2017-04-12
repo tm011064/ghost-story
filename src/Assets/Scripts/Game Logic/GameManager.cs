@@ -56,12 +56,15 @@ public class GameManager : MonoBehaviour
   private void LoadPlayerControllers()
   {
     _playerControllersByName = PlayableCharacters
-      .Select(p => new
-      {
-        PlayerController = Instantiate(p.PlayerController, Vector3.zero, Quaternion.identity) as PlayerController,
-        Name = p.PlayerController.name
-      })
-      .ToDictionary(p => p.Name, p => p.PlayerController, StringComparer.OrdinalIgnoreCase);
+      .Select(p =>
+        {
+          var player = Instantiate(p.PlayerController, Vector3.zero, Quaternion.identity) as PlayerController;
+
+          player.name = p.PlayerController.name;
+
+          return player;
+        })
+      .ToDictionary(p => p.name, StringComparer.OrdinalIgnoreCase);
 
     Logger.Info("Loaded Player Controllers: " + string.Join(", ", _playerControllersByName.Keys.ToArray()));
   }

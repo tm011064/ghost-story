@@ -312,6 +312,11 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
     private float CalculateTargetPosition()
     {
+      if (_calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.BecameGroundedThisFrame)
+      {
+        return _calculator._lastResult.CameraPosition;
+      }
+
       var snapPosition = _calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.CollisionState.FacingUpSlope
         ? _calculator.CalculateUpwardMovementSnapPosition()
         : _calculator.CalculateDownwardMovementSnapPosition();
@@ -321,7 +326,7 @@ public partial class VerticalGroundSnappingCalculator : ICameraPositionCalculato
 
     public CameraPositionCalculationResult Calculate()
     {
-      _deltaTargetPosition = Mathf.Lerp(_deltaTargetPosition, 0, Time.deltaTime * 2f);
+      _deltaTargetPosition = Mathf.Lerp(_deltaTargetPosition, 0, Time.deltaTime * 4f);
 
       if (_calculator._player.CharacterPhysicsManager.LastMoveCalculationResult.DeltaMovement.x != 0)
       {

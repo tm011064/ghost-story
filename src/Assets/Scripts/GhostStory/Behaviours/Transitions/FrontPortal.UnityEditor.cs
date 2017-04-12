@@ -1,8 +1,5 @@
 ﻿#if UNITY_EDITOR
 
-using System.Linq;
-using UnityEditor;
-using UnityEngine;
 
 namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 {
@@ -22,32 +19,32 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     private void CreateCameraModifier(PrefabInstantiationArguments arguments)
     {
       return; // TODO (Roman): figure that one out
-      var wrappingCameraBounds = arguments.WrappingCameraBounds.SingleOrDefault();
-      if (wrappingCameraBounds == null)
-      {
-        return;
-      }
+      //var wrappingCameraBounds = arguments.WrappingCameraBounds.SingleOrDefault();
+      //if (wrappingCameraBounds == null)
+      //{
+      //  return;
+      //}
 
-      var assetPath = arguments.PrefabsAssetPathsByShortName["Camera Modifier"];
-      var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
-      var cameraModifier = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
-      cameraModifier.transform.parent = transform;
+      //var assetPath = arguments.PrefabsAssetPathsByShortName["Camera Modifier"];
+      //var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
+      //var cameraModifier = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
+      //cameraModifier.transform.parent = transform;
 
-      var cameraModifierArguments = new CameraModifierInstantiationArguments
-      {
-        BoundsPropertyInfos = new CameraModifierInstantiationArguments.BoundsPropertyInfo[]
-        {
-          new CameraModifierInstantiationArguments.BoundsPropertyInfo
-          {
-            Bounds = arguments.TiledRectBounds,
-            Properties = arguments.Properties
-          }
-        },
-        Bounds = wrappingCameraBounds
-      };
+      //var cameraModifierArguments = new CameraModifierInstantiationArguments
+      //{
+      //  BoundsPropertyInfos = new CameraModifierInstantiationArguments.BoundsPropertyInfo[]
+      //  {
+      //    new CameraModifierInstantiationArguments.BoundsPropertyInfo
+      //    {
+      //      Bounds = arguments.TiledRectBounds,
+      //      Properties = arguments.Properties
+      //    }
+      //  },
+      //  Bounds = wrappingCameraBounds
+      //};
 
-      var instantiable = cameraModifier.GetComponentOrThrow<IInstantiable<CameraModifierInstantiationArguments>>();
-      instantiable.Instantiate(cameraModifierArguments);
+      //var instantiable = cameraModifier.GetComponentOrThrow<IInstantiable<CameraModifierInstantiationArguments>>();
+      //instantiable.Instantiate(cameraModifierArguments);
     }
   }
 }

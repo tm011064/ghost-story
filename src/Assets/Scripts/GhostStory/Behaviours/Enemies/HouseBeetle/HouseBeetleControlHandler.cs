@@ -22,7 +22,6 @@ public class HouseBeetleControlHandler : BaseControlHandler
   public override bool TryActivate(BaseControlHandler previousControlHandler)
   {
     var direction = GameManager.Instance.Player.transform.position - _enemy.transform.position;
-    var deltaMovement = direction.normalized * _enemyMovementSettings.Speed * Time.deltaTime;
 
     _lastDirection = direction.CalculateDirection();
 

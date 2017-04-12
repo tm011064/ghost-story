@@ -18,6 +18,8 @@ public class GhostStoryGameState
 
   public string SpawnPlayerPortalName;
 
+  public string SpawnPlayerSceneName;
+
   public InventoryItem GetWeapon(string name)
   {
     return Weapons.Single(w => w.Name == name);
@@ -33,5 +35,10 @@ public class GhostStoryGameState
     var allItems = Weapons.Union(DoorKeys).ToArray();
 
     return allItems.First(i => i.Name == name);
+  }
+
+  public override string ToString()
+  {
+    return this.GetFieldValuesFormatted();
   }
 }

@@ -6,6 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Prototype/Scenes/foyer.unity
+  - enabled: 1
     path: Assets/Prototype/Scenes/house_elevator_shaft.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/upper_basement.unity
@@ -27,7 +29,5 @@ EditorBuildSettings:
     path: Assets/Prototype/Scenes/scene_transition_test_right_door.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/scene_transition_test_left_door.unity
-  - enabled: 1
-    path: Assets/Prototype/Scenes/foyer.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/lower_basement.unity

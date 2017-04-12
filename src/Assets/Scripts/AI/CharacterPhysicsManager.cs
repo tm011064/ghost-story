@@ -1405,6 +1405,12 @@ public class CharacterPhysicsManager : BasePhysicsManager
 
           moveCalculationResult.CollisionState.Below = true;
 
+          if (!moveCalculationResult.CollisionState.IsOnSlope
+            && Vector2.Angle(raycastHit.normal, Vector2.up) != 0)
+          {
+            moveCalculationResult.CollisionState.IsOnSlope = true;
+          }
+
           moveCalculationResult.CollisionState.LastTimeGrounded = Time.time;
         }
 
@@ -1414,6 +1420,7 @@ public class CharacterPhysicsManager : BasePhysicsManager
         // where our ray gets a hit that is less then skinWidth causing us to be ungrounded the next frame due to residual velocity.
         if (!isGoingUp && moveCalculationResult.DeltaMovement.y > 0.00001f)
         {
+          // TODO (Roman): is this actually needed?
           moveCalculationResult.CollisionState.MovingUpSlope = true;
         }
 
