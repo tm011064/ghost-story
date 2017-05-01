@@ -72,18 +72,18 @@ GameObject:
   - component: {fileID: 4000012664598406}
   - component: {fileID: 114000012203644590}
   - component: {fileID: 50000014072373306}
-  - component: {fileID: 114000013497037138}
   - component: {fileID: 114000011099568694}
   - component: {fileID: 114000012254581500}
   - component: {fileID: 114000014111143568}
   - component: {fileID: 114701691490969932}
+  - component: {fileID: 114777043659640838}
   m_Layer: 8
   m_Name: Kino
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1690257945412818
 GameObject:
   m_ObjectHideFlags: 1
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4583803415050506}
   - component: {fileID: 114689039021373378}
   m_Layer: 8
-  m_Name: Misa Flash
+  m_Name: Kino Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,25 +346,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6c53f8029c40c43bc09c3545f94b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114000013497037138
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012640441032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10574d12cb271749aedb7f13e9cb8f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WalkingJumpDistance: 512
-  RunningJumpDistance: 1024
-  JumpHeight: 360
-  MaxJumpHeight: 304
-  ComfortableJumpHeight: 272
-  WalkingJumpHeightWidth: 332
-  PlayerDimensions: {x: 86, y: 86}
-  SafeAreaBounds: {x: 1920, y: 1080}
 --- !u!114 &114000014111143568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -388,6 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcee033d9a1fad04a92936125374289d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HudIcon: {fileID: 21300004, guid: 504c7da39e7132d4cb3419d93655b8cc, type: 3}
   Settings:
     EnableAutomaticFire: 0
     MaxProjectilesPerSecond: 8
@@ -420,11 +402,11 @@ MonoBehaviour:
     MaxWallDownwardSpeed: -1000
     MinDistanceFromFloor: 128
   JumpSettings:
-    Gravity: -700
+    Gravity: -400
     StandJumpHeight: 90
-    WalkJumpHeight: 90
+    WalkJumpHeight: 0
     WalkJumpHeightSpeedTrigger: -1
-    RunJumpHeight: 90
+    RunJumpHeight: 0
     RunJumpHeightSpeedTrigger: -1
     InAirDamping: 8
     AllowJumpAfterGroundLostThreashold: 0.1
@@ -433,7 +415,7 @@ MonoBehaviour:
     BackflipOnDirectionChangeSpeed: 200
     MaxHorizontalSpeed: 9999
   RunSettings:
-    WalkSpeed: 120
+    WalkSpeed: 110
     EnableRunning: 0
     RunSpeed: 9999
     AccelerationGroundDamping: 8
@@ -466,6 +448,21 @@ MonoBehaviour:
   Weapons: []
   StandIdleEnvironmentBoxColliderSize: {x: 0, y: 0}
   Health: {fileID: 0}
+--- !u!114 &114777043659640838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012640441032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5edc1bc535ad034eb7c3614135380a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartFloatingDuringFallVelocityMultiplier: 0.2
+  GravityDecreaseInterpolationFactor: 0.8
+  Gravity: -100
+  InAirDamping: 4
 --- !u!114 &114921783650203116
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -217,7 +217,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     return GameState.ActiveUniverse == Universe.AlternateWorld;
   }
 
-  private void DisableCurrentGameObjects()
+  public void DisableCurrentGameObjects()
   {
     foreach (var gameObject in _gameObjectsByUniverse[GameState.ActiveUniverse])
     {
@@ -230,7 +230,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
     }
   }
 
-  private void EnableCurrentGameObjects()
+  public void EnableCurrentGameObjects()
   {
     foreach (var gameObject in _gameObjectsByUniverse[GameState.ActiveUniverse])
     {

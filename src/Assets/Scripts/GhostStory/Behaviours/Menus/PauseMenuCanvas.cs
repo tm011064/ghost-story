@@ -22,12 +22,16 @@ public class PauseMenuCanvas : MonoBehaviour
   {
     LockPlayer();
 
+    GhostStoryGameContext.Instance.DisableCurrentGameObjects();
+
     Time.timeScale = 0f;
   }
 
   void OnDisable()
   {
     UnlockPlayer();
+
+    GhostStoryGameContext.Instance.EnableCurrentGameObjects();
 
     Time.timeScale = 1f;
   }
@@ -45,14 +49,7 @@ public class PauseMenuCanvas : MonoBehaviour
 
   private PauseMenuItemGroup[] BuildItems()
   {
-    var weapons = CreateMenuItems(GhostStoryGameContext.Instance.GameState.Weapons).ToArray();
-    var doorKeys = CreateMenuItems(GhostStoryGameContext.Instance.GameState.DoorKeys).ToArray();
-
-    var itemGroups = new PauseMenuItemGroup[]
-    {
-      CreateMenuItemGroup(weapons, false),
-      CreateMenuItemGroup(doorKeys, true)
-    };
+    var itemGroups = GetItemGroups().ToArray();
 
     ArrangeMenuItemGroups(itemGroups);
 
@@ -60,6 +57,25 @@ public class PauseMenuCanvas : MonoBehaviour
     _focusedMenuItemGroup.SelectedIndex = 0;
 
     return itemGroups;
+  }
+
+  private IEnumerable<PauseMenuItemGroup> GetItemGroups()
+  {
+    var gameState = GhostStoryGameContext.Instance.GameState;
+
+    var weapons = GameManager.Instance
+      .GetPlayerControllers()
+      .Select(p =>
+        CreateMenuItemGroup(
+          CreateMenuItems(gameState.Weapons.Where(w => p.Weapons.Any(pw => string.Equals(pw.Name, w.Name))).ToArray()).ToArray(),
+          false));
+
+    foreach (var weapon in weapons)
+    {
+      yield return weapon;
+    }
+
+    yield return CreateMenuItemGroup(CreateMenuItems(GhostStoryGameContext.Instance.GameState.DoorKeys).ToArray(), true);
   }
 
   private void ArrangeMenuItemGroups(PauseMenuItemGroup[] itemGroups)

@@ -6,6 +6,8 @@ public abstract class AbstractWeaponBehaviour : MonoBehaviour
 
   protected InputStateManager InputStateManager;
 
+  public Sprite HudIcon;
+
   void Awake()
   {
     InputStateManager = GameManager.Instance.InputStateManager;

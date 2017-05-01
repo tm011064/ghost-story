@@ -4,9 +4,9 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 {
   private HouseDoor HouseDoor;
 
-  private FreezePlayerControlHandler _freezeControlHandler;
-
   public HorizontalDirection DoorLocation;
+
+  private FreezePlayerControlHandler _freezeControlHandler;
 
   protected override void OnAwake()
   {

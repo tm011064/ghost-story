@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
   private Dictionary<string, PlayerController> _playerControllersByName;
 
+  public event Action<PlayerController> PlayerActivated;
+
 #if !FINAL
   private readonly FPSRenderer _fpsRenderer = new FPSRenderer();
 #endif
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
           var player = Instantiate(p.PlayerController, Vector3.zero, Quaternion.identity) as PlayerController;
 
           player.name = p.PlayerController.name;
+          player.gameObject.SetActive(false);
 
           return player;
         })
@@ -76,6 +79,12 @@ public class GameManager : MonoBehaviour
     Player.gameObject.SetActive(true);
 
     Camera.main.GetComponent<CameraController>().Target = Player.transform;
+
+    var handler = PlayerActivated;
+    if (handler != null)
+    {
+      handler.Invoke(Player);
+    }
   }
 
   private void BuildPooledObjects()

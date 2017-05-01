@@ -32,15 +32,18 @@ public class HouseBeetleControlHandler : BaseControlHandler
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
+    Logger.UnityDebugLog("UPDATE", Time.deltaTime);
+
     var playerDelta = GameManager.Instance.Player.transform.position - _enemy.transform.position;
+    var safeDeltaTime = Mathf.Min(Time.deltaTime, .02f);
 
     var deltaMovement = playerDelta.magnitude <= _enemy.MaxPlayerChaseDistance
-      ? playerDelta.normalized * _enemyMovementSettings.Speed * Time.deltaTime
+      ? playerDelta.normalized * _enemyMovementSettings.Speed * safeDeltaTime
       : playerDelta.normalized * .001f;
 
     _velocity = _velocity
-      .SetX(Mathf.Lerp(_velocity.x, deltaMovement.x, _enemy.DirectionChangeSmoothDampFactor * Time.deltaTime))
-      .SetY(Mathf.Lerp(_velocity.y, deltaMovement.y, _enemy.DirectionChangeSmoothDampFactor * Time.deltaTime));
+      .SetX(Mathf.Lerp(_velocity.x, deltaMovement.x, _enemy.DirectionChangeSmoothDampFactor * safeDeltaTime))
+      .SetY(Mathf.Lerp(_velocity.y, deltaMovement.y, _enemy.DirectionChangeSmoothDampFactor * safeDeltaTime));
 
     _enemy.transform.Translate(_velocity);
 

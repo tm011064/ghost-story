@@ -469,8 +469,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e9574b48c9ba948a1162a08f8c81bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutlineGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  ShowGizmoOutline: 1
   HorizontalCamereaWindowSettings:
     WindowWitdh: 0
     DirectionChangeDamping: 0
@@ -489,6 +487,11 @@ MonoBehaviour:
     HorizontalSmoothDampTime: 0.2
     VerticalSlowSmoothDampTime: 0.2
     VerticalFastSmoothDampTime: 0.01
+  CameraSettings:
+    VerticalCameraFollowMode: 0
+    HorizontalCameraFollowMode: 0
+  OutlineGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ShowGizmoOutline: 1
   FullScreenScrollSettings:
     TransitionTime: 1
     CameraScrollEasingType: 0
@@ -498,9 +501,6 @@ MonoBehaviour:
     EndScrollFreezeTime: 0.3
     FullScreenScrollerTransitionMode: 1
     VerticalFullScreenScrollerTransitionSpeedFactor: 4
-  CameraSettings:
-    VerticalCameraFollowMode: 0
-    HorizontalCameraFollowMode: 0
   Size: {x: 0, y: 0}
   DoorLocation: 0
 --- !u!114 &114852734836145924
@@ -528,7 +528,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -563,7 +563,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -598,7 +598,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -633,7 +633,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -668,7 +668,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -703,7 +703,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -738,7 +738,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -773,7 +773,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

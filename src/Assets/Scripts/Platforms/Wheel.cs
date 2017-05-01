@@ -41,8 +41,10 @@ public partial class Wheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     }
   }
 
-  void OnEnable()
+  protected override void OnEnable()
   {
+    base.OnEnable();
+
     _objectPoolingManager = ObjectPoolingManager.Instance;
 
     Logger.Info("Enabling wheel " + name);
@@ -68,7 +70,7 @@ public partial class Wheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     _platforms = platforms;
   }
 
-  void OnDisable()
+  protected override void OnDisable()
   {
     Logger.Info("Disabling wheel " + name);
 
@@ -78,6 +80,8 @@ public partial class Wheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     }
 
     _platforms.Clear();
+
+    base.OnDisable();
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()

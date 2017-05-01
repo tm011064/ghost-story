@@ -114,7 +114,7 @@ public partial class DynamicPingPongPath : SpawnBucketItemBehaviour, IObjectPool
     _isMovingForward = false;
   }
 
-  void OnDisable()
+  protected override void OnDisable()
   {
     ObjectPoolingManager.Instance.Deactivate(_gameObject);
 
@@ -123,10 +123,14 @@ public partial class DynamicPingPongPath : SpawnBucketItemBehaviour, IObjectPool
     _percentage = 0f;
 
     _isMovingForward = false;
+
+    base.OnDisable();
   }
 
-  protected virtual void OnEnable()
+  protected override void OnEnable()
   {
+    base.OnEnable();
+
     if (_gameManager == null)
     {
       _gameManager = GameManager.Instance;

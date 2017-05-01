@@ -74,9 +74,7 @@ public class HealthBar : MonoBehaviour, IObjectPoolBehaviour
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()
   {
-    //var units = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
-    //var units = GameManager.Instance.Player.Health.HealthUnits;
-    var units = 10; // TODO (Roman): load
+    var units = 10; // TODO (Roman): load from somewhere
 
     var full = this.GetChildGameObject("Full");
 

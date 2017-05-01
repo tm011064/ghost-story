@@ -63,6 +63,11 @@ public partial class CameraController : MonoBehaviour
     LastTargetPosition = position;
   }
 
+  public Bounds CalculateScreenBounds()
+  {
+    return new Bounds(transform.position.SetZ(0), GetScreenSize());
+  }
+
   public Vector2 GetScreenSize()
   {
     var defaultOrthographicSize = (TargetScreenSize.y * .5f);

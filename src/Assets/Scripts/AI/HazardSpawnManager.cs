@@ -43,13 +43,17 @@ public partial class HazardSpawnManager : SpawnBucketItemBehaviour, IObjectPoolB
     }
   }
 
-  void OnDisable()
+  protected override void OnDisable()
   {
+    base.OnDisable();
+
     Logger.TraceFormat("Disabling HazardSpawnManager {0}", GetHashCode());
   }
 
-  void OnEnable()
+  protected override void OnEnable()
   {
+    base.OnEnable();
+
     Logger.TraceFormat("Enabling HazardSpawnManager {0}", GetHashCode());
 
     _nextSpawnTime = Time.time + ContinuousSpawnInterval;

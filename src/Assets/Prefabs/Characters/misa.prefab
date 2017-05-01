@@ -455,6 +455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8b56cffe4c1d74ba764ca1a3f373f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HudIcon: {fileID: 21300000, guid: 504c7da39e7132d4cb3419d93655b8cc, type: 3}
   DamageUnits: 1
 --- !u!114 &114000010952797648
 MonoBehaviour:
@@ -546,6 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d91ccb4c183d59429d1ba47be0e88b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HudIcon: {fileID: 21300002, guid: 504c7da39e7132d4cb3419d93655b8cc, type: 3}
   DamageUnits: 1
 --- !u!114 &114000012104058610
 MonoBehaviour:

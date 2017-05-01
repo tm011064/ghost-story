@@ -10,8 +10,6 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
   [Tooltip("The dimensions of the camera boundaries")]
   public Vector2 Size;
 
-  protected CameraController CameraController;
-
   private GameObject _parent;
 
   private int _animationShortNameHash;

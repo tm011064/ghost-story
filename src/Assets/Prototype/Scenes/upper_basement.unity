@@ -259,10 +259,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 11492740, guid: 9906e1dd519a54140b221ea7bd753884, type: 2}
-      propertyPath: UseFixedUpdate
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 212101772699077984, guid: 9906e1dd519a54140b221ea7bd753884,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
+    - target: {fileID: 212729721681150120, guid: 9906e1dd519a54140b221ea7bd753884,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cb8aa7917b971fe4db39963b1553bd81, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9906e1dd519a54140b221ea7bd753884, type: 2}
   m_IsPrefabParent: 0
@@ -305,6 +311,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 0}
+      propertyPath: MovementSettings.Speed
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: 5b8a6393c3fb34c4baf891d666526eb7, type: 2}
   m_IsPrefabParent: 0

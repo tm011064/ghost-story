@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnBucketItemBehaviour : MonoBehaviour
+public class SpawnBucketItemBehaviour : BaseMonoBehaviour
 {
   protected IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos(
     GameObject obj,

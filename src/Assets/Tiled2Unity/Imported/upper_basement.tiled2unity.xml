@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 12/04/2017 21:20:44-->
+<!--Last exported: 24/04/2017 05:43:02-->
 <Tiled2Unity version="1.0.7.7">
   <AssignMaterial mesh="mesh_0001" material="blocks_192x128" />
   <AssignMaterial mesh="mesh_0002" material="Blocks_8x8" />
@@ -107,6 +107,19 @@
         <EdgeCollider2D>
           <Points>8,144 168,48</Points>
         </EdgeCollider2D>
+      </GameObject>
+    </GameObject>
+    <GameObject name="Enemies" x="0" y="0" z="0">
+      <Property name="Commands" value="DestroyPrefab" />
+      <Property name="Type" value="PrefabGroup" />
+      <Property name="Universe" value="RealWorld" />
+      <GameObject name="RectangleObject" x="88" y="-216" rotation="0" layer="">
+        <Property name="Prefab" value="House Beetle Spawn Location" />
+        <BoxCollider2D width="8" height="8" />
+      </GameObject>
+      <GameObject name="RectangleObject" x="568" y="-208" rotation="0" layer="">
+        <Property name="Prefab" value="House Beetle Spawn Location" />
+        <BoxCollider2D width="8" height="8" />
       </GameObject>
     </GameObject>
   </Prefab>

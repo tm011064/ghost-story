@@ -119,7 +119,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
       _gameContext.RegisterCallback(ContinuousSpawnInterval, Spawn, "Spawn");
     }
   }
-  
+
   public void DeactivateSpawnedObjects()
   {
     _isDisabling = true;
@@ -134,7 +134,7 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
     _isDisabling = false;
   }
 
-  void OnDisable()
+  protected override void OnDisable()
   {
     Logger.Trace("Disabling EnemySpawnManager {0}", name);
 
@@ -153,13 +153,36 @@ public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IObjectPoolBe
     }
 
     _gameContext.CancelCallback("Spawn");
+
+    base.OnDisable();
   }
 
-  void OnEnable()
+  protected override void OnEnable()
   {
+    base.OnEnable();
+
     Logger.Trace("Enabling EnemySpawnManager {0}", name);
 
     _objectPoolingManager = ObjectPoolingManager.Instance;
+
+    if (RespawnMode == RespawnMode.SpawnWhenGotVisible)
+    {
+      var collider = this.GetComponentOrThrow<Collider2D>();
+
+      StartVisibilityChecks(.1f, collider);
+    }
+    else
+    {
+      _gameContext.RegisterCallback(0f, Spawn, "Spawn");
+    }
+  }
+
+  protected override void OnGotVisible()
+  {
+    if (_spawnedEnemies.Any())
+    {
+      return;
+    }
 
     _gameContext.RegisterCallback(0f, Spawn, "Spawn");
   }

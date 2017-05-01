@@ -8,6 +8,10 @@ public class GameLoader : MonoBehaviour
 
   void Awake()
   {
+#if !UNITY_EDITOR
+    Screen.SetResolution(768, 480, true);
+#endif
+
     Logger.Initialize(GameSettings.LogSettings);
 
     if (GameManager.Instance == null)
@@ -20,9 +24,6 @@ public class GameLoader : MonoBehaviour
     // TODO (old): sound placeholder
     //if (SoundManager.instance == null)
     //  Instantiate(soundManager);
-
-    // it is important to call that here as it instanciates the player controller which needs to have the game settings set.
-    //GameManager.Instance.LoadScene();
   }
 
   void Start()

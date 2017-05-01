@@ -9,4 +9,9 @@
 
     base.OnAwake();
   }
+
+  protected override PlayerControlHandler CreateDefaultPlayerControlHandler()
+  {
+    return new JumpFloaterPlayerControlHandler(this);
+  }
 }

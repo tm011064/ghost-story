@@ -6,11 +6,25 @@ public class GhostStoryMovingEnemyController : MovingEnemyController
 
   protected EnemyDamageBehaviour EnemyDamageBehaviour;
 
+  public EnemyHealthBehaviour EnemyHealthBehaviour;
+
   protected override void OnAwake()
   {
     GhostStoryGameContext = GhostStoryGameContext.Instance;
 
     EnemyDamageBehaviour = this.GetComponentOrThrow<EnemyDamageBehaviour>();
+    EnemyHealthBehaviour = this.GetComponentOrThrow<EnemyHealthBehaviour>();
+
+    EnemyHealthBehaviour.OnHealthReduced += OnHealthReduced;
+  }
+
+  void OnDestroy()
+  {
+    EnemyHealthBehaviour.OnHealthReduced -= OnHealthReduced;
+  }
+
+  protected virtual void OnHealthReduced()
+  {
   }
 
   protected bool CanCollide()

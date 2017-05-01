@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyHealthBehaviour : MonoBehaviour, IObjectPoolBehaviour
@@ -12,6 +13,8 @@ public class EnemyHealthBehaviour : MonoBehaviour, IObjectPoolBehaviour
   private bool _isInvincible;
 
   private int _currentHealthUnits;
+
+  public event Action OnHealthReduced;
 
   void OnEnable()
   {
@@ -49,6 +52,12 @@ public class EnemyHealthBehaviour : MonoBehaviour, IObjectPoolBehaviour
       PlayDeathAnimation();
 
       return DamageResult.Destroyed;
+    }
+
+    var handler = OnHealthReduced;
+    if (handler != null)
+    {
+      handler();
     }
 
     return DamageResult.HealthReduced;

@@ -3,7 +3,7 @@
 using System.Linq;
 using UnityEngine;
 
-public partial class EnemySpawnManager : SpawnBucketItemBehaviour, IInstantiable<PrefabInstantiationArguments>
+public partial class EnemySpawnManager : IInstantiable<PrefabInstantiationArguments>
 {
   public Color OutlineGizmoColor = Color.yellow;
 

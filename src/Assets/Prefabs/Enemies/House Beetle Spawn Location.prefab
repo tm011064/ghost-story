@@ -55,7 +55,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4985213157177054}
-  - component: {fileID: 114775241063241502}
+  - component: {fileID: 114848055755653230}
+  - component: {fileID: 58912316116674274}
   m_Layer: 0
   m_Name: House Beetle Spawn Location
   m_TagString: Untagged
@@ -104,6 +105,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58912316116674274
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1599366927397946}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 120
 --- !u!61 &61398193227323312
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -148,11 +163,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterPhysicsManager: {fileID: 0}
   Animator: {fileID: 0}
+  EnemyHealthBehaviour: {fileID: 0}
   MovementSettings:
     StartDirection: 4
     Speed: 40
     AirborneSpeed: 0
     Gravity: 0
+  DirectionChangeSmoothDampFactor: 0.8
+  MaxPlayerChaseDistance: 120
 --- !u!114 &114260680765250156
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -177,11 +195,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf311429a66a8147b2a8866aebe1cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthUnits: 1
+  HealthUnits: 3
   DeathAnimationPrefab: {fileID: 1000011066839002, guid: e0ee80e8ee3adae43a9c2593bb7a75bb,
     type: 2}
   DeathAnimationPrefabOffset: {x: 0, y: 0}
---- !u!114 &114775241063241502
+--- !u!114 &114848055755653230
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -189,16 +207,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1599366927397946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa09f85b9517ec9459a432afb9ee8c1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c3df981c7ac9f748a90894bfdac4081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutlineGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  ShowGizmoOutline: 1
-  RespawnMode: 0
   DestroySpawnedEnemiesWhenGettingDisabled: 0
-  ContinuousSpawnInterval: 10
-  RespawnOnDestroyDelay: 0.1
   SpawnArguments: []
+  SpawnWhenBecameVisible: 1
+  SpawnOnSceneLoad: 0
 --- !u!212 &212511772737282482
 SpriteRenderer:
   m_ObjectHideFlags: 1

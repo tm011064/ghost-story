@@ -164,6 +164,11 @@ public partial class PlayerController : BaseCharacterController
     return collider;
   }
 
+  public AbstractWeaponBehaviour GetActiveWeapon()
+  {
+    return Weapons.Where(w => w.gameObject.activeSelf).FirstOrDefault();
+  }
+
   public float CalculateMaxJumpHeight()
   {
     return RunSettings.EnableRunning

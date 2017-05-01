@@ -12,9 +12,9 @@ public class BaseMonoBehaviour : MonoBehaviour
 
   public event Action<BaseMonoBehaviour> GotHidden;
 
-  protected bool IsVisible;
+  protected CameraController CameraController;
 
-  private Func<bool> _testVisibility;
+  protected bool IsVisible;
 
   private float _visibiltyCheckInterval = 0f;
 
@@ -28,6 +28,8 @@ public class BaseMonoBehaviour : MonoBehaviour
 
   protected virtual void OnEnable()
   {
+    CameraController = Camera.main.GetComponent<CameraController>();
+
     var handler = GotEnabled;
     if (handler != null)
     {
@@ -46,40 +48,40 @@ public class BaseMonoBehaviour : MonoBehaviour
     }
   }
 
-  protected bool IsColliderVisible(Collider2D collider)
+  private void StartVisibilityChecks(float visibiltyCheckInterval, Func<bool> isVisible)
   {
-    return collider.IsVisibleFrom(Camera.main);
+    if (visibiltyCheckInterval > 0f)
+    {
+      _visibiltyCheckInterval = visibiltyCheckInterval;
+
+      StartCoroutine(CheckVisibility(isVisible));
+    }
+  }
+
+  protected void StopVisibilityChecks()
+  {
+    StopCoroutine("CheckVisibility");
   }
 
   protected void StartVisibilityChecks(float visibiltyCheckInterval, Collider2D collider)
   {
-    if (visibiltyCheckInterval > 0f)
-    {
-      _visibiltyCheckInterval = visibiltyCheckInterval;
-
-      _testVisibility = () => IsColliderVisible(collider);
-
-      StartCoroutine(CheckVisibility());
-    }
+    StartVisibilityChecks(
+      visibiltyCheckInterval,
+      () => CameraController
+        .CalculateScreenBounds()
+        .Intersects(collider.bounds));
   }
 
   protected void StartVisibilityChecks(float visibiltyCheckInterval, Renderer renderer)
   {
-    if (visibiltyCheckInterval > 0f)
-    {
-      _visibiltyCheckInterval = visibiltyCheckInterval;
-
-      _testVisibility = () => renderer.IsVisibleFrom(Camera.main);
-
-      StartCoroutine(CheckVisibility());
-    }
+    StartVisibilityChecks(visibiltyCheckInterval, () => renderer.IsVisibleFrom(Camera.main));
   }
 
-  IEnumerator CheckVisibility()
+  IEnumerator CheckVisibility(Func<bool> testVisibility)
   {
     while (true)
     {
-      var isVisible = _testVisibility();
+      var isVisible = testVisibility();
 
       if (isVisible && !IsVisible)
       {

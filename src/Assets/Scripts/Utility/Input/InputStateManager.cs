@@ -49,6 +49,11 @@ public class InputStateManager
     return (_buttonStates[buttonName].ButtonPressState & ButtonPressState.IsDown) != 0;
   }
 
+  public bool IsButtonUp(string buttonName)
+  {
+    return (_buttonStates[buttonName].ButtonPressState & ButtonPressState.IsUp) != 0;
+  }
+
   public bool IsButtonPressed(string buttonName)
   {
     return (_buttonStates[buttonName].ButtonPressState & ButtonPressState.IsPressed) != 0;

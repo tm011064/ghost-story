@@ -17,6 +17,11 @@ public class HouseBeetle : GhostStoryMovingEnemyController
     }
   }
 
+  protected override void OnHealthReduced()
+  {
+    PushControlHandler(new HouseBeetleHitControlHandler(this, .7f));
+  }
+
   public override bool CanSpawn()
   {
     var collider = GetComponent<BoxCollider2D>();

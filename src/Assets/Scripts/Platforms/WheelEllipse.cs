@@ -45,8 +45,10 @@ public partial class WheelEllipse : SpawnBucketItemBehaviour, IObjectPoolBehavio
     }
   }
 
-  void OnEnable()
+  protected override void OnEnable()
   {
+    base.OnEnable();
+
     _objectPoolingManager = ObjectPoolingManager.Instance;
 
     var platforms = new List<GameObjectContainer>();
@@ -74,7 +76,7 @@ public partial class WheelEllipse : SpawnBucketItemBehaviour, IObjectPoolBehavio
     _platforms = platforms;
   }
 
-  void OnDisable()
+  protected override void OnDisable()
   {
     for (var i = _platforms.Count - 1; i >= 0; i--)
     {
@@ -82,6 +84,8 @@ public partial class WheelEllipse : SpawnBucketItemBehaviour, IObjectPoolBehavio
     }
 
     _platforms.Clear();
+
+    base.OnDisable();
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()
