@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Editor.Tiled.Xml;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
@@ -10,8 +11,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
-      : base(root, map, prefabLookup, objecttypesByName)
+      Dictionary<string, ObjectType> objectTypesByName)
+      : base(root, map, prefabLookup, objectTypesByName)
     {
     }
 
@@ -26,7 +27,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
       var collidersGameObject = new GameObject("Edge Colliders");
 
-      foreach (var obj in layerConfig.TiledObjectgroup.Object)
+      foreach (var obj in layerConfig.TiledObjectGroup.Objects)
       {
         var edgeColliderObject = new GameObject("Edge Collider");
 

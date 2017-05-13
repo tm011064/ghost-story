@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Editor.Tiled.Xml;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     protected readonly GameObject Root;
 
-    protected readonly Dictionary<string, Objecttype> ObjecttypesByName;
+    protected readonly Dictionary<string, ObjectType> ObjectTypesByName;
 
     protected readonly Dictionary<string, string> PrefabLookup = new Dictionary<string, string>();
 
@@ -24,11 +25,11 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
+      Dictionary<string, ObjectType> objectTypesByName)
     {
       Root = root;
       PrefabLookup = prefabLookup;
-      ObjecttypesByName = objecttypesByName;
+      ObjectTypesByName = objectTypesByName;
 
       Map = map;
 
@@ -38,10 +39,10 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         .ToArray();
 
       ObjectLayerConfigs = map
-        .Objectgroup
+        .ObjectGroups
         .Select(og => new TiledObjectLayerConfig
         {
-          TiledObjectgroup = og,
+          TiledObjectGroup = og,
           Type = og.GetPropertyValue("Type"),
           Universe = og.GetPropertyValue("Universe"),
           Commands = og.GetCommands().ToArray()
@@ -85,7 +86,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
       var matrix = new Matrix<long>(tileNumbers, Map.Height, Map.Width);
 
-      return new MatrixVertices(matrix, Map.Tilewidth, Map.Tileheight);
+      return new MatrixVertices(matrix, Map.TileWidth, Map.TileHeight);
     }
 
     protected void AddEdgeColliders(GameObject parent, Vector2[] points, int padding = 0, bool isTrigger = false)
@@ -175,12 +176,12 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       meshTransform.gameObject.layer = LayerMask.NameToLayer("Background");
     }
 
-    protected bool IsFlippedHorizontally(Object obj)
+    protected bool IsFlippedHorizontally(TiledObject obj)
     {
       return obj.Gid >= 2000000000;
     }
 
-    protected bool IsFlippedVertically(Object obj)
+    protected bool IsFlippedVertically(TiledObject obj)
     {
       return (obj.Gid >= 1000000000 && obj.Gid < 2000000000) || obj.Gid >= 3000000000;
     }

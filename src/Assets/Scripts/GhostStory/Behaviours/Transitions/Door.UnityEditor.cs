@@ -21,7 +21,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         var assetPath = arguments.PrefabsAssetPathsByShortName["Door Scroller"];
         var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
         var scrollerGameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
-        
+
         scrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
         scrollerGameObject.transform.parent = gameObject.transform;
 
@@ -34,28 +34,16 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
           doorLocation,
           CameraModifierPadding);
 
-        var cameraModifierBounds = GetInnerCameraModifierBounds(
-          arguments.TiledRectBounds,
-          intersectingCameraBounds,
-          CameraModifierPadding);
-
         scrollerGameObject
           .GetComponent<DoorCameraScroller>()
           .Instantiate(new DoorInstantiationArguments
             {
               CameraBounds = intersectingCameraBounds,
               TriggerBounds = triggerBounds,
-              CameraModifierBounds = cameraModifierBounds,
               DoorKey = DoorKey,
               DoorLocation = doorLocation
             });
       }
-    }
-
-    private void CreateTriggerEnterBehaviour(GameObject boxColliderGameObject)
-    {
-      var triggerEnterBehaviour = boxColliderGameObject.AddComponent<DoorTriggerEnterBehaviour>();
-      triggerEnterBehaviour.DoorKeysNeededToEnter = new DoorKey[] { DoorKey };
     }
 
     private Direction GetDoorLocation(
@@ -123,68 +111,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       }
 
       throw new InvalidOperationException();
-    }
-
-    protected Bounds GetInnerCameraModifierBounds(
-      Bounds transitionObjectBounds,
-      Bounds cameraBounds,
-      Vector2 padding)
-    {
-      var center = transitionObjectBounds.center;
-
-      if (CameraBoundsAreToTheRight(transitionObjectBounds, cameraBounds))
-      {
-        var cameraModifierCenter = new Vector3(center.x + padding.x / 2, center.y, center.z);
-        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x - padding.x, transitionObjectBounds.size.y);
-
-        return new Bounds(cameraModifierCenter, cameraModifierSize);
-      }
-
-      if (CameraBoundsAreToTheLeft(transitionObjectBounds, cameraBounds))
-      {
-        var cameraModifierCenter = new Vector3(center.x - padding.x / 2, center.y, center.z);
-        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x - padding.x, transitionObjectBounds.size.y);
-
-        return new Bounds(cameraModifierCenter, cameraModifierSize);
-      }
-
-      if (CameraBoundsAreAbove(transitionObjectBounds, cameraBounds))
-      {
-        var cameraModifierCenter = new Vector3(center.x, center.y + padding.y / 2, center.z);
-        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x, transitionObjectBounds.size.y - padding.y);
-
-        return new Bounds(cameraModifierCenter, cameraModifierSize);
-      }
-
-      if (CameraBoundsAreBelow(transitionObjectBounds, cameraBounds))
-      {
-        var cameraModifierCenter = new Vector3(center.x, center.y - padding.y / 2, center.z);
-        var cameraModifierSize = new Vector2(transitionObjectBounds.size.x, transitionObjectBounds.size.y - padding.y);
-
-        return new Bounds(cameraModifierCenter, cameraModifierSize);
-      }
-
-      throw new InvalidOperationException();
-    }
-
-    protected bool CameraBoundsAreToTheRight(Bounds transitionObjectBounds, Bounds cameraBounds)
-    {
-      return transitionObjectBounds.ContainLeftEdgeOf(cameraBounds);
-    }
-
-    protected bool CameraBoundsAreToTheLeft(Bounds transitionObjectBounds, Bounds cameraBounds)
-    {
-      return transitionObjectBounds.ContainRightEdgeOf(cameraBounds);
-    }
-
-    protected bool CameraBoundsAreAbove(Bounds transitionObjectBounds, Bounds cameraBounds)
-    {
-      return transitionObjectBounds.ContainBottomEdgeOf(cameraBounds);
-    }
-
-    protected bool CameraBoundsAreBelow(Bounds transitionObjectBounds, Bounds cameraBounds)
-    {
-      return transitionObjectBounds.ContainTopEdgeOf(cameraBounds);
     }
   }
 }

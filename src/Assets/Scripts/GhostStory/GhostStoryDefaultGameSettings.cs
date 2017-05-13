@@ -10,5 +10,7 @@ public class GhostStoryDefaultGameSettings : MonoBehaviour
 
   public FullScreenScrollSettings FullScreenScrollSettings;
 
+  public FullScreenScrollSettings DoorFullScreenScrollSettings;
+
   public CameraSettings CameraSettings;
 }

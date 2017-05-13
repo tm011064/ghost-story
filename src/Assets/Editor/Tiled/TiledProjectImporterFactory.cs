@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Assets.Editor.Tiled.Xml;
 
 namespace Assets.Editor.Tiled
 {
@@ -12,7 +13,7 @@ namespace Assets.Editor.Tiled
 
       Map map;
 
-      Objecttypes objecttypes = new Objecttypes { Objecttype = new List<Objecttype>() };
+      var group = new ObjectTypeGroup { ObjectTypes = new List<ObjectType>() };
 
       using (var reader = new StreamReader(mapFilePath))
       {
@@ -21,15 +22,15 @@ namespace Assets.Editor.Tiled
 
       if (!string.IsNullOrEmpty(objectTypesFilePath))
       {
-        var objecttypesSerializer = new XmlSerializer(typeof(Objecttypes));
+        var objectTypesSerializer = new XmlSerializer(typeof(ObjectTypeGroup));
 
         using (var reader = new StreamReader(objectTypesFilePath))
         {
-          objecttypes = (Objecttypes)objecttypesSerializer.Deserialize(reader);
+          group = (ObjectTypeGroup)objectTypesSerializer.Deserialize(reader);
         }
       }
 
-      return new TiledProjectImporter(map, objecttypes);
+      return new TiledProjectImporter(map, group);
     }
   }
 }

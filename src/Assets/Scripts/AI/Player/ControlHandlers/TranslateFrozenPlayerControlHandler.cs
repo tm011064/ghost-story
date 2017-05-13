@@ -26,6 +26,10 @@ public class TranslateFrozenPlayerControlHandler : FreezePlayerControlHandler
 
   public override bool TryActivate(BaseControlHandler previousControlHandler)
   {
+    Logger.UnityDebugLog(
+      "POS", PlayerController.transform.position,
+      "NPOS", PlayerController.transform.position + _playerTranslationVector);
+
     _translateTransformAction = TranslateTransformAction.Start(
       PlayerController.transform.position,
       PlayerController.transform.position + _playerTranslationVector,
@@ -39,6 +43,7 @@ public class TranslateFrozenPlayerControlHandler : FreezePlayerControlHandler
   {
     PlayerController.transform.position = _translateTransformAction.GetPosition();
 
+    Logger.UnityDebugLog("XPOS", PlayerController.transform.position);
     return base.DoUpdate();
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Editor.Tiled.GameObjectFactories;
+using Assets.Editor.Tiled.Xml;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GhostStory
@@ -11,9 +12,29 @@ namespace Assets.Editor.Tiled.GhostStory
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
-      : base(root, map, prefabLookup, objecttypesByName)
+      Dictionary<string, ObjectType> objectTypesByName)
+      : base(root, map, prefabLookup, objectTypesByName)
     {
+    }
+
+    protected ILookup<string, CameraTriggerBounds> CreateTriggerBoundsByUniverseNameLookup()
+    {
+      return ObjectLayerConfigs
+          .Where(config => config.Type == "CameraModifier")
+          .Select(config =>
+            new
+            {
+              Universe = config.Universe,
+              CameraBounds = config.TiledObjectGroup.Objects.Single(o => o.Type == "Camera Bounds").GetBounds(),
+              TriggerBounds = config.TiledObjectGroup.Objects.Where(o => o.Type == "Camera Trigger").Select(o => o.GetBounds())
+            })
+          .SelectMany(c => c.TriggerBounds.Select(
+            b => new
+            {
+              Universe = c.Universe,
+              CameraTriggerBounds = new CameraTriggerBounds { CameraBounds = c.CameraBounds, TriggerBounds = b }
+            }))
+          .ToLookup(c => c.Universe, c => c.CameraTriggerBounds);
     }
 
     protected ILookup<string, Bounds> CreateCameraBoundsByUniverseNameLookup()
@@ -24,7 +45,7 @@ namespace Assets.Editor.Tiled.GhostStory
           new
           {
             Universe = config.Universe,
-            Bounds = config.TiledObjectgroup.Object.Select(o => o.GetBounds())
+            Bounds = config.TiledObjectGroup.Objects.Select(o => o.GetBounds())
           })
         .SelectMany(c => c.Bounds.Select(b => new { Universe = c.Universe, Bounds = b }))
         .Union(ObjectLayerConfigs
@@ -33,7 +54,7 @@ namespace Assets.Editor.Tiled.GhostStory
             new
             {
               Universe = config.Universe,
-              Bounds = config.TiledObjectgroup.Object.Where(o => o.Type == "Camera Bounds").Select(o => o.GetBounds())
+              Bounds = config.TiledObjectGroup.Objects.Where(o => o.Type == "Camera Bounds").Select(o => o.GetBounds())
             })
           .SelectMany(c => c.Bounds.Select(b => new { Universe = c.Universe, Bounds = b })))
         .ToLookup(c => c.Universe, c => c.Bounds);
@@ -47,19 +68,25 @@ namespace Assets.Editor.Tiled.GhostStory
     protected override IEnumerable<GameObject> CreatePrefabFromGameObject(TiledObjectLayerConfig layerConfig)
     {
       var cameraBoundsByUniverseNameLookup = CreateCameraBoundsByUniverseNameLookup();
+      var triggerBoundsByUniverseNameLookup = CreateTriggerBoundsByUniverseNameLookup();
 
-      foreach (var obj in layerConfig.TiledObjectgroup.Object)
+      foreach (var obj in layerConfig.TiledObjectGroup.Objects)
       {
-        var properties = obj.GetProperties(ObjecttypesByName);
+        var properties = obj.GetProperties(ObjectTypesByName);
 
         var prefabName = properties["Prefab"];
 
         var asset = LoadPrefabAsset(prefabName);
 
         var cameraBounds = cameraBoundsByUniverseNameLookup[layerConfig.Universe];
+        var triggerBounds = triggerBoundsByUniverseNameLookup[layerConfig.Universe];
 
         var intersectingCameraBounds = cameraBounds
           .Where(bounds => bounds.Intersects(obj.GetBounds()))
+          .ToArray();
+
+        var intersectingCameraTriggerBounds = triggerBounds
+          .Where(b => b.TriggerBounds.Intersects(obj.GetBounds()))
           .ToArray();
 
         var wrappingCameraBounds = cameraBounds
@@ -69,6 +96,7 @@ namespace Assets.Editor.Tiled.GhostStory
         var instantiationArguments = new PrefabInstantiationArguments
         {
           IntersectingCameraBounds = intersectingCameraBounds,
+          IntersectingCameraTriggerBounds = intersectingCameraTriggerBounds,
           PrefabsAssetPathsByShortName = PrefabLookup,
           Properties = properties,
           TiledObjectName = obj.Name,

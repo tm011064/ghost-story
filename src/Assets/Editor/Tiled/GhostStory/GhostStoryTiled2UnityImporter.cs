@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Assets.Editor.Tiled.GameObjectFactories;
+using Assets.Editor.Tiled.Xml;
 using Tiled2Unity;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -88,12 +89,12 @@ namespace Assets.Editor.Tiled.GhostStory
         prefab,
         new AbstractGameObjectFactory[]
         {
-          new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName),
-          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjecttypesByName)
+          new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
+          new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
+          new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
+          new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
+          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
+          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName)
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);

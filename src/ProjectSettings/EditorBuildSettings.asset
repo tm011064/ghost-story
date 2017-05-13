@@ -6,6 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Prototype/Scenes/roof.unity
+  - enabled: 1
     path: Assets/Prototype/Scenes/upper_basement.unity
   - enabled: 1
     path: Assets/Prototype/Scenes/foyer.unity

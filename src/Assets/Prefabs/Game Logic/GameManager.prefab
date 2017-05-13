@@ -63,6 +63,7 @@ MonoBehaviour:
     KinoHealthUnits: 0
     SpawnPlayerName: 
     SpawnPlayerPortalName: 
+    SpawnPlayerSceneName: 
   GameSettings: {fileID: 0}
 --- !u!114 &114000010915316208
 MonoBehaviour:
@@ -141,6 +142,15 @@ MonoBehaviour:
     VerticalSlowSmoothDampTime: 0.2
     VerticalFastSmoothDampTime: 0.01
   FullScreenScrollSettings:
+    TransitionTime: 0.8
+    CameraScrollEasingType: 14
+    PlayerTranslationDistance: 88
+    PlayerTranslationEasingType: 0
+    StartScrollFreezeTime: 0
+    EndScrollFreezeTime: 0
+    FullScreenScrollerTransitionMode: 0
+    VerticalFullScreenScrollerTransitionSpeedFactor: 4
+  DoorFullScreenScrollSettings:
     TransitionTime: 1.2
     CameraScrollEasingType: 0
     PlayerTranslationDistance: 88

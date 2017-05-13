@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Assets.Editor.Tiled.GameObjectFactories;
+using Assets.Editor.Tiled.Xml;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,16 +13,16 @@ namespace Assets.Editor.Tiled
   {
     public readonly Map Map;
 
-    public readonly Dictionary<string, Objecttype> ObjecttypesByName;
+    public readonly Dictionary<string, ObjectType> ObjectTypesByName;
 
     public readonly Dictionary<string, string> PrefabLookup;
 
-    public TiledProjectImporter(Map map, Objecttypes objecttypes)
+    public TiledProjectImporter(Map map, ObjectTypeGroup group)
     {
       Map = map;
 
-      ObjecttypesByName = objecttypes
-        .Objecttype
+      ObjectTypesByName = group
+        .ObjectTypes
         .ToDictionary(ot => ot.Name, ot => ot, StringComparer.InvariantCultureIgnoreCase);
 
       PrefabLookup = AssetDatabase
@@ -92,12 +93,12 @@ namespace Assets.Editor.Tiled
 
     private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories(GameObject parent)
     {
-      yield return new PlatformColliderFactory(parent, Map, PrefabLookup, ObjecttypesByName);
-      yield return new OneWayPlatformColliderFactory(parent, Map, PrefabLookup, ObjecttypesByName);
-      yield return new DeathHazardFactory(parent, Map, PrefabLookup, ObjecttypesByName);
-      yield return new TiledLayerPrefabFactory(parent, Map, PrefabLookup, ObjecttypesByName);
-      yield return new TiledObjectPrefabFactory(parent, Map, PrefabLookup, ObjecttypesByName);
-      yield return new CameraModifierFactory(parent, Map, PrefabLookup, ObjecttypesByName);
+      yield return new PlatformColliderFactory(parent, Map, PrefabLookup, ObjectTypesByName);
+      yield return new OneWayPlatformColliderFactory(parent, Map, PrefabLookup, ObjectTypesByName);
+      yield return new DeathHazardFactory(parent, Map, PrefabLookup, ObjectTypesByName);
+      yield return new TiledLayerPrefabFactory(parent, Map, PrefabLookup, ObjectTypesByName);
+      yield return new TiledObjectPrefabFactory(parent, Map, PrefabLookup, ObjectTypesByName);
+      yield return new CameraModifierFactory(parent, Map, PrefabLookup, ObjectTypesByName);
     }
 
     private string GetPrefabName(string assetPath)

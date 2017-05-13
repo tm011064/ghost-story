@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Editor.Tiled.Xml;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
@@ -10,8 +11,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
-      : base(root, map, prefabLookup, objecttypesByName)
+      Dictionary<string, ObjectType> objectTypesByName)
+      : base(root, map, prefabLookup, objectTypesByName)
     {
     }
 
@@ -24,13 +25,13 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     private IEnumerable<GameObject> CreateCameraModifers(TiledObjectLayerConfig layerConfig)
     {
-      var bounds = layerConfig.TiledObjectgroup.GetTypeOrThrow("Camera Bounds");
-      var triggers = layerConfig.TiledObjectgroup.GetTypesOrThrow("Camera Trigger");
+      var bounds = layerConfig.TiledObjectGroup.GetTypeOrThrow("Camera Bounds");
+      var triggers = layerConfig.TiledObjectGroup.GetTypesOrThrow("Camera Trigger");
 
       var fullScreenScrollers = triggers.Where(o => o.HasProperty(
         "Triggers Room Transition",
         "true",
-        ObjecttypesByName)).ToArray();
+        ObjectTypesByName)).ToArray();
 
       if (fullScreenScrollers.Any())
       {
@@ -54,8 +55,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     }
 
     private GameObject CreateCameraModifier(
-      Object[] triggers,
-      Object boundsObject,
+      TiledObject[] triggers,
+      TiledObject boundsObject,
       string prefabName,
       AbstractTiledLayerConfig layerConfig)
     {
@@ -64,7 +65,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
         .Select(t => new CameraModifierInstantiationArguments.BoundsPropertyInfo
           {
             Bounds = t.GetBounds(),
-            Properties = t.GetProperties(ObjecttypesByName)
+            Properties = t.GetProperties(ObjectTypesByName)
           })
         .ToArray();
 

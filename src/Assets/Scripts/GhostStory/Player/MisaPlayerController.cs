@@ -1,6 +1,6 @@
 ﻿public class MisaPlayerController : GhostStoryPlayerController
 {
-  private WorldSwitchSettings _worldSwitchSettings;
+  private WorldSwitchSettings _worldSwitchSettings; // TODO (Roman): this will need to be refactored, world switch types are defined by game progress
 
   protected override void OnAwake()
   {
@@ -18,6 +18,6 @@
 
   protected override PlayerControlHandler CreateDefaultPlayerControlHandler()
   {
-    return new UniverseSwitchPlayerControlHandler(this, _worldSwitchSettings);
+    return new DefaultPlayerControlHandler(this);
   }
 }

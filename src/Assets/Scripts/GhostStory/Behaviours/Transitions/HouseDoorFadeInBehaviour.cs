@@ -16,7 +16,7 @@ public class HouseDoorFadeInBehaviour : CameraScroller
       GhostStoryGameContext.Instance.GameSettings.HorizontalCamereaWindowSettings,
       GhostStoryGameContext.Instance.GameSettings.VerticalSnapWindowSettings);
 
-    FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
+    FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.DoorFullScreenScrollSettings;
 
     HouseDoor = GetComponentInParent<HouseDoor>();
   }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Editor.Tiled.GameObjectFactories;
+using Assets.Editor.Tiled.Xml;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GhostStory
@@ -10,8 +11,8 @@ namespace Assets.Editor.Tiled.GhostStory
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
-      : base(root, map, prefabLookup, objecttypesByName)
+      Dictionary<string, ObjectType> objectTypesByName)
+      : base(root, map, prefabLookup, objectTypesByName)
     {
     }
 

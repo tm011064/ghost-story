@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Editor.Tiled.Xml;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
@@ -11,8 +12,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup,
-      Dictionary<string, Objecttype> objecttypesByName)
-      : base(root, map, prefabLookup, objecttypesByName)
+      Dictionary<string, ObjectType> objectTypesByName)
+      : base(root, map, prefabLookup, objectTypesByName)
     {
     }
 
@@ -36,8 +37,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     private IEnumerable<GameObject> CreatePrefabsFromLayer(TiledTileLayerConfig layerConfig)
     {
-      var prefabName = layerConfig.TiledLayer.Properties
-        .Property
+      var prefabName = layerConfig.TiledLayer.PropertyGroup
+        .Properties
         .First(p => string.Equals(p.Name.Trim(), "Prefab", StringComparison.OrdinalIgnoreCase))
         .Value
         .Trim()
@@ -57,7 +58,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
           {
             Bounds = bounds,
             Properties = layerConfig.TiledLayer
-              .Properties
+              .PropertyGroup
               .ToDictionary()
           });
       }

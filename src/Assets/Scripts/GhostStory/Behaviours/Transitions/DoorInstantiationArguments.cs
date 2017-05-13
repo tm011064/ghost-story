@@ -8,8 +8,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     public Bounds TriggerBounds;
 
-    public Bounds CameraModifierBounds;
-
     public DoorKey DoorKey;
 
     public Direction DoorLocation;

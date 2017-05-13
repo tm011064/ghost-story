@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Assets.Editor.Tiled.Xml;
 
 namespace Assets.Editor.Tiled.GameObjectFactories
 {

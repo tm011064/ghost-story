@@ -85,7 +85,11 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
         new PlayerState[] { PlayerState.Locked, PlayerState.Invincible }));
     }
 
-    player.ExchangeActiveControlHandler(playerControlHandlersStack.Pop());
+    if (FreezeOnStart())
+    {
+      player.ExchangeActiveControlHandler(playerControlHandlersStack.Pop());
+    }
+
     player.PushControlHandlers(playerControlHandlersStack.ToArray());
   }
 
@@ -110,17 +114,22 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
 
   protected void OnEnter(Collider2D collider)
   {
+    if (CameraController.HasScrollActions())
+    {
+      return;
+    }
+
     if (Status == ScrollStatus.Scrolling)
     {
       return;
     }
 
-    UpdatePlayerSpawnLocation();
-
     if (CameraController.IsCurrentCameraMovementSettings(CameraMovementSettings))
     {
       return;
     }
+
+    UpdatePlayerSpawnLocation();
 
     Status = ScrollStatus.Scrolling;
 
@@ -128,7 +137,7 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
 
     _animationShortNameHash = currentAnimatorStateInfo.shortNameHash;
 
-    if (FullScreenScrollSettings.StartScrollFreezeTime > 0f)
+    if (FreezeOnStart())
     {
       var delay = TimeSpan.FromSeconds(FullScreenScrollSettings.StartScrollFreezeTime);
 
@@ -145,6 +154,11 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
     {
       StartScroll(collider);
     }
+  }
+
+  private bool FreezeOnStart()
+  {
+    return FullScreenScrollSettings.StartScrollFreezeTime > 0f;
   }
 
   private void UpdatePlayerSpawnLocation()
