@@ -1,10 +1,10 @@
 ﻿public class MisaPlayerController : GhostStoryPlayerController
 {
-  private WorldSwitchSettings _worldSwitchSettings; // TODO (Roman): this will need to be refactored, world switch types are defined by game progress
+  //private WorldSwitchSettings _worldSwitchSettings; // TODO (Roman): this will need to be refactored, world switch types are defined by game progress
 
   protected override void OnAwake()
   {
-    _worldSwitchSettings = GetComponent<WorldSwitchSettings>();
+    //_worldSwitchSettings = GetComponent<WorldSwitchSettings>();
 
     AnimationHashLookup.Register(
       "Yoyo",

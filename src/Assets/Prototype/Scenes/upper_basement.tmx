@@ -422,9 +422,9 @@
    <property name="Type" value="PrefabGroup"/>
    <property name="Universe" value="RealWorld"/>
   </properties>
-  <object id="22" name="Checkpoint" x="1704" y="424" width="56" height="64">
+  <object id="22" name="Save Game Area" x="1704" y="424" width="56" height="64">
    <properties>
-    <property name="Prefab" value="Checkpoint"/>
+    <property name="Prefab" value="Save Game Area"/>
    </properties>
   </object>
  </objectgroup>

@@ -148,7 +148,7 @@ MonoBehaviour:
     PlayerTranslationEasingType: 0
     StartScrollFreezeTime: 0
     EndScrollFreezeTime: 0
-    FullScreenScrollerTransitionMode: 0
+    FullScreenScrollerTransitionMode: 1
     VerticalFullScreenScrollerTransitionSpeedFactor: 4
   DoorFullScreenScrollSettings:
     TransitionTime: 1.2

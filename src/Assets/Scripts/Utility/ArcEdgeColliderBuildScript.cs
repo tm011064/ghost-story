@@ -17,9 +17,9 @@ public class ArcEdgeColliderBuildScript : MonoBehaviour
   {
     Logger.Info("Start building edge collider.");
 
-    var ta = transform.FindChild("A");
-    var tb = transform.FindChild("B");
-    var tc = transform.FindChild("C");
+    var ta = transform.Find("A");
+    var tb = transform.Find("B");
+    var tc = transform.Find("C");
 
     if (ta == null || tb == null || tc == null)
     {

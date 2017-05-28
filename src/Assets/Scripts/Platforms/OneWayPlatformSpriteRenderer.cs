@@ -69,7 +69,7 @@ public partial class OneWayPlatformSpriteRenderer : BasePlatform
 
   void Awake()
   {
-    var groundPlatformVisibilityMaskTransform = transform.FindChild("GroundPlatformVisibilityMask");
+    var groundPlatformVisibilityMaskTransform = transform.Find("GroundPlatformVisibilityMask");
 
     GameObject visibilityMaskGameObject = null;
 

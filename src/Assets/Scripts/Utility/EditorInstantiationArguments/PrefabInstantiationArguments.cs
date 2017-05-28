@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 
@@ -22,6 +24,36 @@ public class PrefabInstantiationArguments : AbstractInstantiationArguments
   public Dictionary<string, string> Properties;
 
   public string TiledObjectName;
+
+  public void CheckHasTiledObjectName()
+  {
+    if (string.IsNullOrEmpty(TiledObjectName))
+    {
+      throw new ArgumentNullException("TiledObjectName", new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name);
+    }
+  }
+
+  private void HasKey(string key, string caller)
+  {
+    if (!Properties.ContainsKey(key))
+    {
+      throw new KeyNotFoundException(caller + " missing property '" + key.ToString() + "'");
+    }
+  }
+
+  public void CheckHasProperty(string key)
+  {
+    HasKey(key, "'" + new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name + "::" + (TiledObjectName ?? "NULL") + "'");
+  }
+
+  public void CheckHasProperties(params string[] keys)
+  {
+    var caller = "'" + new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name + "::" + (TiledObjectName ?? "NULL") + "'";
+    foreach (var key in keys)
+    {
+      HasKey(key, caller);
+    }
+  }
 
   public string TryProperty(string key, string defaultValue = null)
   {

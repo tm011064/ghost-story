@@ -25,7 +25,6 @@ namespace Assets.Editor.Tiled.GhostStory
     private void Customize(GameObject prefab)
     {
       AttachCustomObjects(prefab);
-      LinkCheckpointsToRooms(prefab);
     }
 
     private void CustomizeSafe(GameObject prefab)
@@ -37,33 +36,6 @@ namespace Assets.Editor.Tiled.GhostStory
       catch (Exception ex)
       {
         Debug.LogError(ex.Message + Environment.NewLine + "Stacktrace: " + ex.StackTrace ?? string.Empty);
-      }
-    }
-
-    private void LinkCheckpointsToRooms(GameObject prefab)
-    {
-      var checkpoints = prefab.GetComponentsInChildren<Checkpoint>();
-      var rooms = prefab.GetComponentsInChildren<FullScreenScroller>();
-      var cameraModifiers = prefab.GetComponentsInChildren<CameraModifier>();
-
-      foreach (var checkpoint in checkpoints)
-      {
-        var roomTransforms = rooms
-          .Where(r => r.Contains(checkpoint.transform.position))
-          .Select(r => r.transform);
-
-        var cameraModifierTransforms = cameraModifiers
-          .Where(c => c.Contains(checkpoint.transform.position))
-          .Select(c => c.transform);
-
-        var parentTransform = roomTransforms.Union(cameraModifierTransforms).FirstOrDefault();
-
-        if (parentTransform == null)
-        {
-          throw new Exception("Checkpoint " + checkpoint.name + " must be within a room");
-        }
-
-        checkpoint.transform.parent = parentTransform;
       }
     }
 
@@ -111,7 +83,7 @@ namespace Assets.Editor.Tiled.GhostStory
         {
           var layerConfig = TiledTileLayerConfigFactory.Create(layer);
 
-          var transform = prefab.transform.FindChild(layerConfig.TiledLayer.Name);
+          var transform = prefab.transform.Find(layerConfig.TiledLayer.Name);
 
           if (transform != null)
           {

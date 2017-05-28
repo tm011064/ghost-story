@@ -27,7 +27,7 @@ public static class MonoBehaviourExtensions
 
   public static GameObject GetOrCreateChildGameObject(this MonoBehaviour self, string name, string layerName = null)
   {
-    var childTransform = self.transform.FindChild(name);
+    var childTransform = self.transform.Find(name);
 
     if (childTransform != null)
     {

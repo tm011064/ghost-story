@@ -9,7 +9,7 @@ public partial class FullScreenScroller :
 
     var boxColliderGameObject = CreateBoxColliderGameObject(arguments.TriggerBounds, "Scroll Trigger");
 
-    var triggerEnterBehaviour = boxColliderGameObject.AddComponent<BoxColliderTriggerEnterBehaviour>();
+    boxColliderGameObject.AddComponent<BoxColliderTriggerEnterBehaviour>();
   }
 }
 

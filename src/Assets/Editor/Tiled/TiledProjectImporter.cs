@@ -79,7 +79,7 @@ namespace Assets.Editor.Tiled
 
     private void Destroy(GameObject prefab, string name)
     {
-      var childTransform = prefab.transform.FindChild(name);
+      var childTransform = prefab.transform.Find(name);
 
       while (childTransform != null)
       {
@@ -87,7 +87,7 @@ namespace Assets.Editor.Tiled
 
         UnityEngine.Object.DestroyImmediate(childTransform.gameObject);
 
-        childTransform = prefab.transform.FindChild(name);
+        childTransform = prefab.transform.Find(name);
       }
     }
 

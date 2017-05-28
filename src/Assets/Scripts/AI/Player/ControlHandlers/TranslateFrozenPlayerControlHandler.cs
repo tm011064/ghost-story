@@ -43,7 +43,6 @@ public class TranslateFrozenPlayerControlHandler : FreezePlayerControlHandler
   {
     PlayerController.transform.position = _translateTransformAction.GetPosition();
 
-    Logger.UnityDebugLog("XPOS", PlayerController.transform.position);
     return base.DoUpdate();
   }
 }

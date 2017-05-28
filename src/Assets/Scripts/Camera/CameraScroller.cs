@@ -10,11 +10,7 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
   [Tooltip("The dimensions of the camera boundaries")]
   public Vector2 Size;
 
-  private GameObject _parent;
-
   private int _animationShortNameHash;
-
-  private Checkpoint _checkpoint;
 
   protected TranslateTransformActions ScrollActions;
 
@@ -33,8 +29,6 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
       enterTrigger.Entered += (_, e) => OnEnter(e.SourceCollider);
       enterTrigger.Exited += (_, e) => CameraController.OnCameraModifierExit(CameraMovementSettings);
     }
-
-    _checkpoint = GetComponentInChildren<Checkpoint>();
 
     OnAwake();
   }
@@ -129,8 +123,6 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
       return;
     }
 
-    UpdatePlayerSpawnLocation();
-
     Status = ScrollStatus.Scrolling;
 
     var currentAnimatorStateInfo = GameManager.Instance.Player.Animator.GetCurrentAnimatorStateInfo(0);
@@ -159,14 +151,6 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
   private bool FreezeOnStart()
   {
     return FullScreenScrollSettings.StartScrollFreezeTime > 0f;
-  }
-
-  private void UpdatePlayerSpawnLocation()
-  {
-    if (_checkpoint != null)
-    {
-      GameManager.Instance.Player.SpawnLocation = _checkpoint.transform.position;
-    }
   }
 
   protected enum ScrollStatus

@@ -4,10 +4,10 @@ public partial class WorldSwitchPortal : IInstantiable<PrefabInstantiationArgume
 {
   public void Instantiate(PrefabInstantiationArguments arguments)
   {
+    arguments.CheckHasTiledObjectName();
+
     transform.position = arguments.TiledRectBounds.center;
 
-    TransitionToPortalName = arguments.TryProperty("Transition To Portal");
-    TransitionToScene = arguments.TryProperty("Transition To Scene");
     PortalName = arguments.TiledObjectName;
   }
 }

@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
     };
 
 #if DEBUG
-    buttonNames.Concat(new string[] 
+    buttonNames.Concat(new string[]
       {
         "Menu Debug Toggle Available"
       });
@@ -215,7 +215,6 @@ public class GameManager : MonoBehaviour
 
   class DebugUpdateActionManager
   {
-    //
     private int _portalIndex;
 
     public void Update()
@@ -255,15 +254,24 @@ public class GameManager : MonoBehaviour
 
     private void LoadPortal(int indexIncrement)
     {
-      var portals = GameManager.Instance.FindSceneComponents<IScenePortal>().ToArray();
+      var portals = Instance
+        .FindSceneComponents<IScenePortal>()
+        .Where(p => p.CanSpawn())
+        .ToArray();
 
       _portalIndex = Repeat(_portalIndex + indexIncrement, portals.Length);
 
-      GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName = portals[_portalIndex].GetPortalName();
+      var portal = portals[_portalIndex];
+
+      GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName = portal.GetPortalName();
+
+      GhostStoryGameContext.Instance.CheckpointManager.CheckpointName = (portal is ISceneCheckpoint)
+        ? portal.GetPortalName()
+        : null;
 
       Logger.Info("Loading from portal " + GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName);
 
-      GameManager.Instance.SceneManager.OnSceneLoad();
+      Instance.SceneManager.OnSceneLoad();
     }
 
     private void LoadPreviousPortal()

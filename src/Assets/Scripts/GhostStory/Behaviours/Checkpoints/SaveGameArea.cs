@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets.Scripts.GhostStory.Behaviours;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public partial class Checkpoint : MonoBehaviour, IScenePortal
+public partial class SaveGameArea : MonoBehaviour, IScenePortal
 {
   private bool _isPlayerWithinBoundingBox;
 
@@ -12,6 +14,11 @@ public partial class Checkpoint : MonoBehaviour, IScenePortal
   public string GetPortalName()
   {
     return PortalName;
+  }
+
+  public bool HasName(string name)
+  {
+    return string.Equals(PortalName, name, StringComparison.OrdinalIgnoreCase);
   }
 
   public void SpawnPlayer()
@@ -83,5 +90,12 @@ public partial class Checkpoint : MonoBehaviour, IScenePortal
   void OnTriggerExit2D(Collider2D col)
   {
     _isPlayerWithinBoundingBox = false;
+  }
+
+  public bool CanSpawn()
+  {
+    var config = GetComponent<LevelObjectConfig>();
+
+    return GhostStoryGameContext.Instance.GameState.ActiveUniverse == config.Universe;
   }
 }

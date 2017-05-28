@@ -1,28 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public partial class WorldSwitchPortal : MonoBehaviour, IScenePortal
 {
   private bool _isPlayerWithinBoundingBox;
 
-  private bool _hasTriggeredSceneLoad;
-
   private PlayerControlHandler _realWorldFreezeControlHandler;
-
-  public string TransitionToScene;
-
-  public string TransitionToPortalName;
 
   public string PortalName;
 
   void Update()
   {
     if (_isPlayerWithinBoundingBox
-      && !_hasTriggeredSceneLoad
       && !GameManager.Instance.InputStateManager.IsVerticalAxisHandled()
       && GameManager.Instance.InputStateManager.IsUpAxisButtonDown(GameManager.Instance.InputSettings)
       && !GameManager.Instance.SceneManager.IsFading())
     {
-      Logger.UnityDebugLog("SWITCH");
       if (GhostStoryGameContext.Instance.IsAlternateWorldActivated())
       {
         SwitchToRealWorld();
@@ -46,6 +39,9 @@ public partial class WorldSwitchPortal : MonoBehaviour, IScenePortal
     GameManager.Instance.Player.EnableAndShow();
 
     GhostStoryGameContext.Instance.SwitchToAlternateWorld();
+
+    GhostStoryGameContext.Instance.GameState.SpawnPlayerName = PlayableCharacterNames.Kino.ToString();
+    GhostStoryGameContext.Instance.CheckpointManager.CheckpointName = PortalName;
   }
 
   private void SwitchToRealWorld()
@@ -62,16 +58,8 @@ public partial class WorldSwitchPortal : MonoBehaviour, IScenePortal
       GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).transform.position);
 
     GameManager.Instance.Player.RemoveControlHandler(_realWorldFreezeControlHandler);
-  }
 
-  void LoadScene()
-  {
-    GameManager.Instance.SceneManager.LoadScene(TransitionToScene, TransitionToPortalName, Vector3.zero);
-  }
-
-  void OnFadeOutCompleted()
-  {
-    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, "LoadScene");
+    GhostStoryGameContext.Instance.GameState.SpawnPlayerName = PlayableCharacterNames.Misa.ToString();
   }
 
   void OnEnable()
@@ -99,6 +87,11 @@ public partial class WorldSwitchPortal : MonoBehaviour, IScenePortal
     return PortalName;
   }
 
+  public bool HasName(string name)
+  {
+    return string.Equals(PortalName, name, StringComparison.OrdinalIgnoreCase);
+  }
+
   public void SpawnPlayer()
   {
     GameManager.Instance.Player.transform.position = transform.position;
@@ -112,5 +105,10 @@ public partial class WorldSwitchPortal : MonoBehaviour, IScenePortal
     GameManager.Instance.SceneManager.FadeIn();
 
     GameManager.Instance.SceneManager.FocusCameraOnPlayer();
+  }
+
+  public bool CanSpawn()
+  {
+    return true;
   }
 }

@@ -116,7 +116,7 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
   public void OnSceneLoad()
   {
     ActivatePlayer();
-    
+
     if (!IsLoading())
     {
       SpawnPlayer();
@@ -143,31 +143,42 @@ public class GhostStorySceneManager : MonoBehaviour, ISceneManager
   private void SpawnPlayerFromPortal()
   {
     this.FindSceneComponents<IScenePortal>()
-      .Single(p => p.GetPortalName() == _loadContext.PortalName)
+      .Single(p => p.HasName(_loadContext.PortalName))
       .SpawnPlayerFromPortal(_loadContext.FromPortalPosition);
   }
 
   private void SpawnPlayer()
   {
-    var portal = GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName;
-    if (string.IsNullOrEmpty(portal))
-    {
-      // this is for editor and when starting scenes directly from dev builds.
-      this.FindSceneComponents<IScenePortal>().First().SpawnPlayer();
-      return;
-    }
+    var portal = GetScenePortalFromGameState();
 
-    this.FindSceneComponents<IScenePortal>().Single(p => p.GetPortalName() == portal).SpawnPlayer();
+    portal.SpawnPlayer();
+  }
+
+  private IScenePortal GetScenePortalFromGameState()
+  {
+    var portalName = GetCurrentPortalName();
+
+#if FINAL
+    this.FindSceneComponents<IScenePortal>().Single(p => p.HasName(GetCurrentPortalName()));
+#else
+    return string.IsNullOrEmpty(portalName)
+      ? this.FindSceneComponents<IScenePortal>().Where(p => p.CanSpawn()).First() // when started from debugger
+      : this.FindSceneComponents<IScenePortal>().Single(p => p.HasName(portalName));
+#endif
+  }
+
+  private string GetCurrentPortalName()
+  {
+    return GhostStoryGameContext.Instance.CheckpointManager.HasCheckpoint()
+      ? GhostStoryGameContext.Instance.CheckpointManager.CheckpointName
+      : GhostStoryGameContext.Instance.GameState.SpawnPlayerPortalName;
   }
 
   private void ActivatePlayer()
   {
-    var playerName = GhostStoryGameContext.Instance.GameState.SpawnPlayerName;
-    if (string.IsNullOrEmpty(playerName))
-    {
-      // this is for editor and when starting scenes directly from dev builds.
-      playerName = GameManager.Instance.PlayableCharacters.Single(p => p.IsDefault).PlayerController.name;
-    }
+    var playerName = string.IsNullOrEmpty(GhostStoryGameContext.Instance.GameState.SpawnPlayerName)
+      ? GameManager.Instance.PlayableCharacters.Single(p => p.IsDefault).PlayerController.name
+      : GhostStoryGameContext.Instance.GameState.SpawnPlayerName;
 
     GameManager.Instance.ActivatePlayer(playerName, Vector3.zero);
   }

@@ -17,6 +17,9 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   [HideInInspector]
   public GhostStoryDefaultGameSettings GameSettings;
 
+  [HideInInspector]
+  public readonly GhostStoryCheckpointManager CheckpointManager = new GhostStoryCheckpointManager();
+
   private ILookup<Universe, GameObject> _gameObjectsByUniverse;
 
   private ILookup<Universe, IFreezable> _freezeableGameObjectsByUniverse;

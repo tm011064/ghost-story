@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 24/04/2017 05:43:02-->
+<!--Last exported: 25/05/2017 18:40:54-->
 <Tiled2Unity version="1.0.7.7">
   <AssignMaterial mesh="mesh_0001" material="blocks_192x128" />
   <AssignMaterial mesh="mesh_0002" material="Blocks_8x8" />
@@ -84,8 +84,8 @@
       <Property name="Commands" value="DestroyPrefab" />
       <Property name="Type" value="PrefabGroup" />
       <Property name="Universe" value="RealWorld" />
-      <GameObject name="Checkpoint" x="1704" y="-424" rotation="0" layer="">
-        <Property name="Prefab" value="Checkpoint" />
+      <GameObject name="Save Game Area" x="1704" y="-424" rotation="0" layer="">
+        <Property name="Prefab" value="Save Game Area" />
         <BoxCollider2D width="56" height="64" />
       </GameObject>
     </GameObject>

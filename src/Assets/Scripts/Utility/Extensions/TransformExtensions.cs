@@ -5,7 +5,7 @@ public static class TransformExtensions
 {
   public static GameObject GetChildGameObject(this Transform self, string name)
   {
-    var child = self.FindChild(name);
+    var child = self.Find(name);
 
     Logger.Assert(
       child != null,

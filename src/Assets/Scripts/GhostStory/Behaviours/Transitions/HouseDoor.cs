@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets.Scripts.GhostStory.Behaviours;
+using UnityEngine;
 
 public partial class HouseDoor : ScenePortal, IScenePortal
 {
@@ -34,8 +36,20 @@ public partial class HouseDoor : ScenePortal, IScenePortal
     return PortalName;
   }
 
+  public bool HasName(string name)
+  {
+    return string.Equals(PortalName, name, StringComparison.OrdinalIgnoreCase);
+  }
+
   private HouseDoorFadeInBehaviour GetHouseDoorFadeInBehaviour()
   {
     return GetComponentInChildren<HouseDoorFadeInBehaviour>();
+  }
+
+  public bool CanSpawn()
+  {
+    var config = GetComponent<LevelObjectConfig>();
+
+    return GhostStoryGameContext.Instance.GameState.ActiveUniverse == config.Universe;
   }
 }

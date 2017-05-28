@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 {
@@ -66,6 +67,11 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       return PortalName;
     }
 
+    public bool HasName(string name)
+    {
+      return string.Equals(PortalName, name, StringComparison.OrdinalIgnoreCase);
+    }
+
     public void SpawnPlayer()
     {
       GameManager.Instance.Player.transform.position = transform.position;
@@ -79,6 +85,13 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       GameManager.Instance.SceneManager.FadeIn();
 
       GameManager.Instance.SceneManager.FocusCameraOnPlayer();
+    }
+
+    public bool CanSpawn()
+    {
+      var config = GetComponent<LevelObjectConfig>();
+
+      return GhostStoryGameContext.Instance.GameState.ActiveUniverse == config.Universe;
     }
   }
 }

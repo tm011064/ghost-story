@@ -7,23 +7,30 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
   public class SceneTransitionInstantiationArguments : AbstractInstantiationArguments
   {
     public static SceneTransitionInstantiationArguments FromPrefabInstantiationArguments(
-      PrefabInstantiationArguments prefabInstantiationArguments)
+      PrefabInstantiationArguments arguments)
     {
-      var doorKey = (DoorKey)Enum.Parse(typeof(DoorKey), prefabInstantiationArguments.Properties["Door Key"]);
-      var doorLocation = (HorizontalDirection)Enum.Parse(typeof(HorizontalDirection), prefabInstantiationArguments.Properties["Transition Direction"]);
+      arguments.CheckHasTiledObjectName();
+      arguments.CheckHasProperties(
+        "Transition To Portal",
+        "Transition To Scene",
+        "Door Key",
+        "Transition Direction");
 
-      var cameraBounds = prefabInstantiationArguments.WrappingCameraBounds.FirstOrDefault();
+      var doorKey = (DoorKey)Enum.Parse(typeof(DoorKey), arguments.Properties["Door Key"]);
+      var doorLocation = (HorizontalDirection)Enum.Parse(typeof(HorizontalDirection), arguments.Properties["Transition Direction"]);
+
+      var cameraBounds = arguments.WrappingCameraBounds.FirstOrDefault();
 
       return new SceneTransitionInstantiationArguments
       {
         CameraBounds = cameraBounds,
         DoorKey = doorKey,
         DoorLocation = doorLocation,
-        Position = prefabInstantiationArguments.TiledRectBounds.center,
-        PrefabsAssetPathsByShortName = prefabInstantiationArguments.PrefabsAssetPathsByShortName,
-        TransitionToPortalName = prefabInstantiationArguments.Properties["Transition To Portal"],
-        TransitionToScene = prefabInstantiationArguments.Properties["Transition To Scene"],
-        PortalName = prefabInstantiationArguments.TiledObjectName,
+        Position = arguments.TiledRectBounds.center,
+        PrefabsAssetPathsByShortName = arguments.PrefabsAssetPathsByShortName,
+        TransitionToPortalName = arguments.Properties["Transition To Portal"],
+        TransitionToScene = arguments.Properties["Transition To Scene"],
+        PortalName = arguments.TiledObjectName,
       };
     }
 

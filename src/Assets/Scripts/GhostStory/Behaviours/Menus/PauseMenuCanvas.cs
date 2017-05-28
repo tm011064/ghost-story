@@ -159,12 +159,7 @@ public class PauseMenuCanvas : MonoBehaviour
   {
     if (GameManager.Instance.InputStateManager.IsButtonDown("Menu Exit"))
     {
-#if DEBUG // TODO (Important): remove eventually, we should not safe here
-      GhostStoryGameContext.Instance.SaveGameState(
-        GhostStoryGameContext.Instance.GameState);
-#endif
       GhostStoryGameContext.Instance.NotifyGameStateChanged();
-
       gameObject.SetActive(false);
       return;
     }
@@ -173,7 +168,6 @@ public class PauseMenuCanvas : MonoBehaviour
     if (GameManager.Instance.InputStateManager.IsButtonDown("Menu Debug Toggle Available"))
     {
       _focusedMenuItemGroup.OnSelectedItemToggleAvailable();
-
       return;
     }
 #endif
@@ -181,7 +175,6 @@ public class PauseMenuCanvas : MonoBehaviour
     if (GameManager.Instance.InputStateManager.IsButtonDown("Menu Select"))
     {
       _focusedMenuItemGroup.OnSelectedItemClick();
-
       return;
     }
 

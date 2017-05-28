@@ -327,7 +327,7 @@ public partial class RectangleMeshBuildScript : BasePlatform
 
   private void ApplyChangesToDependants()
   {
-    var movingPlatformCollisionTrigger = transform.FindChild("MovingPlatformCollisionTrigger");
+    var movingPlatformCollisionTrigger = transform.Find("MovingPlatformCollisionTrigger");
 
     if (movingPlatformCollisionTrigger != null)
     {
