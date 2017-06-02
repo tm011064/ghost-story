@@ -15,7 +15,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
     private BaseControlHandler _freezeControlHandler;
 
     private DoorTriggerEnterBehaviour _doorTriggerEnterBehaviour;
-
+    
     protected override void OnAwake()
     {
       FullScreenScrollSettings = GhostStoryGameContext.Instance.GameSettings.FullScreenScrollSettings;
@@ -83,7 +83,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       GhostStoryGameContext.Instance.RegisterCallback(
         .3f,
         () => GameManager.Instance.SceneManager.FadeIn(OnFadeInCompleted),
-        "FadeIn");
+        this.GetGameObjectUniverse());
     }
 
     public void TriggerScroll()
@@ -98,7 +98,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       GhostStoryGameContext.Instance.RegisterCallback(
         .8f,
         () => GameManager.Instance.SceneManager.FadeOut(() => OnFadeOutCompleted()),
-        "FadeOut");
+        this.GetGameObjectUniverse());
 
       ShowTransitionDoor();
     }
@@ -134,7 +134,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     void OnFadeInCompleted()
     {
-      GhostStoryGameContext.Instance.RegisterCallback(.25f, HideTransitionDoor, "HideTransitionDoor");
+      GhostStoryGameContext.Instance.RegisterCallback(.25f, HideTransitionDoor, this.GetGameObjectUniverse());
     }
 
     void StartCameraScroll()
@@ -157,7 +157,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     void OnFadeOutCompleted()
     {
-      GhostStoryGameContext.Instance.RegisterCallback(.4f, StartCameraScroll, "StartCameraScroll");
+      GhostStoryGameContext.Instance.RegisterCallback(.4f, StartCameraScroll, this.GetGameObjectUniverse());
     }
   }
 }

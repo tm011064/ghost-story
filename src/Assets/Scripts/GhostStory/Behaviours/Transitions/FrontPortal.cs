@@ -39,7 +39,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     void OnFadeOutCompleted()
     {
-      GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, "LoadScene");
+      GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, this.GetGameObjectUniverse());
     }
 
     void OnEnable()
@@ -89,9 +89,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     public bool CanSpawn()
     {
-      var config = GetComponent<LevelObjectConfig>();
-
-      return GhostStoryGameContext.Instance.GameState.ActiveUniverse == config.Universe;
+      return GhostStoryGameContext.Instance.GameState.ActiveUniverse == this.GetGameObjectUniverse();
     }
   }
 }

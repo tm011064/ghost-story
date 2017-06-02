@@ -324,7 +324,7 @@ public partial class LinearPath : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     }
   }
 
-  protected override void OnDisable()
+  void OnDisable()
   {
     if (_needsToUnSubscribeAttachedEvent)
     {
@@ -348,14 +348,10 @@ public partial class LinearPath : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     _isMoving = false;
 
     Logger.Info("Disabled moving linear path " + name);
-
-    base.OnDisable();
   }
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     Logger.Info("Enabled moving linear path " + name);
 
     if (_gameManager == null)

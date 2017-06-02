@@ -24,7 +24,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   private ILookup<Universe, IFreezable> _freezeableGameObjectsByUniverse;
 
-  private FreezableTimer _freezableTimer;
+  private IDictionary<Universe, FreezableTimer> _freezableTimersByUniverse;
 
   public event Action<GhostStoryGameState> GameStateChanged;
 
@@ -66,10 +66,13 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
   {
     GameSettings = gameObject.GetComponentOrThrow<GhostStoryDefaultGameSettings>();
 
-    _freezableTimer = gameObject.GetComponentOrThrow<FreezableTimer>();
+    _freezableTimersByUniverse = gameObject
+      .GetComponentsOrThrow<FreezableTimer>(
+        timer => string.Equals(timer.Name, "Real World", StringComparison.OrdinalIgnoreCase),
+        timer => string.Equals(timer.Name, "Alternate World", StringComparison.OrdinalIgnoreCase))
+      .ToDictionary(t => t.Name == "Real World" ? Universe.RealWorld : Universe.AlternateWorld, t => t);
 
-    var items = GameObject
-      .FindObjectsOfType<LevelObjectConfig>()
+    var items = FindObjectsOfType<LevelObjectConfig>()
       .Select(config => new
       {
         Keys = CreateKeys(config).ToArray(),
@@ -259,25 +262,37 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
 
   public void SwitchToRealWorld()
   {
-    _freezableTimer.Unfreeze();
+    _freezableTimersByUniverse[Universe.RealWorld].Unfreeze();
+    _freezableTimersByUniverse[Universe.AlternateWorld].Freeze();
 
     SwitchUniverse(Universe.RealWorld);
   }
 
   public void SwitchToAlternateWorld()
   {
-    _freezableTimer.Freeze();
+    _freezableTimersByUniverse[Universe.RealWorld].Freeze();
+    _freezableTimersByUniverse[Universe.AlternateWorld].Unfreeze();
 
     SwitchUniverse(Universe.AlternateWorld);
   }
 
-  public void RegisterCallback(float delay, Action action, string name)
+  public static string CreateCallbackName(Type type, string methodName)
   {
-    _freezableTimer.RegisterCallback(delay, action, name);
+    return type.Name + "::" + methodName;
   }
 
-  public void CancelCallback(string name)
+  public static string CreateUniqueCallbackName(Type type, string methodName)
   {
-    _freezableTimer.CancelCallback(name);
+    return type.Name + "::" + methodName + "::" + Guid.NewGuid();
+  }
+
+  public void RegisterCallback(float delay, Action action, Universe universe, string name = null)
+  {
+    _freezableTimersByUniverse[universe].RegisterCallback(delay, action, name);
+  }
+
+  public void CancelCallback(Universe universe, string name)
+  {
+    _freezableTimersByUniverse[universe].CancelCallback(name);
   }
 }

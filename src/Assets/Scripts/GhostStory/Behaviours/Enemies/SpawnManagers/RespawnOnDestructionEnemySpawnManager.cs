@@ -23,7 +23,11 @@ public class RespawnOnDestructionEnemySpawnManager : AbstractEnemySpawnManager
 
     try
     {
-      GhostStoryGameContext.Instance.RegisterCallback(RespawnOnDestroyDelay, Spawn, "Spawn");
+      GhostStoryGameContext.Instance.RegisterCallback(
+        RespawnOnDestroyDelay, 
+        Spawn,
+        this.GetGameObjectUniverse(), 
+        SpawnTimerName);
     }
     catch (MissingReferenceException)
     {

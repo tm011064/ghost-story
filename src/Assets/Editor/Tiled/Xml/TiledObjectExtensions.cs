@@ -79,5 +79,10 @@ namespace Assets.Editor.Tiled.Xml
     {
       return !tiledObject.Gid.HasValue;
     }
+
+    public static bool IsType(this TiledObject tiledObject, string typeName)
+    {
+      return string.Equals(tiledObject.Type, typeName, StringComparison.OrdinalIgnoreCase);
+    }
   }
 }

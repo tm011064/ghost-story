@@ -5,8 +5,8 @@ using System.Linq;
 using Assets.Editor.Tiled.GameObjectFactories;
 using Assets.Editor.Tiled.Xml;
 using Tiled2Unity;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Editor.Tiled.GhostStory
 {
@@ -41,7 +41,7 @@ namespace Assets.Editor.Tiled.GhostStory
 
     private void AttachCustomObjects(GameObject prefab)
     {
-      var scene = EditorSceneManager.GetActiveScene();
+      var scene = SceneManager.GetActiveScene();
 
       var directory = Path.GetDirectoryName(scene.path);
 
@@ -66,7 +66,8 @@ namespace Assets.Editor.Tiled.GhostStory
           new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
           new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
           new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName)
+          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
+          new GhostStoryTimerPlatformFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName)
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);

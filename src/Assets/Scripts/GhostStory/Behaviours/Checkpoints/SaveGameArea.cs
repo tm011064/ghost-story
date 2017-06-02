@@ -69,7 +69,7 @@ public partial class SaveGameArea : MonoBehaviour, IScenePortal
 
   void OnFadeOutCompleted()
   {
-    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, "LoadScene");
+    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, this.GetGameObjectUniverse());
   }
 
   void OnEnable()

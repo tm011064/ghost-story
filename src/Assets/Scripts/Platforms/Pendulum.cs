@@ -95,10 +95,8 @@ public partial class Pendulum : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     _platform.transform.position = rotated;
   }
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     _objectPoolingManager = ObjectPoolingManager.Instance;
 
     _startAngleRad = StartAngle * Mathf.Deg2Rad;
@@ -131,11 +129,9 @@ public partial class Pendulum : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     _nextStartTime = Time.time + StopDuration;
   }
 
-  protected override void OnDisable()
+  void OnDisable()
   {
     _objectPoolingManager.Deactivate(_platform);
-
-    base.OnDisable();
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()

@@ -30,10 +30,8 @@
     }
   }
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     if (AutoStart)
     {
       StartForwardMovement();

@@ -10,9 +10,10 @@ GameObject:
   - component: {fileID: 433718}
   - component: {fileID: 114000010915316208}
   - component: {fileID: 114000010884742090}
-  - component: {fileID: 114000012552585934}
   - component: {fileID: 114942422582685766}
   - component: {fileID: 114849583512686296}
+  - component: {fileID: 114691409931681172}
+  - component: {fileID: 114899873936556662}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -101,7 +102,7 @@ MonoBehaviour:
       TotalEnemyDeathAnimations: 12
   InputSettings:
     AxisSensitivityThreshold: 0.2
---- !u!114 &114000012552585934
+--- !u!114 &114691409931681172
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -116,6 +117,7 @@ MonoBehaviour:
   FreezeEndTime: 0
   FreezeDuration: 0
   IsFrozen: 0
+  Name: Real World
 --- !u!114 &114849583512686296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -162,6 +164,22 @@ MonoBehaviour:
   CameraSettings:
     VerticalCameraFollowMode: 1
     HorizontalCameraFollowMode: 1
+--- !u!114 &114899873936556662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 168078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb5e06b49e22894f98dd590c83e13f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FreezeStartTime: 0
+  FreezeEndTime: 0
+  FreezeDuration: 0
+  IsFrozen: 0
+  Name: Alternate World
 --- !u!114 &114942422582685766
 MonoBehaviour:
   m_ObjectHideFlags: 1

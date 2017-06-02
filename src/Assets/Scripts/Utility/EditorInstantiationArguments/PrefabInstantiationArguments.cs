@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-
-public class CameraTriggerBounds // TODO (Roman): move
-{
-  public Bounds CameraBounds;
-
-  public Bounds TriggerBounds;
-}
-
 public class PrefabInstantiationArguments : AbstractInstantiationArguments
 {
   public Bounds TiledRectBounds;

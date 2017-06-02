@@ -20,7 +20,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       {
         var assetPath = arguments.PrefabsAssetPathsByShortName["Door Scroller"];
         var asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
-        var scrollerGameObject = GameObject.Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
+        var scrollerGameObject = Instantiate(asset, Vector3.zero, Quaternion.identity) as GameObject;
 
         scrollerGameObject.layer = LayerMask.NameToLayer("PlayerTriggerMask");
         scrollerGameObject.transform.parent = gameObject.transform;
@@ -37,12 +37,12 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
         scrollerGameObject
           .GetComponent<DoorCameraScroller>()
           .Instantiate(new DoorInstantiationArguments
-            {
-              CameraBounds = intersectingCameraBounds,
-              TriggerBounds = triggerBounds,
-              DoorKey = DoorKey,
-              DoorLocation = doorLocation
-            });
+          {
+            CameraBounds = intersectingCameraBounds,
+            TriggerBounds = triggerBounds,
+            DoorKey = DoorKey,
+            DoorLocation = doorLocation
+          });
       }
     }
 

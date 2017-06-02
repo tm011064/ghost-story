@@ -1,10 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// A character controller controls all of a character's behavior. It is responsible for managing a
-/// character's <see cref="BaseControlHandler"/>s and perform game loop updates. 
-/// </summary>
 public class BaseCharacterController : BaseMonoBehaviour
 {
   [HideInInspector]

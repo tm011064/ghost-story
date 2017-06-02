@@ -8,7 +8,7 @@ public class ContinuousEnemySpawnManager : AbstractEnemySpawnManager
   {
     if (SpawnWhenBecameVisible)
     {
-      StopVisibilityChecks(); // TODO (Roman): check whether we need to avoid multiple calls here
+      StopVisibilityChecks();
     }
 
     if (ContinuousSpawnInterval <= 0)
@@ -16,6 +16,10 @@ public class ContinuousEnemySpawnManager : AbstractEnemySpawnManager
       throw new ArgumentException("ContinuousSpawnInterval");
     }
 
-    GhostStoryGameContext.Instance.RegisterCallback(ContinuousSpawnInterval, Spawn, "Spawn");
+    GhostStoryGameContext.Instance.RegisterCallback(
+      ContinuousSpawnInterval,
+      Spawn,
+      this.GetGameObjectUniverse(),
+      SpawnTimerName);
   }
 }

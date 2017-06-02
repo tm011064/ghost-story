@@ -17,8 +17,21 @@ namespace Assets.Editor.Tiled.Xml
     {
       return group
         .Properties
-        .First(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+        .Single(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase))
         .Value;
+    }
+
+    public static int GetPropertyValueAsInt32(this PropertyGroup group, string propertyName)
+    {
+      var value = group.GetPropertyValue(propertyName);
+
+      int parsed;
+      if (int.TryParse(value, out parsed))
+      {
+        return parsed;
+      }
+
+      throw new FormatException("Unable to parse value '" + value + "' from property '" + propertyName + "'");
     }
   }
 }

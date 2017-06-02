@@ -32,8 +32,6 @@ public class HouseBeetleControlHandler : BaseControlHandler
 
   protected override ControlHandlerAfterUpdateStatus DoUpdate()
   {
-    Logger.UnityDebugLog("UPDATE", Time.deltaTime);
-
     var playerDelta = GameManager.Instance.Player.transform.position - _enemy.transform.position;
     var safeDeltaTime = Mathf.Min(Time.deltaTime, .02f);
 

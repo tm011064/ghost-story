@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.GhostStory.Behaviours.Transitions;
+﻿using Assets.Scripts.GhostStory.Behaviours;
+using Assets.Scripts.GhostStory.Behaviours.Transitions;
 using UnityEngine;
 
 public class HouseDoorFadeOutBehaviour : MonoBehaviour
@@ -58,7 +59,7 @@ public class HouseDoorFadeOutBehaviour : MonoBehaviour
     GhostStoryGameContext.Instance.RegisterCallback(
       .8f,
       () => GameManager.Instance.SceneManager.FadeOut(() => OnFadeOutCompleted()),
-      "FadeOut");
+      this.GetGameObjectUniverse());
 
     ShowTransitionDoor();
   }
@@ -81,6 +82,6 @@ public class HouseDoorFadeOutBehaviour : MonoBehaviour
 
   void OnFadeOutCompleted()
   {
-    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, "LoadScene");
+    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, this.GetGameObjectUniverse());
   }
 }

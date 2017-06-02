@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class GameObjectExtensions
@@ -18,6 +20,32 @@ public static class GameObjectExtensions
     }
 
     return component;
+  }
+
+  public static IEnumerable<TComponent> GetComponentsOrThrow<TComponent>(this GameObject self, params Func<TComponent, bool>[] conditions)
+  {
+    var components = self.GetComponents<TComponent>();
+
+    var untriggeredConditions = conditions.ToList();
+
+    foreach (var component in components)
+    {
+      foreach (var condition in conditions)
+      {
+        if (condition(component))
+        {
+          untriggeredConditions.Remove(condition);
+
+          yield return component;
+          break;
+        }
+      }
+    }
+
+    if (untriggeredConditions.Any())
+    {
+      throw new MissingComponentException("Not all expected components of type '" + typeof(TComponent).ToString() + "' found at game object '" + self.name + "'");
+    }
   }
 
   public static void AttachChildren(this GameObject self, IEnumerable<GameObject> children)

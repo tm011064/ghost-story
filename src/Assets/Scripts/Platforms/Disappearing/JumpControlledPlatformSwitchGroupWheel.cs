@@ -22,10 +22,8 @@ public partial class JumpControlledPlatformSwitchGroupWheel : SpawnBucketItemBeh
 
   protected PlayerController _playerController;
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     if (PlatformGroups.Count < 1)
     {
       throw new ArgumentOutOfRangeException("There must be at least two platform position groups.");
@@ -108,7 +106,7 @@ public partial class JumpControlledPlatformSwitchGroupWheel : SpawnBucketItemBeh
     }
   }
 
-  protected override void OnDisable()
+  void OnDisable()
   {
     for (var i = 0; i < PlatformGroups.Count; i++)
     {
@@ -124,8 +122,6 @@ public partial class JumpControlledPlatformSwitchGroupWheel : SpawnBucketItemBeh
     }
 
     _playerController.JumpedThisFrame -= OnPlayerJumpedThisFrame;
-
-    base.OnDisable();
   }
 
   private void SwitchGroups(int enabledIndex)

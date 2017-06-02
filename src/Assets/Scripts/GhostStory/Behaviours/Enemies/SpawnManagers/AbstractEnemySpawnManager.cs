@@ -22,11 +22,25 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
 
   private bool _isEnemyToSpawnPrefabLoaded;
 
+  protected string SpawnTimerName = GhostStoryGameContext.CreateUniqueCallbackName(
+    typeof(AbstractEnemySpawnManager), "Spawn");
+
+  private AbstractVisibilityCheckManager _visibilityCheckManager;
+
   void Awake()
   {
     if (!_isEnemyToSpawnPrefabLoaded)
     {
       LoadEnemyToSpawnPrefab();
+    }
+  }
+
+  private void OnDestroy()
+  {
+    if (_visibilityCheckManager != null)
+    {
+      _visibilityCheckManager.Dispose();
+      _visibilityCheckManager = null;
     }
   }
 
@@ -88,24 +102,48 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
   {
     if (SpawnOnSceneLoad)
     {
-      GhostStoryGameContext.Instance.RegisterCallback(0, Spawn, "Spawn");
+      GhostStoryGameContext.Instance.RegisterCallback(0, Spawn, this.GetGameObjectUniverse(), SpawnTimerName);
     }
 
     if (SpawnWhenBecameVisible)
     {
-      var collider = this.GetComponentOrThrow<Collider2D>();
-      StartVisibilityChecks(.1f, collider);
+      StartVisibilityChecks();
     }
   }
 
-  protected override void OnGotVisible()
+  protected void StartVisibilityChecks()
+  {
+    if (_visibilityCheckManager != null)
+    {
+      _visibilityCheckManager.Dispose();
+    }
+
+    var collider = this.GetComponentOrThrow<Collider2D>();
+
+    _visibilityCheckManager = ColliderVisibilityCheckManager.Create(
+      collider,
+      this.GetGameObjectUniverse(),
+      OnGotVisible);
+
+    _visibilityCheckManager.StartChecks();
+  }
+
+  protected void StopVisibilityChecks()
+  {
+    if (_visibilityCheckManager != null)
+    {
+      _visibilityCheckManager.StopChecks();
+    }
+  }
+
+  private void OnGotVisible()
   {
     if (SpawnedEnemies.Any())
     {
       return;
     }
 
-    GhostStoryGameContext.Instance.RegisterCallback(0, Spawn, "Spawn");
+    GhostStoryGameContext.Instance.RegisterCallback(0, Spawn, this.GetGameObjectUniverse(), SpawnTimerName);
   }
 
   void OnEnemyControllerGotDisabled(BaseMonoBehaviour obj)
@@ -134,7 +172,7 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
     _isDisabling = false;
   }
 
-  protected override void OnDisable()
+  protected void OnDisable()
   {
     Logger.Trace("Disabling EnemySpawnManager {0}", name);
 
@@ -152,9 +190,7 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
       _isDisabling = false;
     }
 
-    GhostStoryGameContext.Instance.CancelCallback("Spawn");
-
-    base.OnDisable();
+    GhostStoryGameContext.Instance.CancelCallback(this.GetGameObjectUniverse(), SpawnTimerName);
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()

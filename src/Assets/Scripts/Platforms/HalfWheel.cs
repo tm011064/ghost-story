@@ -85,10 +85,8 @@ public partial class HalfWheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     }
   }
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     _objectPoolingManager = ObjectPoolingManager.Instance;
 
     Logger.Info("Enabling half wheel " + name);
@@ -118,13 +116,11 @@ public partial class HalfWheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     _nextStartTime = Time.time + StopDuration;
   }
 
-  protected override void OnDisable()
+  void OnDisable()
   {
     Logger.Info("Disabling half wheel " + name);
 
     _objectPoolingManager.Deactivate(_platform);
-
-    base.OnDisable();
   }
 
   public IEnumerable<ObjectPoolRegistrationInfo> GetObjectPoolRegistrationInfos()

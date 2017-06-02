@@ -14,10 +14,8 @@ public partial class JumpControlledPlatformSwitchGroup : SpawnBucketItemBehaviou
 
   protected PlayerController _playerController;
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     _playerController = GameManager.Instance.Player;
 
     if (_objectPoolingManager == null)
@@ -55,7 +53,7 @@ public partial class JumpControlledPlatformSwitchGroup : SpawnBucketItemBehaviou
     _playerController.JumpedThisFrame += OnPlayerJumpedThisFrame;
   }
 
-  protected override void OnDisable()
+  void OnDisable()
   {
     for (var i = 0; i < PlatformGroupPositions.Count; i++)
     {
@@ -71,8 +69,6 @@ public partial class JumpControlledPlatformSwitchGroup : SpawnBucketItemBehaviou
     }
 
     _playerController.JumpedThisFrame -= OnPlayerJumpedThisFrame;
-
-    base.OnDisable();
   }
 
   private void SwitchGroups(int enabledIndex)

@@ -13,6 +13,8 @@ public class FreezableTimer : MonoBehaviour
 
   public bool IsFrozen;
 
+  public string Name;
+
   private readonly List<CallbackInfo> _callbacks = new List<CallbackInfo>();
 
   public void Reset()

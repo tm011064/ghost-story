@@ -74,7 +74,7 @@ public partial class BreakablePlatform : SpawnBucketItemBehaviour, IObjectPoolBe
     }
   }
 
-  protected override void OnDisable()
+  void OnDisable()
   {
     for (var i = _spawnedObjects.Count - 1; i >= 0; i--)
     {
@@ -84,14 +84,10 @@ public partial class BreakablePlatform : SpawnBucketItemBehaviour, IObjectPoolBe
     _spawnedObjects.Clear();
 
     _nextSpawnTime = -1f;
-
-    base.OnDisable();
   }
 
-  protected override void OnEnable()
+  void OnEnable()
   {
-    base.OnEnable();
-
     _spawnLocation = transform.position;
 
     if (_objectPoolingManager == null)
