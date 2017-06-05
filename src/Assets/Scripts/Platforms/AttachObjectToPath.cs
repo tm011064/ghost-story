@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttachObjectToPath : BaseMonoBehaviour, IObjectPoolBehaviour
+public class AttachObjectToPath : MonoBehaviour, IObjectPoolBehaviour
 {
   public GameObject AttachedObject;
 

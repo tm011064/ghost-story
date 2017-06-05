@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(EdgeCollider2D))]
-public class MomentumKeepingPortal : BaseMonoBehaviour
+public class MomentumKeepingPortal : MonoBehaviour
 {
   [Tooltip("The other end of the portal where the player gets ejected.")]
   public GameObject ConnectedPortal;

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class BaseCharacterController : BaseMonoBehaviour
+public class BaseCharacterController : MonoBehaviour
 {
   [HideInInspector]
   public CharacterPhysicsManager CharacterPhysicsManager;

@@ -59,7 +59,7 @@ public class HouseDoorFadeOutBehaviour : MonoBehaviour
     GhostStoryGameContext.Instance.RegisterCallback(
       .8f,
       () => GameManager.Instance.SceneManager.FadeOut(() => OnFadeOutCompleted()),
-      this.GetGameObjectUniverse());
+      HouseDoor.GetGameObjectUniverse());
 
     ShowTransitionDoor();
   }
@@ -82,6 +82,6 @@ public class HouseDoorFadeOutBehaviour : MonoBehaviour
 
   void OnFadeOutCompleted()
   {
-    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, this.GetGameObjectUniverse());
+    GhostStoryGameContext.Instance.RegisterCallback(.4f, LoadScene, HouseDoor.GetGameObjectUniverse());
   }
 }

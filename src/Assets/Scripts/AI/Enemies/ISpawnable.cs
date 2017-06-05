@@ -7,5 +7,5 @@ public interface ISpawnable : IFreezable
 
   void Reset(IDictionary<string, string> options);
 
-  event Action<BaseMonoBehaviour> GotDisabled;
+  event EventHandler<GameObjectEventArgs> GotDisabled;
 }

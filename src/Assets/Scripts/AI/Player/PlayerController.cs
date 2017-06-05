@@ -58,10 +58,6 @@ public partial class PlayerController : BaseCharacterController
   [HideInInspector]
   public PlayerHealthBehaviour Health;
 
-  private RaycastHit2D _lastControllerColliderHit;
-
-  private Vector3 _velocity;
-
   private WallJumpControlHandler _reusableWallJumpControlHandler;
 
   private WallJumpEvaluationControlHandler _reusableWallJumpEvaluationControlHandler;

@@ -2,7 +2,6 @@
 
 using System;
 using Assets.Scripts.GhostStory.Behaviours.Transitions;
-using UnityEditor;
 using UnityEngine;
 
 public partial class HouseDoor : IInstantiable<PrefabInstantiationArguments>
@@ -35,7 +34,7 @@ public partial class HouseDoor : IInstantiable<PrefabInstantiationArguments>
   private void AddFadeInBehaviour(SceneTransitionInstantiationArguments arguments)
   {
     var houseDoorFadeInBehaviour = GetComponentInChildren<HouseDoorFadeInBehaviour>();
-    
+
     houseDoorFadeInBehaviour.DoorLocation = arguments.DoorLocation;
     houseDoorFadeInBehaviour.Size = arguments.CameraBounds.size;
     houseDoorFadeInBehaviour.transform.position = arguments.CameraBounds.center;

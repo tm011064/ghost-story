@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MovingEnemyController : BaseCharacterController, IPlayerCollidable, ISpawnable
 {
   [HideInInspector]
   public Animator Animator;
+
+  public event EventHandler<GameObjectEventArgs> GotDisabled;
 
   void Awake()
   {
@@ -17,6 +20,15 @@ public class MovingEnemyController : BaseCharacterController, IPlayerCollidable,
     Animator = GetComponent<Animator>();
 
     OnAwake();
+  }
+
+  protected virtual void OnDisable()
+  {
+    var handler = GotDisabled;
+    if (handler != null)
+    {
+      handler(this, new GameObjectEventArgs(gameObject));
+    }
   }
 
   public void FlipSpriteHorizontally()

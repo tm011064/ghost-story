@@ -14,8 +14,6 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
 
   public bool SpawnOnSceneLoad;
 
-  private bool _isDisabling;
-
   private GameObject _enemyToSpawnPrefab;
 
   private ISpawnable _spawnablePrefabComponent;
@@ -50,8 +48,8 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
 
     if (_spawnablePrefabComponent == null)
     {
-      throw new MissingReferenceException("Enemy spawn manager '" + name
-        + "' does not contain a child object that inmplements an ISpawnable interface");
+      throw new MissingReferenceException(
+        "Enemy spawn manager '" + name + "' does not contain a child object that inmplements an ISpawnable interface");
     }
 
     _enemyToSpawnPrefab = (_spawnablePrefabComponent as MonoBehaviour).gameObject;
@@ -79,11 +77,27 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
 
     spawnable.Reset(SpawnArguments.ToDictionary(c => c.Key, c => c.Value));
 
-    spawnable.GotDisabled += OnEnemyControllerGotDisabled;
+    spawnable.GotDisabled += OnSpawnableDisabled;
 
     SpawnedEnemies.Add(spawnedEnemy);
 
     OnSpawnCompleted();
+  }
+
+  private void OnSpawnableDisabled(object sender, GameObjectEventArgs args)
+  {
+    UnsubscribeSpawnableDisabled(args.GameObject);
+
+    SpawnedEnemies.Remove(args.GameObject);
+
+    OnEnemyDisabled();
+  }
+
+  private void UnsubscribeSpawnableDisabled(GameObject obj)
+  {
+    var spawnable = obj.GetComponent<ISpawnable>();
+
+    spawnable.GotDisabled -= OnSpawnableDisabled;
   }
 
   protected virtual void OnSpawnCompleted()
@@ -146,48 +160,20 @@ public abstract partial class AbstractEnemySpawnManager : SpawnBucketItemBehavio
     GhostStoryGameContext.Instance.RegisterCallback(0, Spawn, this.GetGameObjectUniverse(), SpawnTimerName);
   }
 
-  void OnEnemyControllerGotDisabled(BaseMonoBehaviour obj)
-  {
-    obj.GotDisabled -= OnEnemyControllerGotDisabled;
-
-    if (!_isDisabling)
-    {
-      SpawnedEnemies.Remove(obj.gameObject);
-
-      OnEnemyDisabled();
-    }
-  }
-
-  public void DeactivateSpawnedObjects()
-  {
-    _isDisabling = true;
-
-    for (var i = SpawnedEnemies.Count - 1; i >= 0; i--)
-    {
-      ObjectPoolingManager.Instance.Deactivate(SpawnedEnemies[i]);
-
-      SpawnedEnemies.RemoveAt(i);
-    }
-
-    _isDisabling = false;
-  }
-
   protected void OnDisable()
   {
     Logger.Trace("Disabling EnemySpawnManager {0}", name);
 
     if (DestroySpawnedEnemiesWhenGettingDisabled)
     {
-      _isDisabling = true;
-
       for (var i = SpawnedEnemies.Count - 1; i >= 0; i--)
       {
+        UnsubscribeSpawnableDisabled(SpawnedEnemies[i]);
+
         ObjectPoolingManager.Instance.Deactivate(SpawnedEnemies[i]);
 
         SpawnedEnemies.RemoveAt(i);
       }
-
-      _isDisabling = false;
     }
 
     GhostStoryGameContext.Instance.CancelCallback(this.GetGameObjectUniverse(), SpawnTimerName);

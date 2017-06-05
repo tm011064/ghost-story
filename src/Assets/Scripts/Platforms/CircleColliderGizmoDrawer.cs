@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CircleColliderGizmoDrawer : BaseMonoBehaviour
+public class CircleColliderGizmoDrawer : MonoBehaviour
 {
   public Color OutlineGizmoColor = Color.white;
 

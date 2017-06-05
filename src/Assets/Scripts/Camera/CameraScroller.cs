@@ -16,6 +16,8 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
 
   protected ScrollStatus Status = ScrollStatus.Idle;
 
+  protected CameraController CameraController;
+
   protected void Awake()
   {
     CameraController = Camera.main.GetComponent<CameraController>();

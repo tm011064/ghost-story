@@ -21,7 +21,7 @@ public class Cockroach : GhostStoryMovingEnemyController
   {
     var collider = GetComponent<BoxCollider2D>();
 
-    var bounds = GetBounds(collider);
+    var bounds = collider.GetBoundsWhenDisabled();
 
     return !bounds.Intersects(GameManager.Instance.Player.EnemyBoxCollider.bounds);
   }
@@ -36,11 +36,11 @@ public class Cockroach : GhostStoryMovingEnemyController
 
     switch (Location)
     {
-      case Cockroach.StartLocation.Ceiling:
+      case StartLocation.Ceiling:
         ResetControlHandlers(new CeilingCockroachControlHandler(this, movementSettings));
         break;
 
-      case Cockroach.StartLocation.Floor:
+      case StartLocation.Floor:
         ResetControlHandlers(new FloorCockroachControlHandler(this, movementSettings));
         break;
     }

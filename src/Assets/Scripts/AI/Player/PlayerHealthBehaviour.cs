@@ -1,6 +1,7 @@
 ﻿using System;
+using UnityEngine;
 
-public class PlayerHealthBehaviour : BaseMonoBehaviour
+public class PlayerHealthBehaviour : MonoBehaviour
 {
   public int HealthUnits = 10;
 

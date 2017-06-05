@@ -26,7 +26,7 @@ public class HouseBeetle : GhostStoryMovingEnemyController
   {
     var collider = GetComponent<BoxCollider2D>();
 
-    var bounds = GetBounds(collider);
+    var bounds = collider.GetBoundsWhenDisabled();
 
     return !bounds.Intersects(GameManager.Instance.Player.EnemyBoxCollider.bounds);
   }

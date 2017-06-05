@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class CameraMovementSettingsBehaviour : BaseMonoBehaviour
+public abstract class CameraMovementSettingsBehaviour : MonoBehaviour
 {
   public HorizontalCamereaWindowSettings HorizontalCamereaWindowSettings;
 

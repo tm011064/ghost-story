@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : BaseCharacterController, IPlayerCollidable, ISpawnable
@@ -6,11 +7,22 @@ public class EnemyController : BaseCharacterController, IPlayerCollidable, ISpaw
   [HideInInspector]
   public Animator Animator;
 
+  public event EventHandler<GameObjectEventArgs> GotDisabled;
+
   void Awake()
   {
     Animator = GetComponent<Animator>();
 
     OnAwake();
+  }
+
+  protected virtual void OnDisable()
+  {
+    var handler = GotDisabled;
+    if (handler != null)
+    {
+      handler(this, new GameObjectEventArgs(gameObject));
+    }
   }
 
   public void AdjustVerticalSpriteScale(Direction direction)

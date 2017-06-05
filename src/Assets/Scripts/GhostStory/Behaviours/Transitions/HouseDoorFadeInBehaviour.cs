@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.GhostStory.Behaviours;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HouseDoorFadeInBehaviour : CameraScroller
 {
@@ -151,7 +150,7 @@ public class HouseDoorFadeInBehaviour : CameraScroller
     GhostStoryGameContext.Instance.RegisterCallback(
       .3f,
       () => GameManager.Instance.SceneManager.FadeIn(OnFadeInCompleted),
-      this.GetGameObjectUniverse());
+      HouseDoor.GetGameObjectUniverse());
 
     CameraController.Reset();
 
@@ -162,6 +161,6 @@ public class HouseDoorFadeInBehaviour : CameraScroller
 
   void OnFadeInCompleted()
   {
-    GhostStoryGameContext.Instance.RegisterCallback(.25f, HideTransitionDoor, this.GetGameObjectUniverse());
+    GhostStoryGameContext.Instance.RegisterCallback(.25f, HideTransitionDoor, HouseDoor.GetGameObjectUniverse());
   }
 }
