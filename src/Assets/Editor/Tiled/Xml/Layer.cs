@@ -3,7 +3,7 @@
 namespace Assets.Editor.Tiled.Xml
 {
   [XmlRoot(ElementName = "layer")]
-  public class Layer
+  public class Layer : IHasPropertyGroup
   {
     [XmlElement(ElementName = "data")]
     public Data Data { get; set; }

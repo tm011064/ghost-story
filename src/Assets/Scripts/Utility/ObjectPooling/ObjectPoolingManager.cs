@@ -55,22 +55,42 @@ public class ObjectPoolingManager
     }
   }
 
-  public bool RegisterPool(GameObject objToPool, int initialPoolSize, int maxPoolSize)
+  public void RegisterPoolOrThrow(GameObject objToPool, int initialPoolSize, int maxPoolSize)
   {
     if (_objectPools.ContainsKey(objToPool.name))
     {
-      return false;
+      throw new InvalidOperationException("Prefab " + objToPool.name + " could not be registered at pool as it already exists");
     }
-    else
+
+    var objectPool = ObjectPool.Create(objToPool, initialPoolSize, maxPoolSize);
+
+    _objectPools.Add(objToPool.name, objectPool);
+
+    Logger.Info("Registered " + objToPool.name + " at object pool manager");
+  }
+
+  public void RegisterOrExpandPool(GameObject objToPool, int initialPoolSize, int maxPoolSize = -1)
+  {
+    ObjectPool pool;
+    if (!_objectPools.TryGetValue(objToPool.name, out pool))
     {
-      var objectPool = new ObjectPool(objToPool, initialPoolSize, maxPoolSize);
+      var objectPool = ObjectPool.Create(objToPool, initialPoolSize, maxPoolSize);
 
       _objectPools.Add(objToPool.name, objectPool);
 
       Logger.Info("Registered " + objToPool.name + " at object pool manager");
 
-      return true;
+      return;
     }
+
+    pool.Expand(initialPoolSize, maxPoolSize);
+
+    Logger.Info("Expanded pool for " + objToPool.name);
+  }
+
+  public bool TryGetObject(string objName, Vector3 position, out GameObject gameObject)
+  {
+    return _objectPools[objName].TryGetObject(position, out gameObject);
   }
 
   public GameObject GetObject(string objName, Vector3 position)

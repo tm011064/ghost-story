@@ -44,10 +44,10 @@ public partial class TimerPlatformControllerBehaviour : MonoBehaviour
 
   private void RegisterShow(int index)
   {
-    // TODO (Roman): if alternate world, use freezable timer, otherwise normal timer
     GhostStoryGameContext.Instance.RegisterCallback(
       Interval,
-      () => Show(index), this.GetGameObjectUniverse(),
+      () => Show(index),
+      this.GetGameObjectUniverse(),
       _showNextTimerName);
   }
 

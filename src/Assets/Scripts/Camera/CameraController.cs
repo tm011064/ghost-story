@@ -75,8 +75,8 @@ public partial class CameraController : MonoBehaviour
     var zoomPercentage = Camera.main.orthographicSize / defaultOrthographicSize;
 
     return new Vector2(
-      (float)TargetScreenSize.x * zoomPercentage,
-      (float)TargetScreenSize.y * zoomPercentage);
+      TargetScreenSize.x * zoomPercentage,
+      TargetScreenSize.y * zoomPercentage);
   }
 
   public bool IsPointVisible(Vector2 point)
@@ -119,6 +119,7 @@ public partial class CameraController : MonoBehaviour
     _verticalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateVertical(
       this,
       _cameraMovementSettingsManager.ActiveSettings);
+
     _horizontalCameraPositionCalculator = CamerPositionCalculatorFactory.CreateHorizontal(
       this,
       _cameraMovementSettingsManager.ActiveSettings);

@@ -10,9 +10,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     public DeathHazardFactory(
       GameObject root,
       Map map,
-      Dictionary<string, string> prefabLookup,
-      Dictionary<string, ObjectType> objectTypesByName)
-      : base(root, map, prefabLookup, objectTypesByName)
+      Dictionary<string, string> prefabLookup)
+      : base(root, map, prefabLookup)
     {
     }
 
@@ -30,8 +29,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
       var collidersGameObject = new GameObject("Death Hazard Colliders");
       collidersGameObject.transform.position = Vector3.zero;
 
-      int padding;
-      layerConfig.TiledLayer.TryGetProperty("Collider Padding", out padding);
+      var padding = layerConfig.TiledLayer.TryGetPropertyAsInt32("Collider Padding", 0);
 
       var colliders = vertices.GetColliderEdges(padding);
 

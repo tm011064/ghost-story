@@ -43,6 +43,11 @@ public class EnemyController : BaseCharacterController, IPlayerCollidable, ISpaw
     }
   }
 
+  public void FlipSpriteHorizontally()
+  {
+    transform.localScale = transform.localScale.SetX(transform.localScale.x * -1);
+  }
+
   protected virtual void OnAwake()
   {
   }

@@ -10,9 +10,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     public TiledObjectPrefabFactory(
       GameObject root,
       Map map,
-      Dictionary<string, string> prefabLookup,
-      Dictionary<string, ObjectType> objectTypesByName)
-      : base(root, map, prefabLookup, objectTypesByName)
+      Dictionary<string, string> prefabLookup)
+      : base(root, map, prefabLookup)
     {
     }
 
@@ -38,7 +37,7 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     {
       foreach (var obj in layerConfig.TiledObjectGroup.Objects)
       {
-        var properties = obj.GetProperties(ObjectTypesByName);
+        var properties = obj.GetProperties();
 
         var prefabName = properties["Prefab"];
 

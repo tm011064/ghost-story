@@ -3,7 +3,7 @@
 namespace Assets.Editor.Tiled.Xml
 {
   [XmlRoot(ElementName = "object")]
-  public class TiledObject
+  public class TiledObject : IHasType, IHasPropertyGroup
   {
     [XmlAttribute(AttributeName = "id")]
     public string Id { get; set; }
@@ -34,5 +34,8 @@ namespace Assets.Editor.Tiled.Xml
 
     [XmlElement(ElementName = "polyline")]
     public PolyLine PolyLine { get; set; }
+
+    [XmlElement(ElementName = "text")]
+    public Text Text { get; set; }
   }
 }

@@ -11,9 +11,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     public TiledLayerPrefabFactory(
       GameObject root,
       Map map,
-      Dictionary<string, string> prefabLookup,
-      Dictionary<string, ObjectType> objectTypesByName)
-      : base(root, map, prefabLookup, objectTypesByName)
+      Dictionary<string, string> prefabLookup)
+      : base(root, map, prefabLookup)
     {
     }
 

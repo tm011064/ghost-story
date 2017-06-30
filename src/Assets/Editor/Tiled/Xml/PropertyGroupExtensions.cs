@@ -15,10 +15,22 @@ namespace Assets.Editor.Tiled.Xml
 
     public static string GetPropertyValue(this PropertyGroup group, string propertyName)
     {
-      return group
+      var values = group
         .Properties
-        .Single(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase))
-        .Value;
+        .Where(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+        .ToArray();
+
+      if (!values.Any())
+      {
+        throw new KeyNotFoundException("Property with name '" + propertyName + "' not found");
+      }
+
+      if (values.Count() > 1)
+      {
+        throw new InvalidOperationException("Multiple properties with name '" + propertyName + "' found");
+      }
+
+      return values.Single().Value;
     }
 
     public static int GetPropertyValueAsInt32(this PropertyGroup group, string propertyName)

@@ -13,47 +13,100 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     protected readonly GameObject Root;
 
-    protected readonly Dictionary<string, ObjectType> ObjectTypesByName;
-
     protected readonly Dictionary<string, string> PrefabLookup = new Dictionary<string, string>();
 
     protected readonly TiledObjectLayerConfig[] ObjectLayerConfigs;
+
+    protected readonly TiledGroupConfig[] GroupConfigs;
 
     protected readonly TiledTileLayerConfig[] TileLayerConfigs;
 
     protected AbstractGameObjectFactory(
       GameObject root,
       Map map,
-      Dictionary<string, string> prefabLookup,
-      Dictionary<string, ObjectType> objectTypesByName)
+      Dictionary<string, string> prefabLookup)
     {
       Root = root;
       PrefabLookup = prefabLookup;
-      ObjectTypesByName = objectTypesByName;
-
       Map = map;
 
       TileLayerConfigs = map
-        .Layers
-        .Select(layer => TiledTileLayerConfigFactory.Create(layer))
+        .AllLayers()
+        .Select(TiledTileLayerConfigFactory.Create)
         .ToArray();
 
       ObjectLayerConfigs = map
-        .ObjectGroups
-        .Select(og => new TiledObjectLayerConfig
-        {
-          TiledObjectGroup = og,
-          Type = og.GetPropertyValue("Type"),
-          Universe = og.GetPropertyValue("Universe"),
-          Commands = og.GetCommands().ToArray()
-        })
+        .AllObjectGroups()
+        .Select(CreateTiledObjectGroupConfig)
         .ToArray();
+
+      GroupConfigs = map
+        .AllGroupsDepthFirst()
+        .Select(CreateGroupConfig)
+        .ToArray();
+    }
+
+    private TiledObjectLayerConfig CreateTiledObjectGroupConfig(ObjectGroup objectGroup)
+    {
+      return new TiledObjectLayerConfig
+      {
+        TiledObjectGroup = objectGroup,
+        Type = objectGroup.GetPropertyValue("Type"),
+        Universe = objectGroup.GetPropertyValue("Universe"),
+        Commands = objectGroup.GetCommands().ToArray()
+      };
+    }
+
+    private TiledGroupConfig CreateGroupConfig(Group group)
+    {
+      var config = new TiledGroupConfig
+      {
+        Group = group,
+        Type = group.TryGetProperty("Type"),
+        Universe = group.TryGetProperty("Universe"),
+        Commands = group.GetCommands().ToArray()
+      };
+
+      config.ObjectLayerConfigs = group
+        .ObjectGroups
+        .Select(CreateTiledObjectGroupConfig)
+        .ToArray();
+
+      config.TileLayerConfigs = group
+        .Layers
+        .Select(TiledTileLayerConfigFactory.Create)
+        .ToArray();
+
+      config.GroupConfigs = group
+        .Groups
+        .Select(CreateGroupConfig)
+        .ToArray();
+
+      return config;
     }
 
     public abstract IEnumerable<GameObject> Create();
 
     protected virtual void OnGameObjectCreated(AbstractTiledLayerConfig layerConfig, GameObject gameObject)
     {
+    }
+
+    protected IEnumerable<GameObject> CreateColliderObjects(Layer layer, string layerName = "Platforms")
+    {
+      var vertices = CreateMatrixVertices(layer);
+      var colliders = vertices.GetColliderEdges();
+
+      foreach (var points in colliders)
+      {
+        var obj = new GameObject("Collider");
+
+        obj.transform.position = Vector3.zero;
+        obj.layer = LayerMask.NameToLayer(layerName);
+
+        AddEdgeColliders(obj, points);
+
+        yield return obj;
+      }
     }
 
     protected MatrixVertices CreateMatrixVertices(Layer layer)

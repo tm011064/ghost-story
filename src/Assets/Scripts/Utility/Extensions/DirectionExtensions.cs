@@ -54,6 +54,13 @@ public static class DirectionExtensions
     return 1;
   }
 
+  public static Vector2 ToVector(this Direction direction)
+  {
+    return new Vector2(
+      direction == Direction.Left || direction == Direction.Right ? direction.Multiplier() : 0,
+      direction == Direction.Up || direction == Direction.Down ? direction.Multiplier() : 0);
+  }
+
   public static Direction Update(this Direction self, Vector3 vector)
   {
     return (

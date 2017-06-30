@@ -14,16 +14,20 @@ public partial class TimerPlatformControllerBehaviour : IInstantiable<TimerPlatf
 
       AddTimerPlatform(platform, platformArgs);
 
-      AddBoxCollider(platform, platformArgs);
+      foreach (var obj in platformArgs.ColliderObjects)
+      {
+        obj.transform.parent = platform.transform;
+      }
     }
   }
 
   private GameObject CreatePlatform(TimerPlatformInstantiationArguments.Platform platformArgs)
   {
-    var platform = new GameObject();
+    var platform = new GameObject()
+    {
+      name = "Platform " + platformArgs.Index
+    };
 
-    platform.transform.position = platformArgs.Bounds.center.AddY(platformArgs.Bounds.size.y / 2);
-    platform.name = "Platform " + platformArgs.Index;
     platform.transform.parent = transform;
     platform.layer = LayerMask.NameToLayer("Platforms");
 
@@ -37,14 +41,8 @@ public partial class TimerPlatformControllerBehaviour : IInstantiable<TimerPlatf
     meshRenderer.transform.parent = platform.transform;
     meshRenderer.gameObject.name = "Sprite";
     meshRenderer.transform.position = meshRenderer.transform.position;
-  }
 
-  private void AddBoxCollider(GameObject platform, TimerPlatformInstantiationArguments.Platform platformArgs)
-  {
-    var boxCollider = platform.AddComponent<BoxCollider2D>();
-
-    boxCollider.isTrigger = false;
-    boxCollider.size = platformArgs.Bounds.size;
+    DestroyImmediate(platformArgs.Transform.gameObject);
   }
 
   private void AddTimerPlatform(GameObject platform, TimerPlatformInstantiationArguments.Platform platformArgs)

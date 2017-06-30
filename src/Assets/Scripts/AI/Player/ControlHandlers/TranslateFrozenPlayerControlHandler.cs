@@ -26,10 +26,6 @@ public class TranslateFrozenPlayerControlHandler : FreezePlayerControlHandler
 
   public override bool TryActivate(BaseControlHandler previousControlHandler)
   {
-    Logger.UnityDebugLog(
-      "POS", PlayerController.transform.position,
-      "NPOS", PlayerController.transform.position + _playerTranslationVector);
-
     _translateTransformAction = TranslateTransformAction.Start(
       PlayerController.transform.position,
       PlayerController.transform.position + _playerTranslationVector,

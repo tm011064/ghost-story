@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FlashDart : AbstractWeaponBehaviour, IWeapon
 {
@@ -15,15 +14,10 @@ public class FlashDart : AbstractWeaponBehaviour, IWeapon
 
   protected override void OnAwake()
   {
-    var registrationSucceeded = ObjectPoolingManager.Instance.RegisterPool(
+    ObjectPoolingManager.Instance.RegisterPoolOrThrow(
       Settings.ProjectilePrefab,
       Settings.MaximumSimultaneouslyActiveProjectiles,
       Settings.MaximumSimultaneouslyActiveProjectiles);
-
-    if (!registrationSucceeded)
-    {
-      throw new InvalidOperationException("Prefab " + Settings.ProjectilePrefab.name + " could not be registered at pool as it already exists");
-    }
   }
 
   protected Vector2 GetDirectionVector(XYAxisState axisState)

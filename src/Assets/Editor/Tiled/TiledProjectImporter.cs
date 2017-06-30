@@ -13,17 +13,11 @@ namespace Assets.Editor.Tiled
   {
     public readonly Map Map;
 
-    public readonly Dictionary<string, ObjectType> ObjectTypesByName;
-
     public readonly Dictionary<string, string> PrefabLookup;
 
-    public TiledProjectImporter(Map map, ObjectTypeGroup group)
+    public TiledProjectImporter(Map map)
     {
       Map = map;
-
-      ObjectTypesByName = group
-        .ObjectTypes
-        .ToDictionary(ot => ot.Name, ot => ot, StringComparer.InvariantCultureIgnoreCase);
 
       PrefabLookup = AssetDatabase
         .GetAllAssetPaths()
@@ -93,12 +87,12 @@ namespace Assets.Editor.Tiled
 
     private IEnumerable<AbstractGameObjectFactory> CreateDefaultGameObjectFactories(GameObject parent)
     {
-      yield return new PlatformColliderFactory(parent, Map, PrefabLookup, ObjectTypesByName);
-      yield return new OneWayPlatformColliderFactory(parent, Map, PrefabLookup, ObjectTypesByName);
-      yield return new DeathHazardFactory(parent, Map, PrefabLookup, ObjectTypesByName);
-      yield return new TiledLayerPrefabFactory(parent, Map, PrefabLookup, ObjectTypesByName);
-      yield return new TiledObjectPrefabFactory(parent, Map, PrefabLookup, ObjectTypesByName);
-      yield return new CameraModifierFactory(parent, Map, PrefabLookup, ObjectTypesByName);
+      yield return new PlatformColliderFactory(parent, Map, PrefabLookup);
+      yield return new OneWayPlatformColliderFactory(parent, Map, PrefabLookup);
+      yield return new DeathHazardFactory(parent, Map, PrefabLookup);
+      yield return new TiledLayerPrefabFactory(parent, Map, PrefabLookup);
+      yield return new TiledObjectPrefabFactory(parent, Map, PrefabLookup);
+      yield return new CameraModifierFactory(parent, Map, PrefabLookup);
     }
 
     private string GetPrefabName(string assetPath)

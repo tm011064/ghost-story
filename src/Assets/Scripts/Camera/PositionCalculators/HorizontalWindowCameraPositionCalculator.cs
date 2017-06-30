@@ -10,11 +10,7 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
 
   private readonly float _leftVerticalLockPosition;
 
-  private readonly float _leftVerticalLockPositionWithFudgeFactor;
-
   private readonly float _rightVerticalLockPosition;
-
-  private readonly float _rightVerticalLockPositionWithFudgeFactor;
 
   private readonly SmoothDampedPositionCalculator _smoothDampedPositionCalculator;
 
@@ -29,11 +25,8 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
   {
     var screenCenter = cameraController.TargetScreenSize.x * .5f / cameraMovementSettings.ZoomSettings.ZoomPercentage;
 
-    var fudgeFactor = 1f;
     _leftVerticalLockPosition = cameraMovementSettings.HorizontalLockSettings.LeftHorizontalLockPosition + screenCenter;
-    _leftVerticalLockPositionWithFudgeFactor = _leftVerticalLockPosition - fudgeFactor;
     _rightVerticalLockPosition = cameraMovementSettings.HorizontalLockSettings.RightHorizontalLockPosition - screenCenter;
-    _rightVerticalLockPositionWithFudgeFactor = _rightVerticalLockPosition + fudgeFactor;
 
     _cameraMovementSettings = cameraMovementSettings;
     _cameraController = cameraController;
@@ -70,19 +63,17 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
 
   private float AdjustLocks(float position)
   {
-    if (!IsPlayerMoving())
-    {
-      return position;
-    }
+    //if (!IsPlayerMoving())
+    //{
+    //  return position;
+    //}
 
-    if (position < _leftVerticalLockPosition
-      && _cameraPosition >= _leftVerticalLockPositionWithFudgeFactor)
+    if (position < _leftVerticalLockPosition)
     {
       return _leftVerticalLockPosition;
     }
 
-    if (position > _rightVerticalLockPosition
-      && _cameraPosition <= _rightVerticalLockPositionWithFudgeFactor)
+    if (position > _rightVerticalLockPosition)
     {
       return _rightVerticalLockPosition;
     }

@@ -18,8 +18,6 @@ public class DontGoThroughThings : MonoBehaviour
 
   private Collider2D _collider;
 
-  private bool _skipFirstFrame;
-
   void OnEnable()
   {
     _previousPosition = gameObject.transform.position;

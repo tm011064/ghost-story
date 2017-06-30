@@ -61,13 +61,13 @@ namespace Assets.Editor.Tiled.GhostStory
         prefab,
         new AbstractGameObjectFactory[]
         {
-          new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName),
-          new GhostStoryTimerPlatformFactory(prefab, importer.Map, importer.PrefabLookup, importer.ObjectTypesByName)
+          new GhostStoryPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryCameraModifierFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryOneWayPlatformColliderFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryTimerPlatformFactory(prefab, importer.Map, importer.PrefabLookup)
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);
@@ -77,7 +77,7 @@ namespace Assets.Editor.Tiled.GhostStory
     {
       var layerTypes = new string[] { "Background", "Platform", "OneWayPlatform", "Transition" };
 
-      foreach (var layer in map.Layers)
+      foreach (var layer in map.AllLayers())
       {
         var type = layer.GetPropertyValue("Type");
         if (layerTypes.Contains(type))
