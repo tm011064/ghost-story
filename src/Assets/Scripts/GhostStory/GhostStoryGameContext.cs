@@ -143,7 +143,7 @@ public class GhostStoryGameContext : MonoBehaviour, IDontDestroyOnLoad
       .Cast<DoorKey>()
       .Select(doorKey => new InventoryItem { Name = doorKey.ToString() })
       .ToArray();
-
+    
     var misaHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Misa.ToString()).Health.HealthUnits;
     var kinoHealth = GameManager.Instance.GetPlayerByName(PlayableCharacterNames.Kino.ToString()).Health.HealthUnits;
 

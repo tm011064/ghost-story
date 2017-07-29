@@ -83,7 +83,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       GhostStoryGameContext.Instance.RegisterCallback(
         .3f,
         () => GameManager.Instance.SceneManager.FadeIn(OnFadeInCompleted),
-        this.GetGameObjectUniverse());
+        this.GetGameObjectUniverseRecursive());
     }
 
     public void TriggerScroll()
@@ -98,7 +98,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
       GhostStoryGameContext.Instance.RegisterCallback(
         .8f,
         () => GameManager.Instance.SceneManager.FadeOut(() => OnFadeOutCompleted()),
-        this.GetGameObjectUniverse());
+        this.GetGameObjectUniverseRecursive());
 
       ShowTransitionDoor();
     }
@@ -134,7 +134,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     void OnFadeInCompleted()
     {
-      GhostStoryGameContext.Instance.RegisterCallback(.25f, HideTransitionDoor, this.GetGameObjectUniverse());
+      GhostStoryGameContext.Instance.RegisterCallback(.25f, HideTransitionDoor, this.GetGameObjectUniverseRecursive());
     }
 
     void StartCameraScroll()
@@ -157,7 +157,7 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     void OnFadeOutCompleted()
     {
-      GhostStoryGameContext.Instance.RegisterCallback(.4f, StartCameraScroll, this.GetGameObjectUniverse());
+      GhostStoryGameContext.Instance.RegisterCallback(.4f, StartCameraScroll, this.GetGameObjectUniverseRecursive());
     }
   }
 }

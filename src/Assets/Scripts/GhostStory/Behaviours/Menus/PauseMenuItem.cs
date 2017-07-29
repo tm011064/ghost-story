@@ -19,10 +19,14 @@ public class PauseMenuItem : MonoBehaviour
 
   public Color Color = new Color(1, 1, 1);
 
+  private int _defaultFontSize;
+
   void Awake()
   {
     Text = GetComponent<Text>();
     RectTransform = GetComponent<RectTransform>();
+
+    _defaultFontSize = Text.fontSize;
   }
 
   void Update()
@@ -39,6 +43,6 @@ public class PauseMenuItem : MonoBehaviour
     }
 
     Text.fontStyle = Selected ? FontStyle.Bold : FontStyle.Normal;
-    Text.fontSize = Selected ? 24 : 20;
+    Text.fontSize = Selected ? _defaultFontSize + 2 : _defaultFontSize;
   }
 }

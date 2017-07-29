@@ -92,11 +92,14 @@ public class PauseMenuCanvas : MonoBehaviour
 
     foreach (var itemGroup in itemGroups)
     {
-      itemGroup.RectTransform.position = new Vector3(
+      var pos = new Vector3(
         maxWidth * columnIndex,
         rowPosY,
         itemGroup.RectTransform.position.z);
+            
+      itemGroup.RectTransform.anchoredPosition = pos;
 
+      Logger.UnityDebugLog("pos", itemGroup.RectTransform.position, "ind", maxWidth * columnIndex, "w", maxWidth);
       itemGroup.RectTransform.sizeDelta = itemGroup.RectTransform.sizeDelta.SetX(maxWidth);
 
       maxHeight = Mathf.Max(
@@ -121,13 +124,14 @@ public class PauseMenuCanvas : MonoBehaviour
     gameObject.transform.parent = transform;
 
     var groupRectTransform = gameObject.AddComponent<RectTransform>();
+    groupRectTransform.localScale = new Vector3(1, 1, 1);
 
     var itemPosition = Vector3.zero;
     foreach (var item in items)
     {
-      item.transform.SetParent(gameObject.transform, false);
-
       item.RectTransform.position = itemPosition;
+
+      item.transform.SetParent(gameObject.transform, false);
 
       itemPosition = itemPosition.SetY(itemPosition.y - item.RectTransform.sizeDelta.y);
     }
