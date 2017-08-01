@@ -63,11 +63,6 @@ public partial class HorizontalWindowCameraPositionCalculator : ICameraPositionC
 
   private float AdjustLocks(float position)
   {
-    //if (!IsPlayerMoving())
-    //{
-    //  return position;
-    //}
-
     if (position < _leftVerticalLockPosition)
     {
       return _leftVerticalLockPosition;
