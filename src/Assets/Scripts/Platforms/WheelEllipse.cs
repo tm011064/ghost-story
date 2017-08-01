@@ -15,10 +15,6 @@ public partial class WheelEllipse : SpawnBucketItemBehaviour, IObjectPoolBehavio
 
   private List<GameObjectContainer> _platforms = new List<GameObjectContainer>();
 
-  private bool _isPlayerAttached;
-
-  private BoxCollider2D _visibilityCollider;
-
   private ObjectPoolingManager _objectPoolingManager;
 
   void Update()

@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace Assets.Editor.Tiled.Xml
 {
   [XmlRoot(ElementName = "objectgroup")]
-  public class ObjectGroup
+  public class ObjectGroup : IHasPropertyGroup
   {
     [XmlElement(ElementName = "object")]
     public List<TiledObject> Objects { get; set; }

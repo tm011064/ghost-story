@@ -10,9 +10,8 @@ namespace Assets.Editor.Tiled.GhostStory
     public GhostStoryTiledLayerPrefabFactory(
       GameObject root,
       Map map,
-      Dictionary<string, string> prefabLookup,
-      Dictionary<string, ObjectType> objectTypesByName)
-      : base(root, map, prefabLookup, objectTypesByName)
+      Dictionary<string, string> prefabLookup)
+      : base(root, map, prefabLookup)
     {
     }
 

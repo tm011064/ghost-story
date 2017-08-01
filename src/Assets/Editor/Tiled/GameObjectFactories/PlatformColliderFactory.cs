@@ -10,9 +10,8 @@ namespace Assets.Editor.Tiled.GameObjectFactories
     public PlatformColliderFactory(
       GameObject root,
       Map map,
-      Dictionary<string, string> prefabLookup,
-      Dictionary<string, ObjectType> objectTypesByName)
-      : base(root, map, prefabLookup, objectTypesByName)
+      Dictionary<string, string> prefabLookup)
+      : base(root, map, prefabLookup)
     {
     }
 
@@ -25,24 +24,13 @@ namespace Assets.Editor.Tiled.GameObjectFactories
 
     private GameObject CreateColliders(TiledTileLayerConfig layerConfig)
     {
-      var vertices = CreateMatrixVertices(layerConfig.TiledLayer);
-
       var name = layerConfig.Universe + " Platform Colliders";
 
       var collidersGameObject = new GameObject(name);
       collidersGameObject.transform.position = Vector3.zero;
 
-      var colliders = vertices.GetColliderEdges();
-
-      foreach (var points in colliders)
+      foreach (var obj in CreateColliderObjects(layerConfig.TiledLayer))
       {
-        var obj = new GameObject("Collider");
-
-        obj.transform.position = Vector3.zero;
-        obj.layer = LayerMask.NameToLayer("Platforms");
-
-        AddEdgeColliders(obj, points);
-
         obj.transform.parent = collidersGameObject.transform;
       }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public partial class CameraModifier : CameraMovementSettingsBehaviour, ICameraModifier
 {
@@ -36,7 +35,7 @@ public partial class CameraModifier : CameraMovementSettingsBehaviour, ICameraMo
   protected virtual void OnAwake()
   {
   }
-  
+
   public bool Contains(Vector2 point)
   {
     var cameraMovementSettings = new CameraMovementSettings(

@@ -7,22 +7,9 @@ namespace Assets.Editor.Tiled.Xml
 {
   public static class ObjectGroupExtensions
   {
-    public static bool HasProperty(this ObjectGroup group, string propertyName)
+    public static TiledObject[] GetTiledObjectsOrThrow(this ObjectGroup group, string typeName)
     {
-      return group.PropertyGroup.ToDictionary().ContainsKey(propertyName);
-    }
-
-    public static bool HasProperty(this ObjectGroup group, string propertyName, string propertyValue)
-    {
-      string value;
-
-      return group.PropertyGroup.ToDictionary().TryGetValue(propertyName, out value)
-        && string.Equals(propertyValue, value, StringComparison.OrdinalIgnoreCase);
-    }
-
-    public static TiledObject[] GetTypesOrThrow(this ObjectGroup group, string typeName)
-    {
-      var items = group.GetTypes(typeName).ToArray();
+      var items = group.GetTiledObjects(typeName).ToArray();
 
       if (items == null || !items.Any())
       {
@@ -36,16 +23,16 @@ namespace Assets.Editor.Tiled.Xml
       return items;
     }
 
-    public static IEnumerable<TiledObject> GetTypes(this ObjectGroup group, string typeName)
+    public static IEnumerable<TiledObject> GetTiledObjects(this ObjectGroup group, string typeName)
     {
       return group
         .Objects
         .Where(o => string.Equals(o.Type, typeName, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    public static TiledObject GetTypeOrThrow(this ObjectGroup group, string typeName)
+    public static TiledObject GetTiledObjectOrThrow(this ObjectGroup group, string typeName)
     {
-      var obj = group.GetType(typeName);
+      var obj = group.GetTiledObject(typeName);
 
       if (obj == null)
       {
@@ -59,37 +46,12 @@ namespace Assets.Editor.Tiled.Xml
       return obj;
     }
 
-    public static TiledObject GetType(this ObjectGroup group, string typeName)
+    public static TiledObject GetTiledObject(this ObjectGroup group, string typeName)
     {
       return group
         .Objects
         .Where(o => string.Equals(o.Type, typeName, StringComparison.InvariantCultureIgnoreCase))
         .FirstOrDefault();
-    }
-
-    public static IEnumerable<string> GetCommands(this ObjectGroup group)
-    {
-      if (!group.HasProperty("Commands"))
-      {
-        return Enumerable.Empty<string>();
-      }
-
-      return group.GetPropertyValue("Commands")
-        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-        .Select(s => s.Trim());
-    }
-
-    public static string GetPropertyValue(this ObjectGroup group, string propertyName)
-    {
-      return group.PropertyGroup.GetPropertyValue(propertyName);
-    }
-
-    public static IEnumerable<T> Get<T>(this IEnumerable<ObjectGroup> groups, Func<ObjectGroup, T> func)
-    {
-      foreach (var obj in groups)
-      {
-        yield return func(obj);
-      }
-    }
+    }    
   }
 }

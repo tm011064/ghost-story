@@ -122,10 +122,9 @@ public class GameManager : MonoBehaviour
 
     foreach (ObjectPoolRegistrationInfo objectPoolRegistrationInfo in gameObjectTypes.Values)
     {
-      objectPoolingManager.RegisterPool(
+      objectPoolingManager.RegisterOrExpandPool(
         objectPoolRegistrationInfo.GameObject,
-        objectPoolRegistrationInfo.TotalInstances,
-        int.MaxValue);
+        objectPoolRegistrationInfo.TotalInstances);
     }
   }
 

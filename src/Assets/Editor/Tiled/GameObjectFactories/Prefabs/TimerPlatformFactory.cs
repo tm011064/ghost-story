@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Editor.Tiled.GameObjectFactories;
 using Assets.Editor.Tiled.Xml;
@@ -11,9 +12,8 @@ public class TimerPlatformFactory : AbstractGameObjectFactory
   public TimerPlatformFactory(
     GameObject root,
     Map map,
-    Dictionary<string, string> prefabLookup,
-    Dictionary<string, ObjectType> objectTypesByName)
-    : base(root, map, prefabLookup, objectTypesByName)
+    Dictionary<string, string> prefabLookup)
+    : base(root, map, prefabLookup)
   {
   }
 
@@ -23,7 +23,7 @@ public class TimerPlatformFactory : AbstractGameObjectFactory
 
     prefabsParent.transform.position = Vector3.zero;
 
-    var createdGameObjects = ObjectLayerConfigs
+    var createdGameObjects = GroupConfigs
       .Where(config => config.Type == PrefabName)
       .Select(config => CreatePrefabFromGameObject(config));
 
@@ -35,25 +35,44 @@ public class TimerPlatformFactory : AbstractGameObjectFactory
     yield return prefabsParent;
   }
 
-  protected virtual GameObject CreatePrefabFromGameObject(TiledObjectLayerConfig config)
+  private int ParseIndex(Layer layer)
   {
-    var objectGroupGameObject = Root.gameObject.transform.FindFirstRecursive(config.TiledObjectGroup.Name);
+    var createErrorMessage = new Func<string>(() => "Timed platform timer platform layer name '" + layer.Name
+        + "' invalid. Names must follow this pattern: 'unqiueName {Index}'. Example: 'Roof Platforms 1'");
 
+    var index = layer.Name.LastIndexOf(' ');
+    if (index < 0)
+    {
+      throw new FormatException(createErrorMessage());
+    }
+
+    var indexString = layer.Name.Substring(index).Trim();
+    int value;
+    if (!int.TryParse(indexString, out value))
+    {
+      throw new FormatException(createErrorMessage());
+    }
+
+    return value;
+  }
+
+  protected virtual GameObject CreatePrefabFromGameObject(TiledGroupConfig config)
+  {
     var platforms = config
-      .TiledObjectGroup
-      .Objects
-      .Where(o => o.IsType("Timer Platform"))
-      .Select(o => new TimerPlatformInstantiationArguments.Platform
+      .TileLayerConfigs
+      .Select(c => c.TiledLayer)
+      .Where(c => c.HasProperty("Type", "Timer Platform"))
+      .Select(layer => new TimerPlatformInstantiationArguments.Platform
       {
-        Index = int.Parse(o.Name),
-        Bounds = o.GetBounds(),
-        Transform = objectGroupGameObject.FindFirstRecursive(o.Name)
+        Index = ParseIndex(layer),
+        ColliderObjects = CreateColliderObjects(layer).ToArray(),
+        Transform = Root.gameObject.transform.FindFirstRecursive(layer.Name)
       })
       .ToArray();
 
     var startSwitch = config
-      .TiledObjectGroup
-      .Objects
+      .ObjectLayerConfigs
+      .SelectMany(c => c.TiledObjectGroup.Objects)
       .Where(o => o.IsType("Switch"))
       .Select(o => new TimerPlatformInstantiationArguments.StartSwitch
       {

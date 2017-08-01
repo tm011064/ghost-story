@@ -20,8 +20,6 @@ namespace Assets.Scripts.GhostStory.Behaviours.Transitions
 
     private GameObject _rightTransitionDoor;
 
-    private BaseControlHandler _freezeControlHandler;
-
     private DoorTriggerEnterBehaviour _doorTriggerEnterBehaviour;
 
     void Awake()

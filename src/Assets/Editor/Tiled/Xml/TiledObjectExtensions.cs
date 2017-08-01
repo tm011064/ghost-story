@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.Xml
@@ -14,41 +15,22 @@ namespace Assets.Editor.Tiled.Xml
       }
     }
 
-    public static Dictionary<string, string> GetProperties(this TiledObject tiledObject, Dictionary<string, ObjectType> objectTypesByName)
+    public static Dictionary<string, string> GetProperties(this TiledObject tiledObject)
     {
-      var properties = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-
-      ObjectType objectType;
-
-      if (!string.IsNullOrEmpty(tiledObject.Type)
-        && objectTypesByName.TryGetValue(tiledObject.Type, out objectType))
-      {
-        foreach (var property in objectType.Properties)
-        {
-          properties[property.Name] = property.Default;
-        }
-      }
-
-      if (tiledObject.PropertyGroup != null)
-      {
-        foreach (var property in tiledObject.PropertyGroup.Properties)
-        {
-          properties[property.Name] = property.Value;
-        }
-      }
-
-      return properties;
+      return tiledObject.PropertyGroup == null
+        ? new Dictionary<string, string>()
+        : tiledObject.PropertyGroup.Properties.ToDictionary(p => p.Name, p => p.Value);
     }
 
-    public static bool HasProperty(this TiledObject tiledObject, string propertyName, Dictionary<string, ObjectType> objectTypesByName)
+    public static bool HasProperty(this TiledObject tiledObject, string propertyName)
     {
-      return GetProperties(tiledObject, objectTypesByName)
+      return GetProperties(tiledObject)
         .ContainsKey(propertyName);
     }
 
-    public static bool HasProperty(this TiledObject tiledObject, string propertyName, string propertyValue, Dictionary<string, ObjectType> objectTypesByName)
+    public static bool HasProperty(this TiledObject tiledObject, string propertyName, string propertyValue)
     {
-      var properties = GetProperties(tiledObject, objectTypesByName);
+      var properties = GetProperties(tiledObject);
 
       string value;
 
@@ -78,11 +60,6 @@ namespace Assets.Editor.Tiled.Xml
     public static bool IsCollider(this TiledObject tiledObject)
     {
       return !tiledObject.Gid.HasValue;
-    }
-
-    public static bool IsType(this TiledObject tiledObject, string typeName)
-    {
-      return string.Equals(tiledObject.Type, typeName, StringComparison.OrdinalIgnoreCase);
     }
   }
 }

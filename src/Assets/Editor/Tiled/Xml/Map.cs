@@ -9,6 +9,9 @@ namespace Assets.Editor.Tiled.Xml
     [XmlElement(ElementName = "tileset")]
     public List<TileSet> TileSets { get; set; }
 
+    [XmlElement(ElementName = "group")]
+    public List<Group> Groups { get; set; }
+
     [XmlElement(ElementName = "layer")]
     public List<Layer> Layers { get; set; }
 

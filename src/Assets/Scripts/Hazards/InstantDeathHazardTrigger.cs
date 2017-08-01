@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class InstantDeathHazardTrigger : MonoBehaviour
+public partial class InstantDeathHazardTrigger : MonoBehaviour
 {
   void OnTriggerEnter2D(Collider2D col)
   {

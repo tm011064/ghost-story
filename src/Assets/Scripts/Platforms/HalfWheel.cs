@@ -25,10 +25,6 @@ public partial class HalfWheel : SpawnBucketItemBehaviour, IObjectPoolBehaviour
 
   private float _nextStartTime;
 
-  private bool _isPlayerAttached;
-
-  private BoxCollider2D _visibilityCollider;
-
   private ObjectPoolingManager _objectPoolingManager;
 
   void Update()

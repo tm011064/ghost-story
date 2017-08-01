@@ -15,8 +15,8 @@ public class TimerPlatformInstantiationArguments : AbstractInstantiationArgument
   {
     public int Index;
 
-    public Bounds Bounds;
-
     public Transform Transform;
+
+    public GameObject[] ColliderObjects;
   }
 }

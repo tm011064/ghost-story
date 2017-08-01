@@ -12,8 +12,6 @@ public class MovingPlatformCollisionController : MonoBehaviour
 
   private PlayerController _playerController;
 
-  private AttachPlayerControllerToObject _attachPlayerControllerToObject;
-
   void Start()
   {
     _playerController = GameManager.Instance.Player;

@@ -3,49 +3,63 @@ using UnityEngine;
 
 public class ObjectPool
 {
-  private List<GameObject> _pooledObjects;
+  private List<GameObject> _pooledObjects = new List<GameObject>();
 
-  private GameObject _pooledObj;
+  private GameObject _pooledObjectPrefab;
 
   private int _maxPoolSize;
 
   private int _initialPoolSize;
 
-  public ObjectPool(GameObject obj, int initialPoolSize, int maxPoolSize)
+  public static ObjectPool Create(GameObject prefab, int numberOfGameObjectsToInstantiate = 0, int maxNumberOfGameObjectsToInstantiate = -1)
   {
-    _pooledObjects = new List<GameObject>();
+    var pool = new ObjectPool(prefab);
 
-    for (var i = 0; i < initialPoolSize; i++)
-    {
-      var gameObject = GameObject.Instantiate(obj, Vector3.zero, Quaternion.identity) as GameObject;
+    pool.Expand(numberOfGameObjectsToInstantiate, maxNumberOfGameObjectsToInstantiate);
 
-      gameObject.SetActive(false);
-
-      _pooledObjects.Add(gameObject);
-
-      GameObject.DontDestroyOnLoad(gameObject);
-    }
-
-    _maxPoolSize = maxPoolSize;
-
-    _pooledObj = obj;
-
-    _initialPoolSize = initialPoolSize;
+    return pool;
   }
 
-  /// <summary>
-  /// Returns an active object from the object pool without resetting any of its values.
-  /// You will need to set its values and set it inactive again when you are done with it.
-  /// </summary>
+  private ObjectPool(GameObject prefab)
+  {
+    _pooledObjectPrefab = prefab;
+  }
+
+  public void Expand(int numberOfGameObjectsToInstantiate, int maxNumberOfGameObjectsToInstantiate)
+  {
+    InstantiateObjects(_pooledObjectPrefab, numberOfGameObjectsToInstantiate, maxNumberOfGameObjectsToInstantiate);
+  }
+
+  private void InstantiateObjects(GameObject pooledObject, int numberOfGameObjectsToInstantiate, int maxNumberOfGameObjectsToInstantiate)
+  {
+    for (var i = 0; i < numberOfGameObjectsToInstantiate; i++)
+    {
+      var gameObject = Object.Instantiate(pooledObject, Vector3.zero, Quaternion.identity) as GameObject;
+
+      gameObject.SetActive(false);
+      Object.DontDestroyOnLoad(gameObject);
+
+      _pooledObjects.Add(gameObject);
+    }
+
+    _maxPoolSize = _maxPoolSize < 0
+      ? maxNumberOfGameObjectsToInstantiate
+      : _maxPoolSize + maxNumberOfGameObjectsToInstantiate;
+
+    _initialPoolSize += numberOfGameObjectsToInstantiate;
+  }
+
   public GameObject GetObject()
   {
     return GetObject(null);
   }
 
-  /// <summary>
-  /// Returns an active object from the object pool without resetting any of its values.
-  /// You will need to set its values and set it inactive again when you are done with it.
-  /// </summary>
+  public bool TryGetObject(Vector3? position, out GameObject gameObject)
+  {
+    gameObject = GetObject(position);
+    return gameObject != null;
+  }
+
   public GameObject GetObject(Vector3? position)
   {
     for (var i = 0; i < _pooledObjects.Count; i++)
@@ -63,9 +77,9 @@ public class ObjectPool
       }
     }
 
-    if (_maxPoolSize > _pooledObjects.Count)
+    if (_maxPoolSize < 0 || _maxPoolSize > _pooledObjects.Count)
     {
-      var gameObject = GameObject.Instantiate(_pooledObj, position.HasValue ? position.Value : Vector3.zero, Quaternion.identity) as GameObject;
+      var gameObject = Object.Instantiate(_pooledObjectPrefab, position ?? Vector3.zero, Quaternion.identity) as GameObject;
 
       gameObject.SetActive(true);
 

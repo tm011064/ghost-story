@@ -128,8 +128,6 @@ public partial class BreakablePlatform : SpawnBucketItemBehaviour, IObjectPoolBe
 
     private float _fallStartTime;
 
-    private float _respawnTime;
-
     private float _stableDuration;
 
     private float _fallGravity;
