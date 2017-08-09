@@ -7,13 +7,20 @@ public class EnemyController : BaseCharacterController, IPlayerCollidable, ISpaw
   [HideInInspector]
   public Animator Animator;
 
+  private bool _deactivateOnceInvisible;
+
+  private bool _isVisible;
+
   public event EventHandler<GameObjectEventArgs> GotDisabled;
 
-  void Awake()
+  public virtual void Awake()
   {
     Animator = GetComponent<Animator>();
+  }
 
-    OnAwake();
+  protected virtual void OnEnable()
+  {
+    _deactivateOnceInvisible = false;
   }
 
   protected virtual void OnDisable()
@@ -48,10 +55,6 @@ public class EnemyController : BaseCharacterController, IPlayerCollidable, ISpaw
     transform.localScale = transform.localScale.SetX(transform.localScale.x * -1);
   }
 
-  protected virtual void OnAwake()
-  {
-  }
-
   public virtual void Reset(IDictionary<string, string> options)
   {
   }
@@ -63,5 +66,30 @@ public class EnemyController : BaseCharacterController, IPlayerCollidable, ISpaw
   public virtual bool CanSpawn()
   {
     return true;
+  }
+
+  public virtual void OnBecameVisible()
+  {
+    _isVisible = true;
+  }
+
+  public virtual void OnBecameInvisible()
+  {
+    _isVisible = false;
+
+    if (_deactivateOnceInvisible)
+    {
+      ObjectPoolingManager.Instance.Deactivate(gameObject);
+    }
+  }
+
+  public void DeactivateOnceInvisible()
+  {
+    _deactivateOnceInvisible = true;
+
+    if (!_isVisible)
+    {
+      ObjectPoolingManager.Instance.Deactivate(gameObject);
+    }
   }
 }

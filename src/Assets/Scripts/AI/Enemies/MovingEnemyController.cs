@@ -2,9 +2,9 @@
 
 public class MovingEnemyController : EnemyController, IPlayerCollidable, ISpawnable
 {
-  protected override void OnAwake()
+  public override void Awake()
   {
-    base.OnAwake();
+    base.Awake();
 
     CharacterPhysicsManager = GetComponent<CharacterPhysicsManager>();
     if (CharacterPhysicsManager != null)

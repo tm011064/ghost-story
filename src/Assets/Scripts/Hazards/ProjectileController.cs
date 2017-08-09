@@ -7,6 +7,8 @@ public class ProjectileController : MonoBehaviour
 
   public EnemyContactReaction EnemyContactReaction = EnemyContactReaction.Knockback;
 
+  public PooledObjectType PooledObjectType = PooledObjectType.Default; // TODO (Roman): this must be set
+
   private GameManager _gameManager;
 
   private CustomStack<BaseProjectileControlHandler> _controlHandlers = new CustomStack<BaseProjectileControlHandler>();

@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Squirrel : GhostStoryEnemyController
+public class Squirrel : GhostStoryEnemyController, IEnemy
 {
   public Direction Direction;
 
   public ProjectileWeaponSettings Settings;
 
-  protected override void OnAwake()
+  public override void Awake()
   {
-    base.OnAwake();
+    base.Awake();
 
     ObjectPoolingManager.Instance.RegisterOrExpandPool(
       Settings.ProjectilePrefab,

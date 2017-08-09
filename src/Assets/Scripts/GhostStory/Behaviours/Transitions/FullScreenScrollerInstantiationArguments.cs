@@ -7,4 +7,6 @@ public class FullScreenScrollerInstantiationArguments : AbstractInstantiationArg
   public Bounds TriggerBounds;
 
   public Direction TriggerLocation;
+
+  public bool DestroySpawnedEnemiesOnEnter;
 }

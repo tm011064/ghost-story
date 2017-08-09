@@ -8,6 +8,8 @@ public partial class ApplyDamageHazard : MonoBehaviour
 
   public EnemyContactReaction EnemyContactReaction = EnemyContactReaction.Knockback;
 
+  public PooledObjectType PooledObjectType = PooledObjectType.Default; // TODO (Roman): this must be set
+
   private void ApplyDamage()
   {
     if ((GameManager.Instance.Player.PlayerState & PlayerState.Invincible) != 0)

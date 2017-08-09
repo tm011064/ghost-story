@@ -8,8 +8,10 @@ public class GhostStoryEnemyController : EnemyController
 
   public EnemyHealthBehaviour EnemyHealthBehaviour;
 
-  protected override void OnAwake()
+  public override void Awake()
   {
+    base.Awake();
+
     GhostStoryGameContext = GhostStoryGameContext.Instance;
 
     EnemyDamageBehaviour = this.GetComponentOrThrow<EnemyDamageBehaviour>();

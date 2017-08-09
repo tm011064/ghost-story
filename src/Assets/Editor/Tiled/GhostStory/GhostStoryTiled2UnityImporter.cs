@@ -75,7 +75,7 @@ namespace Assets.Editor.Tiled.GhostStory
 
     private void AssignLevelObjectConfigs(GameObject prefab, Map map)
     {
-      var layerTypes = new string[] { "Background", "Platform", "OneWayPlatform", "Transition" };
+      var layerTypes = new HashSet<string>(new string[] { "Background", "Platform", "OneWayPlatform", "Transition" });
 
       foreach (var layer in map.AllLayers())
       {
@@ -84,7 +84,7 @@ namespace Assets.Editor.Tiled.GhostStory
         {
           var layerConfig = TiledTileLayerConfigFactory.Create(layer);
 
-          var transform = prefab.transform.Find(layerConfig.TiledLayer.Name);
+          var transform = prefab.transform.FindFirstRecursive(layerConfig.TiledLayer.Name);
 
           if (transform != null)
           {

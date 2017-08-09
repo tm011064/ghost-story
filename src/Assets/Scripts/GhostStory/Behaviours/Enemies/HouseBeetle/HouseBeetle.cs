@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class HouseBeetle : GhostStoryMovingEnemyController
+public class HouseBeetle : GhostStoryMovingEnemyController, IEnemy
 {
   public EnemyMovementSettings MovementSettings;
 

@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
-public class EnemyProjectileBehaviour : MonoBehaviour
+public class EnemyProjectileBehaviour : MonoBehaviour, IEnemy
 {
   public int DamageUnits = 1;
 
   [Tooltip("Specifies what happens to a projectile if an enemy blocks the shot")]
   public ProjectileBlockedBehaviour ProjectileBlockedBehaviour = ProjectileBlockedBehaviour.Disappear;
+
+  private bool _deactivateOnceInvisible;
 
   private Vector3 _velocity;
 
@@ -15,7 +17,7 @@ public class EnemyProjectileBehaviour : MonoBehaviour
 
   private SpriteRenderer _sprite;
 
-  void Awake()
+  public virtual void Awake()
   {
     _animator = GetComponent<Animator>();
     _sprite = GetComponentInChildren<SpriteRenderer>();
@@ -24,6 +26,11 @@ public class EnemyProjectileBehaviour : MonoBehaviour
     {
       _projectileReboundBehaviour = this.GetComponentOrThrow<IProjectileReboundBehaviour>();
     }
+  }
+
+  public virtual void OnEnable()
+  {
+    _deactivateOnceInvisible = false;
   }
 
   public void StartMove(Vector2 startPosition, Vector2 velocity)
@@ -41,14 +48,14 @@ public class EnemyProjectileBehaviour : MonoBehaviour
     }
   }
 
-  void Update()
+  public virtual void Update()
   {
     transform.Translate(_velocity * Time.deltaTime, Space.World);
-  }
 
-  void OnBecameInvisible()
-  {
-    ObjectPoolingManager.Instance.Deactivate(gameObject);
+    if (_deactivateOnceInvisible && !_sprite.isVisible)
+    {
+      ObjectPoolingManager.Instance.Deactivate(gameObject);
+    }
   }
 
   void OnTriggerEnter2D(Collider2D collider)
@@ -81,5 +88,12 @@ public class EnemyProjectileBehaviour : MonoBehaviour
     }
 
     ObjectPoolingManager.Instance.Deactivate(gameObject);
+  }
+
+  public void DeactivateOnceInvisible()
+  {
+    Logger.UnityDebugLog("DeactivateOnceInvisible");
+
+    _deactivateOnceInvisible = true;
   }
 }

@@ -19,7 +19,7 @@ public partial class HorizontalFullScreenScrollContainer : IInstantiable<PrefabI
 
       var triggerLocation = GetTriggerLocation(
         arguments.TiledRectBounds,
-        intersectingCameraBounds.TriggerBounds); // TODO (Roman): this needs to be trigger bounds, not camera bounds
+        intersectingCameraBounds.TriggerBounds);
 
       var triggerBounds = GetInnerCameraModifierBounds(
         arguments.TiledRectBounds,
@@ -29,11 +29,12 @@ public partial class HorizontalFullScreenScrollContainer : IInstantiable<PrefabI
       fullScreenScroller
         .AddComponent<FullScreenScroller>()
         .Instantiate(new FullScreenScrollerInstantiationArguments
-          {
-            CameraBounds = intersectingCameraBounds.CameraBounds,
-            TriggerBounds = triggerBounds,
-            TriggerLocation = triggerLocation
-          });
+        {
+          CameraBounds = intersectingCameraBounds.CameraBounds,
+          TriggerBounds = triggerBounds,
+          TriggerLocation = triggerLocation,
+          DestroySpawnedEnemiesOnEnter = arguments.TryBooleanProperty("DestroySpawnedEnemiesOnEnter")
+        });
     }
   }
 

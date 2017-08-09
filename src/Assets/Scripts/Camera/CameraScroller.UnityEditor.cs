@@ -7,7 +7,7 @@ public partial class CameraScroller
   public Color OutlineGizmoColor = Color.yellow;
 
   public bool ShowGizmoOutline = true;
-
+  
   protected void SetPosition(Bounds bounds)
   {
     transform.position = bounds.center;

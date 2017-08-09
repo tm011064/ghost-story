@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Prototype/Scenes/upper_basement.unity
-    guid: 866dc50e01385e840abe8138e379864f
-  - enabled: 1
     path: Assets/Prototype/Scenes/roof.unity
     guid: 26d7b37d50bf10d4f81dd566e4d66de3
+  - enabled: 1
+    path: Assets/Prototype/Scenes/upper_basement.unity
+    guid: 866dc50e01385e840abe8138e379864f
   - enabled: 1
     path: Assets/Prototype/Scenes/foyer.unity
     guid: a119b2f8c529c4346b36fb2458c890ba

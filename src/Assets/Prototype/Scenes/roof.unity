@@ -332,6 +332,14 @@ Prefab:
       propertyPath: Settings.DistancePerSecond
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: DestroySpawnedEnemiesOnEnter
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: DestroySpawnedEnemiesOnEnter
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cc04aaffb94a1b34fa784c05af6aec1b, type: 2}
   m_IsPrefabParent: 0

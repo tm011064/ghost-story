@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Spider : GhostStoryMovingEnemyController
+public class Spider : GhostStoryMovingEnemyController, IEnemy
 {
   public EnemyMovementSettings MovementSettings;
 

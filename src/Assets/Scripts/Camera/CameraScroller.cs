@@ -10,6 +10,9 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
   [Tooltip("The dimensions of the camera boundaries")]
   public Vector2 Size;
 
+  [Tooltip("If set, all currently spawned enemies will be destroyed when the camerea scroll action is triggered")]
+  public bool DestroySpawnedEnemiesOnEnter;
+
   private int _animationShortNameHash;
 
   protected TranslateTransformActions ScrollActions;
@@ -53,6 +56,13 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
 
   private void StartScroll(Collider2D collider)
   {
+    if (DestroySpawnedEnemiesOnEnter)
+    {
+      ObjectPoolingManager.Instance
+        .GetAllActive<IEnemy>()
+        .ForEach(e => e.DeactivateOnceInvisible());
+    }
+
     // the order here is important. First we want to set the camera movement settings, then we can create
     // the scroll transform action.
     var targetPosition = CameraController.CalculateTargetPosition(CameraMovementSettings);
@@ -155,12 +165,6 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
     return FullScreenScrollSettings.StartScrollFreezeTime > 0f;
   }
 
-  protected enum ScrollStatus
-  {
-    Scrolling,
-    Idle
-  }
-
   protected override VerticalLockSettings CreateBaseVerticalLockSettings()
   {
     return new VerticalLockSettings
@@ -185,5 +189,11 @@ public partial class CameraScroller : CameraMovementSettingsBehaviour
       LeftHorizontalLockPosition = transform.position.x - Size.x * .5f,
       RightHorizontalLockPosition = transform.position.x + Size.x * .5f
     };
+  }
+
+  protected enum ScrollStatus
+  {
+    Scrolling,
+    Idle
   }
 }

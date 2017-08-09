@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Cockroach : GhostStoryMovingEnemyController
+public class Cockroach : GhostStoryMovingEnemyController, IEnemy
 {
   public EnemyMovementSettings MovementSettings;
 

@@ -47,6 +47,19 @@ public class PrefabInstantiationArguments : AbstractInstantiationArguments
     }
   }
 
+  public bool TryBooleanProperty(string key, bool defaultValue = false)
+  {
+    var parsed = defaultValue;
+
+    string value;
+    if (Properties.TryGetValue(key, out value))
+    {
+      bool.TryParse(value, out parsed);
+    }
+
+    return parsed;
+  }
+
   public string TryProperty(string key, string defaultValue = null)
   {
     string value;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectPoolingManager
@@ -107,25 +108,34 @@ public class ObjectPoolingManager
 
   public void Deactivate(GameObject obj)
   {
-    if (obj != null && obj.activeSelf)
+    if (obj == null || !obj.activeSelf)
     {
-      var beforeDeactivatedHandler = BeforeDeactivated;
-
-      if (beforeDeactivatedHandler != null)
-      {
-        beforeDeactivatedHandler.Invoke(obj);
-      }
-
-      obj.SendMessage("OnBeforeDisable", SendMessageOptions.DontRequireReceiver);
-
-      obj.SetActive(false);
-
-      var afterDeactivatedHandler = AfterDeactivated;
-      if (afterDeactivatedHandler != null)
-      {
-        afterDeactivatedHandler.Invoke(obj);
-      }
+      return;
     }
+
+    var beforeDeactivatedHandler = BeforeDeactivated;
+    if (beforeDeactivatedHandler != null)
+    {
+      beforeDeactivatedHandler.Invoke(obj);
+    }
+
+    obj.SendMessage("OnBeforeDisable", SendMessageOptions.DontRequireReceiver);
+    obj.SetActive(false);
+
+    var afterDeactivatedHandler = AfterDeactivated;
+    if (afterDeactivatedHandler != null)
+    {
+      afterDeactivatedHandler.Invoke(obj);
+    }
+  }
+
+  public IEnumerable<TComponent> GetAllActive<TComponent>()
+  {
+    return _objectPools.Values
+      .SelectMany(
+        pool => pool.GetGameObjects()
+          .Where(o => o.activeSelf)
+          .SelectMany(o => o.GetComponents<TComponent>()));
   }
 
   public void DeactivateAll()

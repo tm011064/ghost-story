@@ -4,8 +4,6 @@ using UnityEngine;
 
 public partial class CameraModifier : IInstantiable<CameraModifierInstantiationArguments>
 {
-  public ImportCameraSettings ImportCameraSettings;
-
   public void Instantiate(CameraModifierInstantiationArguments arguments)
   {
     VerticalLockSettings = new VerticalLockSettings
