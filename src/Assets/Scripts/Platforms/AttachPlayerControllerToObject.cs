@@ -9,7 +9,7 @@ public class AttachPlayerControllerToObject : MonoBehaviour, IAttachableObject
 
   public event Action<IAttachableObject, GameObject> Detached;
 
-  void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
+  void OnPlayerGroundedPlatformChanged(GroundedPlatformArgs e)
   {
     Logger.UnityDebugLog("OnPlayerGroundedPlatformChanged");
 

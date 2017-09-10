@@ -131,7 +131,7 @@ public partial class LinearPath : SpawnBucketItemBehaviour, IObjectPoolBehaviour
     }
   }
 
-  void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
+  void OnPlayerGroundedPlatformChanged(GroundedPlatformArgs e)
   {
     if (!_gameObjectTrackingInformation.Exists(c => c.GameObject == e.CurrentPlatform))
     {

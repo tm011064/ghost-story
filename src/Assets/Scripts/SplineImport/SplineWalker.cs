@@ -25,7 +25,7 @@ public class SplineWalker : MonoBehaviour, IObjectPoolBehaviour
 
   private bool _isMoving = false;
 
-  void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
+  void OnPlayerGroundedPlatformChanged(GroundedPlatformArgs e)
   {
     if (e.CurrentPlatform != _gameObject)
     {

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4320581739198384}
   - component: {fileID: 114546318502467688}
   m_Layer: 0
-  m_Name: Timer Platform Controller
+  m_Name: Connected Timer Platform Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

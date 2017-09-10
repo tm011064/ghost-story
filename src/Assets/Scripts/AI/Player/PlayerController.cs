@@ -62,7 +62,7 @@ public partial class PlayerController : BaseCharacterController
 
   private WallJumpEvaluationControlHandler _reusableWallJumpEvaluationControlHandler;
 
-  public event Action<GroundedPlatformChangedInfo> GroundedPlatformChanged;
+  public event Action<GroundedPlatformArgs> GroundedPlatformChanged;
 
   public event Action JumpedThisFrame;
 
@@ -231,18 +231,17 @@ public partial class PlayerController : BaseCharacterController
   {
     var handler = GroundedPlatformChanged;
 
-    if (handler != null)
-    {
-      var previousGameObject = CurrentPlatform;
-
-      CurrentPlatform = gameObject;
-
-      GroundedPlatformChanged(new GroundedPlatformChangedInfo(previousGameObject, CurrentPlatform));
-    }
-    else
+    if (handler == null)
     {
       CurrentPlatform = gameObject;
+      return;
     }
+
+    var previousGameObject = CurrentPlatform;
+
+    CurrentPlatform = gameObject;
+
+    handler(new GroundedPlatformArgs(previousGameObject, CurrentPlatform));
   }
 
   void OnControllerLostGround()
@@ -255,8 +254,8 @@ public partial class PlayerController : BaseCharacterController
 
   void OnControllerCollided(RaycastHit2D hit)
   {
-    // bail out on plain old ground hits cause they arent very interesting
-    if (hit.normal.y == 1f)
+    var isGroundHit = hit.normal.y == 1f;
+    if (isGroundHit)
     {
       if (CurrentPlatform != hit.collider.gameObject)
       {

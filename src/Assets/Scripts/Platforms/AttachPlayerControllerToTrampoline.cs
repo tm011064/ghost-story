@@ -70,7 +70,7 @@ public partial class AttachPlayerControllerToTrampoline : MonoBehaviour, IAttach
     _playerController.GroundedPlatformChanged -= OnPlayerGroundedPlatformChanged;
   }
 
-  void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
+  void OnPlayerGroundedPlatformChanged(GroundedPlatformArgs e)
   {
     var lostGround =
       ( // either player is in air

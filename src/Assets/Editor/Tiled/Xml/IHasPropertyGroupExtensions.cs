@@ -6,6 +6,16 @@ namespace Assets.Editor.Tiled.Xml
 {
   public static class IHasPropertyGroupExtensions
   {
+    public static float GetPropertyValueAsFloat(this IHasPropertyGroup self, string propertyName)
+    {
+      return float.Parse(self.PropertyGroup.GetPropertyValue(propertyName));
+    }
+
+    public static int GetPropertyValueAsInt32(this IHasPropertyGroup self, string propertyName)
+    {
+      return int.Parse(self.PropertyGroup.GetPropertyValue(propertyName));
+    }
+
     public static string GetPropertyValue(this IHasPropertyGroup self, string propertyName)
     {
       return self.PropertyGroup.GetPropertyValue(propertyName);

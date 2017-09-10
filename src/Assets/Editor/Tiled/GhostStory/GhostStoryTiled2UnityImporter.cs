@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Assets.Editor.Tiled.GameObjectFactories;
+using Assets.Editor.Tiled.Xml;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Assets.Editor.Tiled.GameObjectFactories;
-using Assets.Editor.Tiled.Xml;
 using Tiled2Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -67,7 +66,9 @@ namespace Assets.Editor.Tiled.GhostStory
           new GhostStoryTiledLayerPrefabFactory(prefab, importer.Map, importer.PrefabLookup),
           new GhostStoryTiledObjectPrefabFactory(prefab, importer.Map, importer.PrefabLookup),
           new GhostStoryEdgeColliderFactory(prefab, importer.Map, importer.PrefabLookup),
-          new GhostStoryTimerPlatformFactory(prefab, importer.Map, importer.PrefabLookup)
+          new GhostStoryConnectedTimerPlatformFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryJumpControlledDisappearingPlatformFactory(prefab, importer.Map, importer.PrefabLookup),
+          new GhostStoryTimerPlatformSetFactory(prefab, importer.Map, importer.PrefabLookup)
         });
 
       AssignLevelObjectConfigs(prefab, importer.Map);

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public class GroundedPlatformChangedInfo
+public class GroundedPlatformArgs
 {
   public GameObject PreviousPlatform;
 
   public GameObject CurrentPlatform;
 
-  public GroundedPlatformChangedInfo(GameObject previousPlatform, GameObject currentPlatform)
+  public GroundedPlatformArgs(GameObject previousPlatform, GameObject currentPlatform)
   {
     PreviousPlatform = previousPlatform;
     CurrentPlatform = currentPlatform;

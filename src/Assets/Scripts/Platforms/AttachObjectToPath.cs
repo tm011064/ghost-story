@@ -29,7 +29,7 @@ public class AttachObjectToPath : MonoBehaviour, IObjectPoolBehaviour
 
   private bool _delayExecuted;
 
-  void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
+  void OnPlayerGroundedPlatformChanged(GroundedPlatformArgs e)
   {
     if (e.CurrentPlatform != _gameObject)
     {

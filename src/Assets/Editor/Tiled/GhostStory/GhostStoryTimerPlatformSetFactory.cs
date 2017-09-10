@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Assets.Editor.Tiled.GameObjectFactories;
+﻿using Assets.Editor.Tiled.GameObjectFactories;
 using Assets.Editor.Tiled.Xml;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Editor.Tiled.GhostStory
 {
-  public class GhostStoryTimerPlatformFactory : TimerPlatformFactory
+  public class GhostStoryTimerPlatformSetFactory : TimerPlatformSetFactory
   {
-    public GhostStoryTimerPlatformFactory(
+    public GhostStoryTimerPlatformSetFactory(
       GameObject root,
       Map map,
       Dictionary<string, string> prefabLookup)

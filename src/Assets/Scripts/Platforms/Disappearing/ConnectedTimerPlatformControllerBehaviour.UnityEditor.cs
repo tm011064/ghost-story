@@ -2,7 +2,7 @@
 
 using System.Linq;
 
-public partial class DisappearingPlatformControllerBehaviour : IInstantiable<ConnectedTimerPlatformInstantiationArguments>
+public partial class ConnectedTimerPlatformControllerBehaviour : IInstantiable<ConnectedTimerPlatformInstantiationArguments>
 {
   public void Instantiate(ConnectedTimerPlatformInstantiationArguments arguments)
   {

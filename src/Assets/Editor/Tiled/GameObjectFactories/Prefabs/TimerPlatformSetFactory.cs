@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Assets.Editor.Tiled.GameObjectFactories;
+using Assets.Editor.Tiled.Xml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Editor.Tiled.GameObjectFactories;
-using Assets.Editor.Tiled.Xml;
 using UnityEngine;
 
-public class TimerPlatformFactory : AbstractGameObjectFactory
+public class TimerPlatformSetFactory : AbstractGameObjectFactory
 {
-  private const string PrefabName = "Timer Platform Controller";
+  private const string PrefabName = "Timer Platform Set Controller";
 
-  public TimerPlatformFactory(
+  public TimerPlatformSetFactory(
     GameObject root,
     Map map,
     Dictionary<string, string> prefabLookup)
@@ -19,7 +19,7 @@ public class TimerPlatformFactory : AbstractGameObjectFactory
 
   public override IEnumerable<GameObject> Create()
   {
-    var prefabsParent = new GameObject("Timer Platforms");
+    var prefabsParent = new GameObject("Timer Platform Sets");
 
     prefabsParent.transform.position = Vector3.zero;
 
@@ -62,7 +62,7 @@ public class TimerPlatformFactory : AbstractGameObjectFactory
       .TileLayerConfigs
       .Select(c => c.TiledLayer)
       .Where(c => c.HasProperty("Type", "Timer Platform"))
-      .Select(layer => new TimerPlatformInstantiationArguments.Platform
+      .Select(layer => new PlatformArguments
       {
         Index = ParseIndex(layer),
         ColliderObjects = CreateColliderObjects(layer).ToArray(),
@@ -70,25 +70,17 @@ public class TimerPlatformFactory : AbstractGameObjectFactory
       })
       .ToArray();
 
-    var startSwitch = config
-      .ObjectLayerConfigs
-      .SelectMany(c => c.TiledObjectGroup.Objects)
-      .Where(o => o.IsType("Switch"))
-      .Select(o => new TimerPlatformInstantiationArguments.StartSwitch
-      {
-        Bounds = o.GetBounds()
-      })
-      .Single();
-
     var asset = LoadPrefabAsset(PrefabName);
 
     return CreateInstantiableObject(
        asset,
        PrefabName,
        config,
-       new TimerPlatformInstantiationArguments
+       new TimerPlatformSetInstantiationArguments
        {
-         Switch = startSwitch,
+         ActivationDelay = config.Group.GetPropertyValueAsFloat("ActivationDelay"),
+         InvisibleInterval = config.Group.GetPropertyValueAsFloat("InvisibleInterval"),
+         VisibleInterval = config.Group.GetPropertyValueAsFloat("VisibleInterval"),
          Platforms = platforms
        });
   }

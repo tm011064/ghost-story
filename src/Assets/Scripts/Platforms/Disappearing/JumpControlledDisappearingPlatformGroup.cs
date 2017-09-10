@@ -96,7 +96,7 @@ public partial class JumpControlledDisappearingPlatformGroup : MonoBehaviour, IO
     }
   }
 
-  void OnDisappearWhenLostGround(GroundedPlatformChangedInfo groundedPlatformChangedInfo)
+  void OnDisappearWhenLostGround(GroundedPlatformArgs groundedPlatformChangedInfo)
   {
     var lostGround = groundedPlatformChangedInfo.CurrentPlatform == null;
 
@@ -169,7 +169,7 @@ public partial class JumpControlledDisappearingPlatformGroup : MonoBehaviour, IO
     }
   }
 
-  void OnDisappearWhenLandingOnNextPlatform(GroundedPlatformChangedInfo GroundedPlatformChangedInfo)
+  void OnDisappearWhenLandingOnNextPlatform(GroundedPlatformArgs GroundedPlatformChangedInfo)
   {
     if (_currentPlatforms.Contains(GroundedPlatformChangedInfo.CurrentPlatform))
     {

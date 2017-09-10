@@ -5,6 +5,21 @@ using UnityEngine;
 
 public static class GameObjectExtensions
 {
+  public static GameObject GetParentGameObject(this GameObject self)
+  {
+    if (self == null)
+    {
+      return null;
+    }
+
+    if (self.transform.parent == null)
+    {
+      return null;
+    }
+
+    return self.transform.parent.gameObject;
+  }
+
   public static void AttachChild(this GameObject self, GameObject child)
   {
     child.transform.parent = self.transform;

@@ -16,7 +16,7 @@ public class ConveyorBelt : MonoBehaviour
     }
   }
 
-  void OnPlayerGroundedPlatformChanged(GroundedPlatformChangedInfo e)
+  void OnPlayerGroundedPlatformChanged(GroundedPlatformArgs e)
   {
     if (e.CurrentPlatform == gameObject)
     {

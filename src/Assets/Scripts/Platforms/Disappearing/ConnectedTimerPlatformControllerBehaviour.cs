@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public partial class TimerPlatformControllerBehaviour : MonoBehaviour
+public partial class ConnectedTimerPlatformControllerBehaviour : MonoBehaviour
 {
   public float Interval = 1;
 
@@ -13,12 +13,12 @@ public partial class TimerPlatformControllerBehaviour : MonoBehaviour
   private TimerPlatform[] _platforms;
 
   private string _showNextTimerName = GhostStoryGameContext.CreateCallbackName(
-    typeof(TimerPlatformControllerBehaviour), "ShowNext");
+    typeof(ConnectedTimerPlatformControllerBehaviour), "ShowNext");
 
   private string _startTimerName = GhostStoryGameContext.CreateCallbackName(
-    typeof(TimerPlatformControllerBehaviour), "StartTimer");
+    typeof(ConnectedTimerPlatformControllerBehaviour), "StartTimer");
 
-  private void Awake()
+  public virtual void Awake()
   {
     _platforms = GetComponentsInChildren<TimerPlatform>()
       .OrderBy(p => p.Index)
@@ -28,7 +28,7 @@ public partial class TimerPlatformControllerBehaviour : MonoBehaviour
     Assert.IsTrue(_platforms.Length >= MaxNumberOfVisiblePlatforms);
   }
 
-  private void Start()
+  public virtual void Start()
   {
     StartTimer(); // TODO (Roman): let this be controlled by switch
   }
