@@ -37,20 +37,13 @@ public class TimerPlatformSetFactory : AbstractGameObjectFactory
 
   private int ParseIndex(Layer layer)
   {
-    var createErrorMessage = new Func<string>(() => "Timed platform timer platform layer name '" + layer.Name
-        + "' invalid. Names must follow this pattern: 'unqiueName {Index}'. Example: 'Roof Platforms 1'");
+    var trimmedLayerName = layer.Name.Trim();
 
-    var index = layer.Name.LastIndexOf(' ');
-    if (index < 0)
-    {
-      throw new FormatException(createErrorMessage());
-    }
-
-    var indexString = layer.Name.Substring(index).Trim();
     int value;
-    if (!int.TryParse(indexString, out value))
+    if (!int.TryParse(trimmedLayerName, out value))
     {
-      throw new FormatException(createErrorMessage());
+      throw new FormatException("Timed platform timer platform layer name '" + trimmedLayerName
+        + "' invalid. Names must be a number representing the index of the platform within the platform group");
     }
 
     return value;
