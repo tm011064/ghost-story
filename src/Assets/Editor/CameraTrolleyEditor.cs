@@ -82,13 +82,13 @@ public class CameraTrolleyEditor : Editor
       {
         var controlIDBeforeHandle = GUIUtility.GetControlID(hashCode, FocusType.Passive);
 
-        var isEventUsedBeforeHandle = (Event.current.type == EventType.used);
+        var isEventUsedBeforeHandle = (Event.current.type == EventType.Used);
 
         _target.Nodes[i] = _target.gameObject.transform.InverseTransformPoint(
           Handles.PositionHandle(_target.gameObject.transform.TransformPoint(_target.Nodes[i]), Quaternion.identity));
 
         var controlIDAfterHandle = GUIUtility.GetControlID(hashCode, FocusType.Passive);
-        var isEventUsedByHandle = !isEventUsedBeforeHandle && (Event.current.type == EventType.used);
+        var isEventUsedByHandle = !isEventUsedBeforeHandle && (Event.current.type == EventType.Used);
 
         if ((controlIDBeforeHandle < GUIUtility.hotControl && GUIUtility.hotControl < controlIDAfterHandle) || isEventUsedByHandle)
         {
@@ -101,7 +101,7 @@ public class CameraTrolleyEditor : Editor
 
     switch (currentEvent.type)
     {
-      case EventType.keyDown:
+      case EventType.KeyDown:
 
         if (Event.current.keyCode == (KeyCode.Delete))
         {

@@ -61,7 +61,7 @@ public class BuildTools
       var results = BuildPipeline.BuildPlayer(level_list, output, target, BuildOptions.None);
       log.Message("");
 
-      if (results.Length == 0)
+      if (results.summary.totalErrors == 0)
       {
         log.Message("No Build Errors");
       }
