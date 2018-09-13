@@ -26,8 +26,15 @@ namespace Assets.Editor.Tiled.Xml
     [XmlAttribute(AttributeName = "height")]
     public int Height { get; set; }
 
-    [XmlAttribute(AttributeName = "gid")]
+    [XmlIgnore]
     public long? Gid { get; set; }
+
+    [XmlAttribute("gid")]
+    public string GidAsText
+    {
+      get { return (Gid.HasValue) ? Gid.ToString() : null; }
+      set { Gid = !string.IsNullOrWhiteSpace(value) ? long.Parse(value) : default(long?); }
+    }
 
     [XmlElement(ElementName = "properties")]
     public PropertyGroup PropertyGroup { get; set; }

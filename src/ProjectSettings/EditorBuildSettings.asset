@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Prototype/Scenes/roof.unity
     guid: 26d7b37d50bf10d4f81dd566e4d66de3
   - enabled: 0
@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Prototype/Scenes/foyer.unity
     guid: a119b2f8c529c4346b36fb2458c890ba
-  - enabled: 0
+  - enabled: 1
     path: Assets/Prototype/Scenes/house_elevator_shaft.unity
     guid: 006883bddbf27f544a71b1d80a7f359c
   - enabled: 0

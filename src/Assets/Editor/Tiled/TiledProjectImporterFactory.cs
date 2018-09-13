@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Assets.Editor.Tiled.Xml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using Assets.Editor.Tiled.Xml;
 
 namespace Assets.Editor.Tiled
 {

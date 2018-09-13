@@ -21,6 +21,12 @@ namespace Assets.Editor.Tiled.Xml
     [XmlAttribute(AttributeName = "version")]
     public string Version { get; set; }
 
+    [XmlAttribute(AttributeName = "tiledversion")]
+    public string Tiledversion { get; set; }
+
+    [XmlAttribute(AttributeName = "infinite")]
+    public string Infinite { get; set; }
+
     [XmlAttribute(AttributeName = "orientation")]
     public string Orientation { get; set; }
 
